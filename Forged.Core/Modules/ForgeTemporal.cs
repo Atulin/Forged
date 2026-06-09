@@ -5,7 +5,6 @@ namespace Forged.Core.Modules;
 
 public sealed class ForgeTemporal(Forge forge)
 {
-
 	public Generator<DateTime> Between(DateTime? min = null, DateTime? max = null)
         => new DateTimeGenerator(min, max) { Rng = forge.Rng };
 

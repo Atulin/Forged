@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="Forged.Core/Forged.Core.csproj" />
   <Project Path="Forged.Demo/Forged.Demo.csproj" />
+  <Project Path="Forged.Generator/Forged.Generator.csproj" />
   <Project Path="Forged/Forged.csproj" />
 </Solution>

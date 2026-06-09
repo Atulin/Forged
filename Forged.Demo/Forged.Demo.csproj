@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Forged.Core\Forged.Core.csproj" />
+      <ProjectReference Include="..\Forged.Generator\Forged.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
 
 </Project>

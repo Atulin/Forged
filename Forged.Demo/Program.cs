@@ -1,19 +1,26 @@
 using System.Text.Json;
 using Forged.Core.Generators;
+using Forged.Core.Generators.Text;
 using Forged.Demo;
 
-var faker = new FooFaker(new Random(12345))
+var faker = new PersonFaker
 {
-    Bar = f => f.Text.Alphanumeric(10),
-    Baz = f => f.Random.Number<int>(1, 100).OrNull(0.2f),
-    Quz = f => f.Random.Pick<bool?>(true, false, null),
-    Timestamp = f => f.Temporal.Past()
+	Id = f => f.Text.Guid(GuidGenerator.Kind.V7),
+	FirstName = f => f.Text.Alphanumeric(10),
+	LastName = f => f.Text.Alphanumeric(10),
+	MiddleNames = f => f.Text
+		.Alphanumeric(5)
+		.Collection(3)
+		.Refine(c => c.ToList())
+		.OrDefault(0f),
+	DateOfBirth = f => f.Temporal.Past().OrNull(0f),
+	IsActive = f => f.Random.Pick(true, false)
 };
-
-var foos = faker.Get(5);
+ 
+var people = faker.Get(5);
 
 Console.WriteLine("Generated Foos:");
-foreach (var foo in foos)
+foreach (var person in people)
 {
-    Console.WriteLine(JsonSerializer.Serialize(foo, new JsonSerializerOptions { WriteIndented = true }));
+    Console.WriteLine(JsonSerializer.Serialize(person, new JsonSerializerOptions { WriteIndented = true }));
 }
