@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <AssemblyAttribute Include="AutoSeal.SealPublicClasses" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Atulin.SealAnalyzer" Version="1.0.0" PrivateAssets="all" />
+    </ItemGroup>
+
+</Project>
