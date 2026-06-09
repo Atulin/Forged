@@ -12,6 +12,51 @@ public class Foo
 
 generates
 
+
+```csharp
+public class FooFaker : Faker<Foo>
+{
+    public required Func<Generator<string>> Bar { get; init; }
+    public Func<Generator<int?>>? Baz { get; init; }
+    public required Func<Generator<bool?>> Quz { get; init; }
+
+    public override Foo Get()
+    {
+        return new Foo
+        {
+            Bar = this.Bar(generator).Generate(),
+            Baz = this.Baz?.Invoke(generator)?.Generate(),
+            Quz = this.Quz(generator).Generate(),
+        }
+    }
+
+    public override IEnumerable<Foo> Get(int count)
+    {
+        for (var i = 0; i < count; i++)
+        {
+            yield return Get();
+        }
+    }
+}
+```
+
+and you use it with
+
+```csharp
+var faker = new FooFaker {
+    Bar = f => f.Name.First(),
+    // no `Baz`, it's fine
+    // no `Quz` would not be allowed, so you need this:
+    Quz = f => f.Random.Pick(true, false, null)
+};
+var foos = faker.Get(10);
+```
+
+<details>
+<summary>Old impl that had no chance to work</summary>
+
+generates
+
 ```csharp
 public class FooFaker : Faker<Foo>
 {
@@ -37,6 +82,8 @@ var faker = new FooFaker {
 };
 var foos = faker.Get(10);
 ```
+
+</details>
 
 Needs 2 parts: generator and base faker, so some `Forged.Generator` and `Forged.Core`
 packaged neatly into one `Forged` nuggie
