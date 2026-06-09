@@ -1,6 +1,6 @@
 ﻿namespace Forged.Core;
 
-public sealed partial class Forged<TModel>
+public abstract partial class Forged<TModel>
 {
 	
 }
