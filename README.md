@@ -1,4 +1,4 @@
-﻿Imagine, if you will:
+Imagine, if you will:
 
 ```csharp
 [Fake]
@@ -16,18 +16,26 @@ generates
 ```csharp
 public class FooFaker : Faker<Foo>
 {
-    public required Func<Generator<string>> Bar { get; init; }
-    public Func<Generator<int?>>? Baz { get; init; }
-    public required Func<Generator<bool?>> Quz { get; init; }
+    public required Func<Forge, Generator<string>> Bar { get; init; }
+    public Func<Forge, Generator<int?>>? Baz { get; init; }
+    public required Func<Forge, Generator<bool?>> Quz { get; init; }
+
+    private Generator<string>? _barGenerator;
+    private Generator<int?>? _bazGenerator;
+    private Generator<bool?>? _quzGenerator;
 
     public override Foo Get()
     {
+        _barGenerator ??= Bar(this.Forge);
+        _bazGenerator ??= Baz?.Invoke(this.Forge);
+        _quzGenerator ??= Quz(this.Forge);
+
         return new Foo
         {
-            Bar = this.Bar(generator).Generate(),
-            Baz = this.Baz?.Invoke(generator)?.Generate(),
-            Quz = this.Quz(generator).Generate(),
-        }
+            Bar = _barGenerator.Generate(),
+            Baz = _bazGenerator?.Generate(),
+            Quz = _quzGenerator.Generate(),
+        };
     }
 
     public override IEnumerable<Foo> Get(int count)
@@ -47,6 +55,16 @@ var faker = new FooFaker {
     Bar = f => f.Name.First(),
     // no `Baz`, it's fine
     // no `Quz` would not be allowed, so you need this:
+    Quz = f => f.Random.Pick(true, false, null)
+};
+var foos = faker.Get(10);
+```
+
+or, optionally, for a seeded random:
+
+```csharp
+var faker = new FooFaker(new Random(12345)) {
+    Bar = f => f.Name.First(),
     Quz = f => f.Random.Pick(true, false, null)
 };
 var foos = faker.Get(10);
@@ -93,31 +111,38 @@ packaged neatly into one `Forged` nuggie
 Takes a decorated class and generates a `[Name]Faker` class, that:
 1. Has properties with all the same names
 2. Each property inherits the `required` and nullability of the original
-3. Each property is of type `Generator<T>`, where `T` is the type of the original property
+3. Each property is of type `Func<Forge, Generator<T>>`, where `T` is the type of the original property
 
 ## Core
 
 Contains a basic `Faker<T>` class that looks something like:
 
 ```csharp
-public abstract class Faker<T>
+public sealed class Forge
 {
-    protected static class Name
+    public Random Rng { get; }
+    public ForgeName Name { get; }
+    public ForgeRandom Random { get; }
+
+    public Forge(Random? random = null)
     {
-        public static string First();
-        public static string Last();
-        public static string Full();
+        Rng = random ?? Global.Random;
+        Name = new ForgeName(this);
+        Random = new ForgeRandom(this);
     }
-    
-    protected static class Random
-    {
-        public static T Pick<T>(params T[] values);
-        public static int Next(int min, int max);
-        // ...
-    }
-    
+}
+
+public class ForgeName 
+{
+    public Generator<string> First();
+    public Generator<string> Last();
+    public Generator<string> Full();
+}
+
+public class ForgeRandom 
+{
+    public Generator<T> Pick<T>(params T[] values);
+    public Generator<int> Next(int min, int max);
     // ...
-    
-    public abstract IEnumerable<T> Get(int count);
 }
 ```

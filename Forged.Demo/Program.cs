@@ -1,16 +1,19 @@
-﻿using Forged.Core;
+using System.Text.Json;
 using Forged.Core.Generators;
+using Forged.Demo;
 
-var f = new Foo
+var faker = new FooFaker(new Random(12345))
 {
-	Name = Foo.Text.Alphanumeric(10)
-	//     ^^^ I really thought I can avoid this 😭
+    Bar = f => f.Text.Alphanumeric(10),
+    Baz = f => f.Random.Number<int>(1, 100).OrNull(0.2f),
+    Quz = f => f.Random.Pick<bool?>(true, false, null),
+    Timestamp = f => f.Temporal.Past()
 };
 
-return;
+var foos = faker.Get(5);
 
-internal class Foo : Forged<Foo>
+Console.WriteLine("Generated Foos:");
+foreach (var foo in foos)
 {
-	public required Generator<string> Name { get; set; }
-
+    Console.WriteLine(JsonSerializer.Serialize(foo, new JsonSerializerOptions { WriteIndented = true }));
 }
