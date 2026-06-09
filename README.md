@@ -1,148 +1,111 @@
-Imagine, if you will:
+# Forged
+
+A fast, strict, and strongly-typed data generator (faker) for C# powered by Source Generators.
+
+Forged allows you to declaratively define how your models should be faked, leveraging the C# compiler to enforce required properties, nullability, and type-safety.
+
+## Features
+
+- 🚀 **Source Generated**: No reflection, fast at runtime, and fully trim/AOT compatible.
+- 🛡️ **Strict & Type-Safe**: Respects your class properties. If a property in your model is `required`, the faker will force you to provide a generator for it at compile time.
+- 🌊 **Fluent API**: A clean and readable fluent API for configuring generators and their modifiers.
+- 🎲 **Deterministic**: Pass a seeded `Random` instance to the faker to generate the exact same data every time.
+
+## Quick Start
+
+1. Add the package to your project.
+2. Decorate your model with `[Fake]`:
 
 ```csharp
+using Forged.Core;
+
+namespace MyProject;
+
 [Fake]
-public class Foo
+public class Person
 {
-    public required string Bar { get; set; }
-    public int? Baz { get; set; }
-    public required bool? Quz { get; set; }
+    public required Guid Id { get; set; }
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
+    public List<string>? MiddleNames { get; set; }
+    public bool IsActive { get; set; }
+    public DateTime? DateOfBirth { get; set; }
 }
 ```
 
-generates
-
+3. The source generator will automatically create a `{ModelName}Faker` class for you. Configure it and generate data!
 
 ```csharp
-public class FooFaker : Faker<Foo>
+using Forged.Core.Generators; 
+using Forged.Core.Generators.Text; 
+
+// The faker properties match your model's properties!
+var faker = new PersonFaker
 {
-    public required Func<Forge, Generator<string>> Bar { get; init; }
-    public Func<Forge, Generator<int?>>? Baz { get; init; }
-    public required Func<Forge, Generator<bool?>> Quz { get; init; }
-
-    private Generator<string>? _barGenerator;
-    private Generator<int?>? _bazGenerator;
-    private Generator<bool?>? _quzGenerator;
-
-    public override Foo Get()
-    {
-        _barGenerator ??= Bar(this.Forge);
-        _bazGenerator ??= Baz?.Invoke(this.Forge);
-        _quzGenerator ??= Quz(this.Forge);
-
-        return new Foo
-        {
-            Bar = _barGenerator.Generate(),
-            Baz = _bazGenerator?.Generate(),
-            Quz = _quzGenerator.Generate(),
-        };
-    }
-
-    public override IEnumerable<Foo> Get(int count)
-    {
-        for (var i = 0; i < count; i++)
-        {
-            yield return Get();
-        }
-    }
-}
-```
-
-and you use it with
-
-```csharp
-var faker = new FooFaker {
-    Bar = f => f.Name.First(),
-    // no `Baz`, it's fine
-    // no `Quz` would not be allowed, so you need this:
-    Quz = f => f.Random.Pick(true, false, null)
-};
-var foos = faker.Get(10);
-```
-
-or, optionally, for a seeded random:
-
-```csharp
-var faker = new FooFaker(new Random(12345)) {
-    Bar = f => f.Name.First(),
-    Quz = f => f.Random.Pick(true, false, null)
-};
-var foos = faker.Get(10);
-```
-
-<details>
-<summary>Old impl that had no chance to work</summary>
-
-generates
-
-```csharp
-public class FooFaker : Faker<Foo>
-{
-    public required Generator<string> Bar { get; init; }
-    public Generator<int?>? Baz { get; init; }
-    public required Generator<bool?> Quz { get; init; }
+    Id = f => f.Text.Guid(GuidGenerator.Kind.V7),
+    FirstName = f => f.Text.Alphanumeric(10),
+    LastName = f => f.Text.Alphanumeric(10),
     
-    public override IEnumerable<Foo> Get(int count)
-    {
-        // ...
-    }
-}
-```
-
-and you use it with
-
-```csharp
-var faker = new FooFaker {
-    Bar = Name.First(),
-    // no `Baz`, it's fine
-    // no `Quz` would not be allowed, so you need this:
-    Quz = Random.Pick(true, false, null)
+    // Non-required properties can be omitted, but you can still provide a generator:
+    MiddleNames = f => f.Text
+        .Alphanumeric(5)
+        .Collection(3)
+        .Refine(c => c.ToList()) // Map to List<string>
+        .OrDefault(0.5f),        // 50% chance of being default (null)
+        
+    DateOfBirth = f => f.Temporal.Past().OrNull(0.2f), // 20% chance to be null
+    IsActive = f => f.Random.Pick(true, false)
 };
-var foos = faker.Get(10);
+
+// Generate a single item
+var person = faker.Get();
+
+// Generate multiple items
+var people = faker.Get(5);
 ```
 
-</details>
+### Deterministic Generation
 
-Needs 2 parts: generator and base faker, so some `Forged.Generator` and `Forged.Core`
-packaged neatly into one `Forged` nuggie
-
-## Generator
-
-Takes a decorated class and generates a `[Name]Faker` class, that:
-1. Has properties with all the same names
-2. Each property inherits the `required` and nullability of the original
-3. Each property is of type `Func<Forge, Generator<T>>`, where `T` is the type of the original property
-
-## Core
-
-Contains a basic `Faker<T>` class that looks something like:
+If you need reproducible results (e.g., in unit tests), you can provide a seeded `Random` instance to the faker:
 
 ```csharp
-public sealed class Forge
+var faker = new PersonFaker(new Random(12345)) 
 {
-    public Random Rng { get; }
-    public ForgeName Name { get; }
-    public ForgeRandom Random { get; }
-
-    public Forge(Random? random = null)
-    {
-        Rng = random ?? Global.Random;
-        Name = new ForgeName(this);
-        Random = new ForgeRandom(this);
-    }
-}
-
-public class ForgeName 
-{
-    public Generator<string> First();
-    public Generator<string> Last();
-    public Generator<string> Full();
-}
-
-public class ForgeRandom 
-{
-    public Generator<T> Pick<T>(params T[] values);
-    public Generator<int> Next(int min, int max);
     // ...
-}
+};
 ```
+
+## Available Generators
+
+The `Forge` instance (`f` in the lambda expressions) provides access to built-in generators categorized by modules:
+
+### `Random`
+- `Pick(params T[])` / `Pick(T[], count)` - Pick one or more items from a predefined set.
+- `Number(min, max)` - Generate a random number between min and max.
+- `WeightedPick(items, weights)` - Pick an item based on custom weights.
+
+### `Temporal`
+- `Between(min, max)` - Generate a `DateTime` between two dates.
+- `Past(earliest)` / `Future(latest)` - Generate a `DateTime` in the past or future.
+- `DateBetween`, `DateInPast`, `DateInFuture` - Same as above, but for `DateOnly`.
+- `TimeBetween` - Generate a `TimeOnly`.
+
+### `Text`
+- `Alphanumeric(length)` - Generate a random alphanumeric string.
+- `Hex(length)` - Generate a random hexadecimal string.
+- `Guid(kind)` - Generate a Guid (supports V4 and V7).
+- `Template(template)` - Generate a string from a template.
+
+## Modifiers & Extensions
+
+Any `Generator<T>` can be customized and composed using fluent methods:
+
+### General Modifiers
+- `.Or(other, probability)` / `.OrDefault(probability)` / `.OrNull(probability)` - Introduce a chance to return an alternative value or null.
+- `.Refine(mappingFunc)` - Transform the generated value to another type or format (e.g., `IEnumerable<T>` to `List<T>`).
+- `.Array(length)` / `.Enumerable(length)` / `.Collection(length)` - Generate a collection of items using the current generator.
+
+### Specific Extensions
+- **String specific**: `.ToUpper()`, `.ToLower()`, `.ToTitleCase()`
+- **Temporal specific**: `.ToUtc()`, `.ToLocal()`, `.ToDateOnly()`, `.ToTimeOnly()`, `.TruncateToDate()`
+- **Formatting**: `.ToString()`, `.ToString(format, cultureInfo)`
