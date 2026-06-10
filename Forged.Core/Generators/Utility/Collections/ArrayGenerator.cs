@@ -1,6 +1,6 @@
-﻿namespace Forged.Core.Generators.Utility.Collections;
+namespace Forged.Core.Generators.Utility.Collections;
 
-public class ArrayGenerator<T>(Generator<T> innerGenerator, int length) : Generator<T[]>
+public sealed class ArrayGenerator<T>(Generator<T> innerGenerator, int length, System.Random rng) : Generator<T[]>(rng)
 {
 	public override T[] Generate()
 	{

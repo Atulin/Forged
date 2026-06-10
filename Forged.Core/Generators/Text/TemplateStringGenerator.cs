@@ -2,7 +2,12 @@ using System.Text;
 
 namespace Forged.Core.Generators.Text;
 
-public sealed class TemplateStringGenerator(string template, char digitToken = '#', char letterToken = '?', char alphanumericToken = '*') : Generator<string>
+public sealed class TemplateStringGenerator(
+	string template,
+	System.Random rng,
+	char digitToken = '#',
+	char letterToken = '?',
+	char alphanumericToken = '*') : Generator<string>(rng)
 {
 	public override string Generate()
 	{

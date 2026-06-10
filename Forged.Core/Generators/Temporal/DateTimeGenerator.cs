@@ -1,6 +1,6 @@
 namespace Forged.Core.Generators.Temporal;
 
-public sealed class DateTimeGenerator(DateTime? min = null, DateTime? max = null) : Generator<DateTime>
+public sealed class DateTimeGenerator(DateTime? min, DateTime? max, System.Random rng) : Generator<DateTime>(rng)
 {
 	private readonly long _minTicks = (min ?? DateTime.MinValue).Ticks;
 	private readonly long _maxTicks = (max ?? DateTime.MaxValue).Ticks;

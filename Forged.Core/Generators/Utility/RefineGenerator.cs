@@ -1,6 +1,6 @@
-﻿namespace Forged.Core.Generators.Utility;
+namespace Forged.Core.Generators.Utility;
 
-public sealed class RefineGenerator<T, TNew>(Generator<T> innerGenerator, Func<T, TNew> refiner) : Generator<TNew>
+public sealed class RefineGenerator<T, TNew>(Generator<T> innerGenerator, Func<T, TNew> refiner, System.Random rng) : Generator<TNew>(rng)
 {
 	public override TNew Generate()
 	{
