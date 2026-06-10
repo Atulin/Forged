@@ -10,10 +10,9 @@ var faker = new PersonFaker
 	LastName = f => f.Text.Alphanumeric(10),
 	MiddleNames = f => f.Text
 		.Alphanumeric(5)
-		.Collection(3)
-		.Refine(c => c.ToList())
-		.OrDefault(0f),
-	DateOfBirth = f => f.Temporal.Past().OrNull(0f),
+		.List(3)
+		.ToNullable(),
+	DateOfBirth = f => f.Temporal.Past().Nullable(),
 	IsActive = f => f.Random.Pick(true, false)
 };
  

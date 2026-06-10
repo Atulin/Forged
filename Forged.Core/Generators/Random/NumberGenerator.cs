@@ -11,7 +11,7 @@ public sealed class NumberGenerator<T>(T? min, T? max, System.Random rng) : Gene
 	{
 		var range = _max - _min;
 		var ratio = Rng.NextDouble();
-		var scale = T.CreateChecked<double>(ratio);
+		var scale = T.CreateChecked(ratio);
 
 		return _min + range * scale;
 	}

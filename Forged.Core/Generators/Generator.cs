@@ -3,20 +3,17 @@ using Forged.Core.Generators.Utility.Collections;
 
 namespace Forged.Core.Generators;
 
-public abstract class Generator<T> : IGenerator<T>
+public abstract class Generator<T>(System.Random rng) : IGenerator<T>
 {
-	/// <summary>The Random instance used by this generator and all generators derived from it.</summary>
-	public System.Random Rng { get; }
-
-	protected Generator(System.Random rng)
-	{
-		Rng = rng;
-	}
+	public System.Random Rng { get; } = rng;
 
 	public abstract T Generate();
 
 	public Generator<T?> OrDefault(float probability)
 		=> new NullableOrGenerator<T>(this, default, probability, Rng);
+
+	public Generator<T?> ToNullable()
+		=> Refine(T? (x) => x);
 
 	public Generator<T> Or(T other, float probability)
 		=> new OrGenerator<T>(this, other, probability, Rng);
@@ -38,14 +35,4 @@ public abstract class Generator<T> : IGenerator<T>
 
 	public Generator<HashSet<T>> HashSet(int length)
 		=> new HashSetGenerator<T>(this, length, Rng);
-
-	/// <summary>
-	/// Implicitly lifts a Generator&lt;T&gt; (where T is a value type) to
-	/// Generator&lt;T?&gt;, allowing it to be assigned to nullable properties
-	/// without calling .OrNull(0f) or .Refine().
-	/// The generated values are never null — this is a pure type-widening lift.
-	/// </summary>
-	public static implicit operator Generator<T?>(Generator<T> generator)
-		where T : struct
-		=> new NullableOrValueGenerator<T>(generator, 0f, generator.Rng);
 }
