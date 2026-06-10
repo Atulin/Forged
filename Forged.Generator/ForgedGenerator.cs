@@ -10,27 +10,20 @@ public class ForgedGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        var provider = context.SyntaxProvider
-            .CreateSyntaxProvider(
-                predicate: static (s, _) => s is ClassDeclarationSyntax or RecordDeclarationSyntax,
-                transform: static (ctx, _) => GetSemanticTargetForGeneration(ctx))
-            .Where(static m => m is not null);
+        var typesToGenerate = context.SyntaxProvider
+	        .ForAttributeWithMetadataName(
+				"Forged.Core.FakeAttribute",
+				predicate: static (s, _) => s is ClassDeclarationSyntax or RecordDeclarationSyntax,
+				transform: static (ctx, _) => GetSemanticTargetForGeneration(ctx.SemanticModel, ctx.TargetNode)
+		    )
+		    .Where(static m => m is not null);
 
-        context.RegisterSourceOutput(provider, static (spc, source) => Execute(spc, source));
+        context.RegisterSourceOutput(typesToGenerate, static (spc, source) => Execute(spc, source));
     }
 
-    private static TypeToGenerate? GetSemanticTargetForGeneration(GeneratorSyntaxContext context)
+    private static TypeToGenerate? GetSemanticTargetForGeneration(SemanticModel semanticModel, SyntaxNode node)
     {
-        var declarationSyntax = (TypeDeclarationSyntax)context.Node;
-        if (context.SemanticModel.GetDeclaredSymbol(declarationSyntax) is not INamedTypeSymbol symbol)
-        {
-	        return null;
-        }
-
-        var hasFakeAttribute = symbol.GetAttributes()
-            .Any(a => a.AttributeClass?.ToDisplayString() == "Forged.Core.FakeAttribute");
-
-        if (!hasFakeAttribute)
+        if (semanticModel.GetDeclaredSymbol(node) is not INamedTypeSymbol symbol)
         {
 	        return null;
         }
@@ -48,7 +41,7 @@ public class ForgedGenerator : IIncrementalGenerator
         return new TypeToGenerate(
             symbol.ContainingNamespace.IsGlobalNamespace ? string.Empty : symbol.ContainingNamespace.ToDisplayString(),
             name: symbol.Name,
-            properties: properties
+            properties: properties.ToEquatableReadOnlyList()
         );
     }
 
@@ -156,11 +149,11 @@ public class ForgedGenerator : IIncrementalGenerator
     }
 }
 
-public class TypeToGenerate(string ns, string name, IReadOnlyList<PropertyToGenerate> properties)
+public class TypeToGenerate(string ns, string name, EquatableReadOnlyList<PropertyToGenerate> properties)
 {
     public string Namespace { get; } = ns;
     public string Name { get; } = name;
-    public IReadOnlyList<PropertyToGenerate> Properties { get; } = properties;
+    public EquatableReadOnlyList<PropertyToGenerate> Properties { get; } = properties;
 }
 
 public class PropertyToGenerate(string name, string type, bool isRequired)
