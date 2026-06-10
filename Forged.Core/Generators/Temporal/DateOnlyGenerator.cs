@@ -1,6 +1,6 @@
 namespace Forged.Core.Generators.Temporal;
 
-public sealed class DateOnlyGenerator(DateOnly? min = null, DateOnly? max = null) : Generator<DateOnly>
+public sealed class DateOnlyGenerator(DateOnly? min, DateOnly? max, System.Random rng) : Generator<DateOnly>(rng)
 {
 	private readonly int _minDay = (min ?? DateOnly.MinValue).DayNumber;
 	private readonly int _maxDay = (max ?? DateOnly.MaxValue).DayNumber;

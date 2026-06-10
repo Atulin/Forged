@@ -1,6 +1,6 @@
-﻿namespace Forged.Core.Generators.Text;
+namespace Forged.Core.Generators.Text;
 
-public sealed class GuidGenerator(GuidGenerator.Kind kind = GuidGenerator.Kind.V4) : Generator<Guid>
+public sealed class GuidGenerator(GuidGenerator.Kind kind, System.Random rng) : Generator<Guid>(rng)
 {
 	public override Guid Generate()
 	{

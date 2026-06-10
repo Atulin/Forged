@@ -1,6 +1,6 @@
-﻿namespace Forged.Core.Generators.Utility.Collections;
+namespace Forged.Core.Generators.Utility.Collections;
 
-public class EnumerableGenerator<T>(Generator<T> innerGenerator, int length) : Generator<IEnumerable<T>>
+public sealed class EnumerableGenerator<T>(Generator<T> innerGenerator, int length, System.Random rng) : Generator<IEnumerable<T>>(rng)
 {
 	public override IEnumerable<T> Generate()
 	{

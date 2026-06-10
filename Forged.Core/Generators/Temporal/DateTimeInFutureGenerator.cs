@@ -5,7 +5,7 @@ public sealed class DateTimeInFutureGenerator : Generator<DateTime>
 	private readonly long _minTicks;
 	private readonly long _maxTicks;
 
-	public DateTimeInFutureGenerator(DateTime? latest = null)
+	public DateTimeInFutureGenerator(DateTime? latest, System.Random rng) : base(rng)
 	{
 		var now = DateTime.UtcNow;
 		_minTicks = now.Ticks;

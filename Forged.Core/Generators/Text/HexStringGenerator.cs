@@ -1,6 +1,6 @@
-﻿namespace Forged.Core.Generators.Text;
+namespace Forged.Core.Generators.Text;
 
-public sealed class HexStringGenerator(int length) : Generator<string>
+public sealed class HexStringGenerator(int length, System.Random rng) : Generator<string>(rng)
 {
 	public override string Generate() => Rng.GetHexString(length);
 }

@@ -5,7 +5,7 @@ public sealed class DateTimeInPastGenerator : Generator<DateTime>
 	private readonly long _minTicks;
 	private readonly long _maxTicks;
 
-	public DateTimeInPastGenerator(DateTime? earliest = null)
+	public DateTimeInPastGenerator(DateTime? earliest, System.Random rng) : base(rng)
 	{
 		var now = DateTime.UtcNow;
 		_maxTicks = now.Ticks;
