@@ -23,6 +23,8 @@ public static class GeneratorExtensions
 			=> new LowercaseGenerator(generator, generator.Rng);
 		public Generator<string> ToTitleCase(CultureInfo? cultureInfo = null)
 			=> new TitleCaseGenerator(generator, cultureInfo, generator.Rng);
+		public Generator<string> Capitalize(CultureInfo? cultureInfo = null)
+			=> new CapitalizeGenerator(generator, cultureInfo, generator.Rng);
 	}
 
 	extension(Generator<DateTime> generator)
@@ -46,14 +48,14 @@ public static class GeneratorExtensions
 		=> new ToFormattedStringGenerator<T>(generator, format, cultureInfo, generator.Rng);
 
 	public static Generator<List<T>> AsList<T>(this Generator<IEnumerable<T>> generator)
-		=> new RefineGenerator<IEnumerable<T>, List<T>>(generator, e => e.ToList(), generator.Rng);
+		=> new RefineGenerator<IEnumerable<T>, List<T>>(generator, static e => e.ToList(), generator.Rng);
 
 	public static Generator<List<T>> AsList<T>(this Generator<ICollection<T>> generator)
-		=> new RefineGenerator<ICollection<T>, List<T>>(generator, c => c.ToList(), generator.Rng);
+		=> new RefineGenerator<ICollection<T>, List<T>>(generator, static c => c.ToList(), generator.Rng);
 
 	public static Generator<HashSet<T>> AsHashSet<T>(this Generator<IEnumerable<T>> generator)
-		=> new RefineGenerator<IEnumerable<T>, HashSet<T>>(generator, e => e.ToHashSet(), generator.Rng);
+		=> new RefineGenerator<IEnumerable<T>, HashSet<T>>(generator, static e => e.ToHashSet(), generator.Rng);
 
 	public static Generator<HashSet<T>> AsHashSet<T>(this Generator<ICollection<T>> generator)
-		=> new RefineGenerator<ICollection<T>, HashSet<T>>(generator, c => c.ToHashSet(), generator.Rng);
+		=> new RefineGenerator<ICollection<T>, HashSet<T>>(generator, static c => c.ToHashSet(), generator.Rng);
 }

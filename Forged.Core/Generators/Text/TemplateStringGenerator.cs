@@ -12,27 +12,33 @@ public sealed class TemplateStringGenerator(
 	public override string Generate()
 	{
 		var sb = new StringBuilder(template.Length);
+		var escaped = false;
 		foreach (var c in template.AsSpan())
 		{
+			if (escaped)
+			{
+				sb.Append(c);
+				escaped = false;
+				continue;
+			}
+			
+			if (c == '\\')
+			{
+				escaped = true;
+				continue;
+			}
+			
 			if (c == digitToken)
 			{
 				sb.Append(Rng.Next(0, 10));
 			}
 			else if (c == letterToken)
 			{
-				sb.Append((char)('A' + Rng.Next(0, 26)));
+				sb.Append(Rng.GetItems(Constants.AlphanumericString.AsSpan()[..^10], 1));
 			}
 			else if (c == alphanumericToken)
 			{
-				var isDigit = Rng.Next(0, 2) == 0;
-				if (isDigit)
-				{
-					sb.Append(Rng.Next(0, 10));
-				}
-				else
-				{
-					sb.Append((char)('A' + Rng.Next(0, 26)));
-				}
+				sb.Append(Rng.GetItems(Constants.AlphanumericString.AsSpan(), 1));
 			}
 			else
 			{

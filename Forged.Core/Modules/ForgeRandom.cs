@@ -10,7 +10,10 @@ public sealed class ForgeRandom(Forge forge)
 		=> new PickOneGenerator<T>(items, forge.Rng);
 
 	public Generator<T[]> Pick<T>(T[] items, int count)
-		=> new PickManyGenerator<T>(items, count, forge.Rng);
+		=> new PickManyGenerator<T>(items, count, count, forge.Rng);
+
+	public Generator<T[]> Pick<T>(T[] items, int minCount, int maxCount)
+		=> new PickManyGenerator<T>(items, minCount, maxCount, forge.Rng);
 
 	public Generator<T> Number<T>(T? min = null, T? max = null) where T : struct, INumber<T>, IMinMaxValue<T>
 		=> new NumberGenerator<T>(min, max, forge.Rng);

@@ -71,11 +71,11 @@ public class ForgedGenerator : IIncrementalGenerator
         {
             if (prop.IsRequired)
             {
-                sb.AppendLine($"    public required Func<Forge, Generator<{prop.Type}>> {prop.Name} {{ get; init; }}");
+                sb.AppendLine($"    public required Func<Forge, IGenerator<{prop.Type}>> {prop.Name} {{ get; init; }}");
             }
             else
             {
-                sb.AppendLine($"    public Func<Forge, Generator<{prop.Type}>>? {prop.Name} {{ get; init; }}");
+                sb.AppendLine($"    public Func<Forge, IGenerator<{prop.Type}>>? {prop.Name} {{ get; init; }}");
             }
         }
 
@@ -83,7 +83,7 @@ public class ForgedGenerator : IIncrementalGenerator
 
         foreach (var prop in typeToGenerate.Properties)
         {
-            sb.AppendLine($"    private Generator<{prop.Type}>? _{Decapitalize(prop.Name)}Generator;");
+            sb.AppendLine($"    private IGenerator<{prop.Type}>? _{Decapitalize(prop.Name)}Generator;");
         }
 
         sb.AppendLine();
