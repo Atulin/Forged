@@ -1,5 +1,9 @@
 # Forged
 
+[![NuGet](https://img.shields.io/nuget/v/Atulin.Forged.svg)](https://www.nuget.org/packages/Atulin.Forged)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![.NET 10](https://img.shields.io/badge/.NET-10.0-purple.svg)](https://dotnet.microsoft.com/)
+
 A fast, strict, and strongly-typed data generator (faker) for C# powered by Source Generators.
 
 Forged allows you to declaratively define how your models should be faked, leveraging the C# compiler to enforce required properties, nullability, and type-safety.
@@ -79,6 +83,9 @@ var faker = new PersonFaker(new Random(12345))
 
 The `Forge` instance (`f` in the lambda expressions) provides access to built-in generators categorized by modules:
 
+### `Basic`
+- `.Literal(T value)` - Creates a generator that always returns the specified literal value.
+
 ### `Random`
 - `Pick<T>(params T[] items)` - Pick a single random item from the given collection.
 - `Pick<T>(T[] items, int count)` - Pick an exact number of random items from the collection.
@@ -115,7 +122,6 @@ The `Forge` instance (`f` in the lambda expressions) provides access to built-in
 Any `Generator<T>` can be customized and composed using fluent methods. These methods can be chained to create complex generation pipelines.
 
 ### Core Modifiers (on `Generator<T>`)
-- `.Literal(T value)` - Creates a generator that always returns the specified literal value.
 - `.Or(T other, float probability)` - Returns an alternative value with the specified probability (e.g., 0.2f = 20% chance).
 - `.OrDefault(float probability)` - Returns the default value for type T with the specified probability.
 - `.Refine<TNew>(Func<T, TNew> refiner)` - Transforms the generated value using the provided function.

@@ -10,6 +10,12 @@ namespace Forged.Core.Modules;
 public sealed class ForgeRandom(Forge forge)
 {
 	/// <summary>
+	/// Creates a generator that simulates a coin toss, producing a random boolean value representing heads (true) or tails (false).
+	/// </summary>
+	public Generator<bool> CoinToss()
+		=> new CoinTossGenerator<bool>(forge.Rng);
+	
+	/// <summary>
 	/// Creates a generator that picks a random item from the specified collection.
 	/// </summary>
 	/// <typeparam name="T">The type of items to pick from.</typeparam>

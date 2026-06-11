@@ -26,21 +26,11 @@ public sealed class Forge
     /// Gets the text generation module.
     /// </summary>
     public ForgeText Text { get; }
-    
+
     /// <summary>
-    /// Generates a random integer within the specified range.
+    /// Gets the module for generating basic random or deterministic data.
     /// </summary>
-    /// <param name="min">The inclusive lower bound.</param>
-    /// <param name="max">The exclusive upper bound.</param>
-    /// <returns>A random integer between <paramref name="min"/> and <paramref name="max"/>-1.</returns>
-    public int Next(int min, int max) => Rng.Next(min, max);
-    
-    /// <summary>
-    /// Generates a random boolean value (true or false).
-    /// </summary>
-    /// <returns>True or false with equal probability.</returns>
-    public bool Coinflip() => Rng.Next(0, 2) == 1;
-    
+    public ForgeBasic Basic { get; }
     
     /// <summary>
     /// Initializes a new instance of the <see cref="Forge"/> class.
@@ -52,5 +42,6 @@ public sealed class Forge
         Random = new ForgeRandom(this);
         Temporal = new ForgeTemporal(this);
         Text = new ForgeText(this);
+        Basic = new ForgeBasic(this);
     }
 }
