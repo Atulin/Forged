@@ -11,16 +11,18 @@
         <Description>A fast, strict, and strongly-typed data generator (faker) for C# powered by Source Generators.</Description>
         <Authors>Atulin</Authors>
         <PackageTags>faker;data-generator;testing;source-generator;csharp</PackageTags>
+        
         <PackageProjectUrl>https://github.com/Atulin/Forged</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Atulin/Forged</RepositoryUrl>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <RepositoryType>git</RepositoryType>
+        
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        
         <IsPackable>true</IsPackable>
         <IncludeBuildOutput>false</IncludeBuildOutput>
-
-        <PackageReferenceUpdate>PreserveExactVersions</PackageReferenceUpdate>
     </PropertyGroup>
 
     <ItemGroup>
@@ -28,14 +30,18 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Forged.Core\Forged.Core.csproj"
-                          ReferenceOutputAssembly="true"
-                          Pack="true"
-                          PackagePath="lib\net10.0"/>
-        <ProjectReference Include="..\Forged.Generator\Forged.Generator.csproj"
-                          ReferenceOutputAssembly="true"
-                          Pack="true"
-                          PackagePath="analyzers\dotnet\cs"/>
+        <None Include="../Forged.Core/bin/$(Configuration)/$(TargetFramework)/Forged.Core.dll" 
+              Pack="true" 
+              PackagePath="lib/$(TargetFramework)"/>
+        <None Include="../Forged.Generator/bin/$(Configuration)/netstandard2.0/Forged.Generator.dll" 
+              Pack="true" 
+              PackagePath="analyzers/dotnet/roslyn4.8/cs" 
+              Visible="true"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Forged.Core\Forged.Core.csproj" ReferenceOutputAssembly="false"/>
+        <ProjectReference Include="..\Forged.Generator\Forged.Generator.csproj" ReferenceOutputAssembly="false"/>
     </ItemGroup>
 
 </Project>
