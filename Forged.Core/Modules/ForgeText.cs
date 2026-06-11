@@ -14,6 +14,16 @@ public sealed class ForgeText(Forge forge)
 		=> new AlphaStringGenerator(length, length, forge.Rng);
 	public Generator<string> Alpha(int minLength, int maxLength)
 		=> new AlphaStringGenerator(minLength, maxLength, forge.Rng);
+	
+	public Generator<string> Pronounceable(int length)
+		=> new PronounceableStringGenerator(length, length, forge.Rng);
+	public Generator<string> Pronounceable(int minLength, int maxLength)
+		=> new PronounceableStringGenerator(minLength, maxLength, forge.Rng);
+	
+	public Generator<string> Lorem(int length)
+		=> new LoremIpsumGenerator(length, length, forge.Rng);
+	public Generator<string> Lorem(int minLength, int maxLength)
+		=> new LoremIpsumGenerator(minLength, maxLength, forge.Rng);
 
 	public Generator<string> Hex(int length)
 		=> new HexStringGenerator(length, length, forge.Rng);

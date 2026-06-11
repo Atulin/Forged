@@ -20,4 +20,7 @@ public sealed class ForgeRandom(Forge forge)
 
 	public Generator<T> WeightedPick<T>(T[] items, float[] weights)
 		=> new WeightedPickGenerator<T>(items, weights, forge.Rng);
+
+	public Generator<T> WeightedPick<T>((T item, float weight)[] items)
+		=> new WeightedPickGenerator<T>(items, forge.Rng);
 }

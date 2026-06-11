@@ -9,9 +9,9 @@ public static class GeneratorExtensions
 {
 	extension<T>(Generator<T> generator) where T : struct
 	{
-		public Generator<T?> OrNull(float probability) 
+		public Generator<T?> OrNull(float probability)
 			=> new NullableOrValueGenerator<T>(generator, probability, generator.Rng);
-		public Generator<T?> Nullable() 
+		public Generator<T?> Nullable()
 			=> generator.Refine(x => (T?)x);
 	}
 
@@ -25,6 +25,10 @@ public static class GeneratorExtensions
 			=> new TitleCaseGenerator(generator, cultureInfo, generator.Rng);
 		public Generator<string> Capitalize(CultureInfo? cultureInfo = null)
 			=> new CapitalizeGenerator(generator, cultureInfo, generator.Rng);
+		public Generator<string> Sentencify(int sentenceLength, CultureInfo? cultureInfo = null)
+			=> new SentencifyGenerator(generator, sentenceLength, sentenceLength, cultureInfo, generator.Rng);
+		public Generator<string> Sentencify(int minSentenceLength, int maxSentenceLength, CultureInfo? cultureInfo = null)
+			=> new SentencifyGenerator(generator, minSentenceLength, maxSentenceLength, cultureInfo, generator.Rng);
 	}
 
 	extension(Generator<DateTime> generator)
@@ -58,4 +62,11 @@ public static class GeneratorExtensions
 
 	public static Generator<HashSet<T>> AsHashSet<T>(this Generator<ICollection<T>> generator)
 		=> new RefineGenerator<ICollection<T>, HashSet<T>>(generator, static c => c.ToHashSet(), generator.Rng);
+
+	public static Generator<Dictionary<TKey, TValue>> AsDictionary<T, TKey, TValue>(
+		this Generator<IEnumerable<T>> generator,
+		Func<T, TKey> keySelector,
+		Func<T, TValue> valueSelector
+	) where TKey : notnull
+		=> generator.Refine(e => e.ToDictionary(keySelector, valueSelector));
 }
