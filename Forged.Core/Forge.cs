@@ -2,17 +2,50 @@ using Forged.Core.Modules;
 
 namespace Forged.Core;
 
+/// <summary>
+/// The main entry point for generating fake data. Provides access to all generator modules.
+/// </summary>
 public sealed class Forge
 {
+    /// <summary>
+    /// Gets the underlying random number generator.
+    /// </summary>
     public Random Rng { get; }
+    
+    /// <summary>
+    /// Gets the random data generation module.
+    /// </summary>
     public ForgeRandom Random { get; }
+    
+    /// <summary>
+    /// Gets the temporal (date/time) generation module.
+    /// </summary>
     public ForgeTemporal Temporal { get; }
+    
+    /// <summary>
+    /// Gets the text generation module.
+    /// </summary>
     public ForgeText Text { get; }
     
+    /// <summary>
+    /// Generates a random integer within the specified range.
+    /// </summary>
+    /// <param name="min">The inclusive lower bound.</param>
+    /// <param name="max">The exclusive upper bound.</param>
+    /// <returns>A random integer between <paramref name="min"/> and <paramref name="max"/>-1.</returns>
     public int Next(int min, int max) => Rng.Next(min, max);
+    
+    /// <summary>
+    /// Generates a random boolean value (true or false).
+    /// </summary>
+    /// <returns>True or false with equal probability.</returns>
     public bool Coinflip() => Rng.Next(0, 2) == 1;
     
     
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Forge"/> class.
+    /// </summary>
+    /// <param name="random">The random number generator to use. If null, <see cref="System.Random.Shared"/> is used.</param>
     public Forge(Random? random = null)
     {
         Rng = random ?? System.Random.Shared;

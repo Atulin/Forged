@@ -1,9 +1,15 @@
 namespace Forged.Core.Generators.Text;
 
+/// <summary>
+/// Generates random Lorem Ipsum text.
+/// </summary>
+/// <param name="minWords">The minimum number of words to generate.</param>
+/// <param name="maxWords">The maximum number of words to generate.</param>
+/// <param name="rng">The random number generator to use.</param>
 public sealed class LoremIpsumGenerator(int minWords, int maxWords, System.Random rng) : Generator<string>(rng)
 {
 	private static readonly string[] Lipsum =
-	[    
+	[
 		// repeat common words for higher chance
 		"lorem", "ipsum", "dolor", "sit", "amet",
 		"lorem", "ipsum", "dolor",
@@ -32,6 +38,10 @@ public sealed class LoremIpsumGenerator(int minWords, int maxWords, System.Rando
 		"mauris", "pretium", "fusce", "ornare", "donec", "ullamcorper"
 	];
 
+	/// <summary>
+	/// Generates a random Lorem Ipsum string.
+	/// </summary>
+	/// <returns>A random Lorem Ipsum string with the specified number of words.</returns>
 	public override string Generate()
 	{
 		var length = minWords == maxWords

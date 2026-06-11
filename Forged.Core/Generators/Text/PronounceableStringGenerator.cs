@@ -2,6 +2,12 @@ using System.Text;
 
 namespace Forged.Core.Generators.Text;
 
+/// <summary>
+/// Generates random pronounceable strings using syllable-based generation.
+/// </summary>
+/// <param name="minSyllables">The minimum number of syllables to generate.</param>
+/// <param name="maxSyllables">The maximum number of syllables to generate.</param>
+/// <param name="rng">The random number generator to use.</param>
 public sealed class PronounceableStringGenerator(int minSyllables, int maxSyllables, System.Random rng) : Generator<string>(rng)
 {
 	private static readonly string[] Onsets =
@@ -21,6 +27,10 @@ public sealed class PronounceableStringGenerator(int minSyllables, int maxSyllab
 		"ch", "sh", "th", "ck", "ng", "nk", "nt", "st", "rd", "ld"
 	];
 	
+	/// <summary>
+	/// Generates a random pronounceable string.
+	/// </summary>
+	/// <returns>A random pronounceable string.</returns>
 	public override string Generate()
 	{
 		var length = minSyllables == maxSyllables 
