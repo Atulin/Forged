@@ -80,32 +80,78 @@ var faker = new PersonFaker(new Random(12345))
 The `Forge` instance (`f` in the lambda expressions) provides access to built-in generators categorized by modules:
 
 ### `Random`
-- `Pick(params T[])` / `Pick(T[], count)` - Pick one or more items from a predefined set.
-- `Number(min, max)` - Generate a random number between min and max.
-- `WeightedPick(items, weights)` - Pick an item based on custom weights.
+- `Pick<T>(params T[] items)` - Pick a single random item from the given collection.
+- `Pick<T>(T[] items, int count)` - Pick an exact number of random items from the collection.
+- `Pick<T>(T[] items, int minCount, int maxCount)` - Pick a variable number of random items from the collection.
+- `Number<T>(T? min, T? max)` - Generate a random numeric value within the specified range (supports all numeric types).
+- `WeightedPick<T>(T[] items, float[] weights)` - Pick an item from the collection using specified weights for probability distribution.
+- `WeightedPick<T>((T item, float weight)[] items)` - Pick an item from an array of item-weight tuples.
 
 ### `Temporal`
-- `Between(min, max)` - Generate a `DateTime` between two dates.
-- `Past(earliest)` / `Future(latest)` - Generate a `DateTime` in the past or future.
-- `DateBetween`, `DateInPast`, `DateInFuture` - Same as above, but for `DateOnly`.
-- `TimeBetween` - Generate a `TimeOnly`.
+- `Between(DateTime? min, DateTime? max)` - Generate a random `DateTime` within the specified range.
+- `Past(DateTime? earliest)` - Generate a random `DateTime` in the past, with an optional earliest bound.
+- `Future(DateTime? latest)` - Generate a random `DateTime` in the future, with an optional latest bound.
+- `DateBetween(DateOnly? min, DateOnly? max)` - Generate a random `DateOnly` within the specified range.
+- `DateInPast(DateOnly? earliest)` - Generate a random `DateOnly` in the past, with an optional earliest bound.
+- `DateInFuture(DateOnly? latest)` - Generate a random `DateOnly` in the future, with an optional latest bound.
+- `TimeBetween(TimeOnly? min, TimeOnly? max)` - Generate a random `TimeOnly` within the specified range.
 
 ### `Text`
-- `Alphanumeric(length)` - Generate a random alphanumeric string.
-- `Hex(length)` - Generate a random hexadecimal string.
-- `Guid(kind)` - Generate a Guid (supports V4 and V7).
-- `Template(template)` - Generate a string from a template.
+- `Alphanumeric(int length)` - Generate a random alphanumeric string of fixed length.
+- `Alphanumeric(int minLength, int maxLength)` - Generate a random alphanumeric string of variable length.
+- `Alpha(int length)` - Generate a random alphabetic string of fixed length.
+- `Alpha(int minLength, int maxLength)` - Generate a random alphabetic string of variable length.
+- `Pronounceable(int length)` - Generate a random pronounceable string (syllable-based) of fixed length.
+- `Pronounceable(int minLength, int maxLength)` - Generate a random pronounceable string of variable length.
+- `Lorem(int length)` - Generate Lorem Ipsum text with a fixed number of words.
+- `Lorem(int minLength, int maxLength)` - Generate Lorem Ipsum text with a variable number of words.
+- `Hex(int length)` - Generate a random hexadecimal string of fixed length.
+- `Hex(int minLength, int maxLength)` - Generate a random hexadecimal string of variable length.
+- `Guid(GuidGenerator.Kind kind)` - Generate a GUID of the specified kind (supports V4 and V7).
+- `Template(string template)` - Generate a string from a template with random placeholder replacements.
 
 ## Modifiers & Extensions
 
-Any `Generator<T>` can be customized and composed using fluent methods:
+Any `Generator<T>` can be customized and composed using fluent methods. These methods can be chained to create complex generation pipelines.
 
-### General Modifiers
-- `.Or(other, probability)` / `.OrDefault(probability)` / `.OrNull(probability)` - Introduce a chance to return an alternative value or null.
-- `.Refine(mappingFunc)` - Transform the generated value to another type or format (e.g., `IEnumerable<T>` to `List<T>`).
-- `.Array(length)` / `.Enumerable(length)` / `.Collection(length)` - Generate a collection of items using the current generator.
+### Core Modifiers (on `Generator<T>`)
+- `.Literal(T value)` - Creates a generator that always returns the specified literal value.
+- `.Or(T other, float probability)` - Returns an alternative value with the specified probability (e.g., 0.2f = 20% chance).
+- `.OrDefault(float probability)` - Returns the default value for type T with the specified probability.
+- `.Refine<TNew>(Func<T, TNew> refiner)` - Transforms the generated value using the provided function.
+- `.Enumerable(int length)` - Generates an `IEnumerable<T>` with a fixed number of items.
+- `.Enumerable(int minLength, int maxLength)` - Generates an `IEnumerable<T>` with a variable number of items.
+- `.Array(int length)` - Generates a `T[]` array with a fixed number of items.
+- `.Array(int minLength, int maxLength)` - Generates a `T[]` array with a variable number of items.
+- `.List(int length)` - Generates a `List<T>` with a fixed number of items.
+- `.List(int minLength, int maxLength)` - Generates a `List<T>` with a variable number of items.
+- `.HashSet(int length)` - Generates a `HashSet<T>` with a fixed number of unique items.
+- `.HashSet(int minLength, int maxLength)` - Generates a `HashSet<T>` with a variable number of unique items.
 
-### Specific Extensions
-- **String specific**: `.ToUpper()`, `.ToLower()`, `.ToTitleCase()`
-- **Temporal specific**: `.ToUtc()`, `.ToLocal()`, `.ToDateOnly()`, `.ToTimeOnly()`, `.TruncateToDate()`
-- **Formatting**: `.ToString()`, `.ToString(format, cultureInfo)`
+### Nullable & Struct Extensions
+- `.OrNull(float probability)` - For struct generators, returns null with the specified probability.
+- `.Nullable()` - Converts a struct generator to a nullable struct generator.
+
+### Collection Conversion Extensions
+- `.AsList()` - Converts an `IEnumerable<T>` or `ICollection<T>` generator to a `List<T>` generator.
+- `.AsHashSet()` - Converts an `IEnumerable<T>` or `ICollection<T>` generator to a `HashSet<T>` generator.
+- `.AsDictionary<T, TKey, TValue>(keySelector, valueSelector)` - Converts an `IEnumerable<T>` generator to a `Dictionary<TKey, TValue>` using the provided selectors.
+
+### String-Specific Extensions
+- `.ToUpper()` - Converts generated strings to uppercase.
+- `.ToLower()` - Converts generated strings to lowercase.
+- `.ToTitleCase(CultureInfo? cultureInfo)` - Converts generated strings to title case using the specified culture.
+- `.Capitalize(CultureInfo? cultureInfo)` - Capitalizes the first character of generated strings.
+- `.Sentencify(int sentenceLength, CultureInfo? cultureInfo)` - Formats strings as proper sentences with a fixed word count.
+- `.Sentencify(int minSentenceLength, int maxSentenceLength, CultureInfo? cultureInfo)` - Formats strings as proper sentences with a variable word count.
+
+### Temporal-Specific Extensions (DateTime)
+- `.ToUtc()` - Converts generated DateTime values to UTC.
+- `.ToLocal()` - Converts generated DateTime values to local time.
+- `.ToDateOnly()` - Extracts the date component from DateTime values, producing DateOnly.
+- `.ToTimeOnly()` - Extracts the time component from DateTime values, producing TimeOnly.
+- `.TruncateToDate()` - Truncates DateTime values to date precision (sets time to midnight).
+
+### Formatting Extensions
+- `.ToString()` - Converts generated values to their string representation.
+- `.ToString(string format, CultureInfo? cultureInfo)` - Converts generated values to formatted strings using the specified format and culture (for types implementing `ISpanFormattable`).
