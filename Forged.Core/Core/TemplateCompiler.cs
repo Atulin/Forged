@@ -73,6 +73,6 @@ internal static class TemplateCompiler
 	}
 
 	internal abstract record Token;
-	internal sealed record Literal(string Value) : Token;
-	internal sealed record Placeholder(string Key) : Token;
+	private sealed record Literal(string Value) : Token;
+	private sealed record Placeholder(string Key) : Token;
 }

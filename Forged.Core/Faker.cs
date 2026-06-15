@@ -25,9 +25,14 @@ public abstract class Faker<TModel>(Random? random = null, CultureInfo? locale =
     /// </summary>
     /// <param name="count">The number of instances to generate.</param>
     /// <returns>An enumerable of fake model instances.</returns>
-    public abstract IEnumerable<TModel> Get(int count);
-
-
+    public IEnumerable<TModel> Get(int count)
+    {
+	    for (var i = 0; i < count; i++)
+	    {
+		    yield return Get();
+	    }
+    }
+	
     /// <summary>
     /// Generates a random number of fake model instances within a specified range.
     /// </summary>

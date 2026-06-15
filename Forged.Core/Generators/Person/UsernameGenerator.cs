@@ -50,7 +50,7 @@ public sealed class UsernameGenerator(float prefixChance, float suffixChance, fl
 	/// <returns>A randomly generated username that may include a prefix, suffix, and leet-speak substitutions based on the configured probabilities.</returns>
 	public override string Generate()
 	{
-		var data = FileLoader.LoadData(Locale.Name, "username.json5", UserDataContext.Default.UserData);
+		var data = FileLoader.LoadData(Locale.Name, "username", UserDataContext.Default.UserData);
 
 		var usePrefix = Rng.NextSingle() < prefixChance;
 		var useSuffix = Rng.NextSingle() < suffixChance;

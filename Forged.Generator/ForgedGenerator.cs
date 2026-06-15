@@ -125,15 +125,6 @@ public class ForgedGenerator : IIncrementalGenerator
 
 		sb.AppendLine("        };");
 		sb.AppendLine("    }");
-
-		sb.AppendLine();
-		sb.AppendLine($"    public override IEnumerable<{typeToGenerate.Name}> Get(int count)");
-		sb.AppendLine("    {");
-		sb.AppendLine("        for (var i = 0; i < count; i++)");
-		sb.AppendLine("        {");
-		sb.AppendLine("            yield return Get();");
-		sb.AppendLine("        }");
-		sb.AppendLine("    }");
 		sb.AppendLine("}");
 
 		context.AddSource($"{typeToGenerate.Name}Faker.g.cs", SourceText.From(sb.ToString(), Encoding.UTF8));
