@@ -46,6 +46,14 @@ public sealed class ForgeRandom(Forge forge)
 		=> new PickManyGenerator<T>(items, minCount, maxCount, forge);
 
 	/// <summary>
+	/// Creates a generator that randomly selects a single value from the provided enum.
+	/// </summary>
+	/// <typeparam name="T">The type of the enum to select from.</typeparam>
+	/// <returns>A generator that produces a randomly selected enum value.</returns>
+	public Generator<T> Pick<T>() where T : struct, Enum
+		=> new PickEnumGenerator<T>(forge);
+
+	/// <summary>
 	/// Creates a generator that produces random numeric values within a specified range.
 	/// </summary>
 	/// <typeparam name="T">The numeric type to generate.</typeparam>
