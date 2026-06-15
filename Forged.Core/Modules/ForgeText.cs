@@ -15,7 +15,7 @@ public sealed class ForgeText(Forge forge)
 	/// <returns>A generator that produces random alphanumeric strings.</returns>
 	public Generator<string> Alphanumeric(int length)
 		=> new AlphanumericStringGenerator(length, length, forge);
-	
+
 	/// <summary>
 	/// Creates a generator that produces random alphanumeric strings of variable length.
 	/// </summary>
@@ -24,7 +24,7 @@ public sealed class ForgeText(Forge forge)
 	/// <returns>A generator that produces random alphanumeric strings.</returns>
 	public Generator<string> Alphanumeric(int minLength, int maxLength)
 		=> new AlphanumericStringGenerator(minLength, maxLength, forge);
-	
+
 	/// <summary>
 	/// Creates a generator that produces random alphabetic strings of a fixed length.
 	/// </summary>
@@ -32,7 +32,7 @@ public sealed class ForgeText(Forge forge)
 	/// <returns>A generator that produces random alphabetic strings.</returns>
 	public Generator<string> Alpha(int length)
 		=> new AlphaStringGenerator(length, length, forge);
-	
+
 	/// <summary>
 	/// Creates a generator that produces random alphabetic strings of variable length.
 	/// </summary>
@@ -41,7 +41,7 @@ public sealed class ForgeText(Forge forge)
 	/// <returns>A generator that produces random alphabetic strings.</returns>
 	public Generator<string> Alpha(int minLength, int maxLength)
 		=> new AlphaStringGenerator(minLength, maxLength, forge);
-	
+
 	/// <summary>
 	/// Creates a generator that produces random pronounceable strings of a fixed length.
 	/// </summary>
@@ -49,7 +49,7 @@ public sealed class ForgeText(Forge forge)
 	/// <returns>A generator that produces random pronounceable strings.</returns>
 	public Generator<string> Pronounceable(int length)
 		=> new PronounceableStringGenerator(length, length, forge);
-	
+
 	/// <summary>
 	/// Creates a generator that produces random pronounceable strings of variable length.
 	/// </summary>
@@ -58,7 +58,7 @@ public sealed class ForgeText(Forge forge)
 	/// <returns>A generator that produces random pronounceable strings.</returns>
 	public Generator<string> Pronounceable(int minLength, int maxLength)
 		=> new PronounceableStringGenerator(minLength, maxLength, forge);
-	
+
 	/// <summary>
 	/// Creates a generator that produces random Lorem Ipsum text of a fixed length.
 	/// </summary>
@@ -66,7 +66,17 @@ public sealed class ForgeText(Forge forge)
 	/// <returns>A generator that produces random Lorem Ipsum text.</returns>
 	public Generator<string> Lorem(int length)
 		=> new LoremIpsumGenerator(length, length, forge);
-	
+
+	/// <summary>
+	/// Creates a generator that produces random waffle text with a specified number of sentences
+	/// and a given style.
+	/// </summary>
+	/// <param name="sentences">The number of sentences to generate.</param>
+	/// <param name="style">The style of waffle text to generate (e.g., Fiction or Technical).</param>
+	/// <returns>A generator that produces random waffle text.</returns>
+	public Generator<string> Waffle(int sentences, WaffleStyle style = WaffleStyle.Technical)
+		=> new WaffleGenerator(sentences, style, forge);
+
 	/// <summary>
 	/// Creates a generator that produces random Lorem Ipsum text of variable length.
 	/// </summary>
@@ -83,7 +93,7 @@ public sealed class ForgeText(Forge forge)
 	/// <returns>A generator that produces random hexadecimal strings.</returns>
 	public Generator<string> Hex(int length)
 		=> new HexStringGenerator(length, length, forge);
-	
+
 	/// <summary>
 	/// Creates a generator that produces random hexadecimal strings of variable length.
 	/// </summary>

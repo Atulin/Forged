@@ -36,8 +36,7 @@ string Template(string module, string name) => $$"""
      
      /// <summary>
      /// </summary>
-     /// <param name="rng">The random number generator to use</param>
-     public sealed class {{name}}Generator<T>(System.Random rng) : Generator<T>(rng)
+     public sealed class {{name}}Generator<T>(Forge forge) : Generator<T>(forge)
      {
         public override T Generate() => throw new NotImplementedException();
      }

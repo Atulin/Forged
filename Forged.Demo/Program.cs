@@ -52,8 +52,7 @@ var faker = new PersonFaker
 
 	// Generate a random bio
 	Bio = f => f.Text
-		.Lorem(20, 100)    // generate a random lorem ipsum text, between 20 and 100 words long
-		.Sentencify(8, 20) // split the text into sentences, with a minimum of 8 and a maximum of 20 words per sentence
+		.Waffle(f.Random.Number<int>(3, 6), WaffleStyle.Fiction)
 };
 
 // Get 5 random people

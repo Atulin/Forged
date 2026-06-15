@@ -22,6 +22,8 @@
       <PackageReference Include="Atulin.SealAnalyzer" Version="1.0.0" PrivateAssets="all" />
       <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
       <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.9" />
+      <PackageReference Include="NetEscapades.EnumGenerators" Version="1.0.0-beta21" />
+      <PackageReference Include="NetEscapades.EnumGenerators.Interceptors" Version="1.0.0-beta21" />
     </ItemGroup>
 
 </Project>
