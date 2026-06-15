@@ -1,4 +1,4 @@
-namespace Forged.Core.Generators.Utility;
+namespace Forged.Core.Generators.Basic;
 
 /// <summary>
 /// Generates a constant value that never changes.

@@ -24,4 +24,17 @@ public abstract class Faker<TModel>(Random? random = null)
     /// <param name="count">The number of instances to generate.</param>
     /// <returns>An enumerable of fake model instances.</returns>
     public abstract IEnumerable<TModel> Get(int count);
+
+
+    /// <summary>
+    /// Generates a random number of fake model instances within a specified range.
+    /// </summary>
+    /// <param name="min">The minimum number of instances to generate.</param>
+    /// <param name="max">The maximum number of instances to generate.</param>
+    /// <returns>An enumerable of fake model instances.</returns>
+    public IEnumerable<TModel> Get(int min, int max)
+    {
+	    var count = Forge.Rng.Next(min, max);
+	    return Get(count);
+    }
 }

@@ -1,5 +1,5 @@
 using Forged.Core.Generators;
-using Forged.Core.Generators.Utility;
+using Forged.Core.Generators.Basic;
 
 namespace Forged.Core.Modules;
 
