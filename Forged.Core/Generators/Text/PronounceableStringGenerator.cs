@@ -7,8 +7,8 @@ namespace Forged.Core.Generators.Text;
 /// </summary>
 /// <param name="minSyllables">The minimum number of syllables to generate.</param>
 /// <param name="maxSyllables">The maximum number of syllables to generate.</param>
-/// <param name="rng">The random number generator to use.</param>
-public sealed class PronounceableStringGenerator(int minSyllables, int maxSyllables, System.Random rng) : Generator<string>(rng)
+/// <param name="forge">The Forge instance to use.</param>
+public sealed class PronounceableStringGenerator(int minSyllables, int maxSyllables, Forge forge) : Generator<string>(forge)
 {
 	private static readonly string[] Onsets =
 	[

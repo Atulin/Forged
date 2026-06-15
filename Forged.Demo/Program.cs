@@ -29,6 +29,11 @@ var faker = new PersonFaker
 		.ToLower()    // convert to lowercase
 		.Capitalize() // capitalize the first letter
 		.List(0, 3),  // generate a list of 0 to 3 names
+	
+	// Generate a random username, with 20% chance of being null
+	Nickname = f => f.Person
+		.Username()
+		.OrDefault(.2f),
 
 	// Generate a random date of birth
 	DateOfBirth = f => f.Temporal

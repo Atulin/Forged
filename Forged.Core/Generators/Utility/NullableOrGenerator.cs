@@ -7,8 +7,8 @@ namespace Forged.Core.Generators.Utility;
 /// <param name="innerGenerator">The inner generator to use when not returning the fallback.</param>
 /// <param name="fallback">The fallback value to return when the probability condition is met.</param>
 /// <param name="probability">The probability (0.0 to 1.0) of returning the fallback value.</param>
-/// <param name="rng">The random number generator to use.</param>
-public sealed class NullableOrGenerator<T>(Generator<T> innerGenerator, T? fallback, float probability, System.Random rng) : Generator<T?>(rng)
+/// <param name="forge">The Forge instance to use.</param>
+public sealed class NullableOrGenerator<T>(Generator<T> innerGenerator, T? fallback, float probability, Forge forge) : Generator<T?>(forge)
 {
 	/// <summary>
 	/// Generates a value from the inner generator or returns the fallback.

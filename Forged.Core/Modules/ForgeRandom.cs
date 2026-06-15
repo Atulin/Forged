@@ -13,7 +13,7 @@ public sealed class ForgeRandom(Forge forge)
 	/// Creates a generator that simulates a coin toss, producing a random boolean value representing heads (true) or tails (false).
 	/// </summary>
 	public Generator<bool> CoinToss()
-		=> new CoinTossGenerator<bool>(forge.Rng);
+		=> new CoinTossGenerator<bool>(forge);
 	
 	/// <summary>
 	/// Creates a generator that picks a random item from the specified collection.
@@ -22,7 +22,7 @@ public sealed class ForgeRandom(Forge forge)
 	/// <param name="items">The collection of items to pick from.</param>
 	/// <returns>A generator that produces random items from the collection.</returns>
 	public Generator<T> Pick<T>(params T[] items)
-		=> new PickOneGenerator<T>(items, forge.Rng);
+		=> new PickOneGenerator<T>(items, forge);
 
 	/// <summary>
 	/// Creates a generator that picks a fixed number of random items from the specified collection.
@@ -32,7 +32,7 @@ public sealed class ForgeRandom(Forge forge)
 	/// <param name="count">The exact number of items to pick each time.</param>
 	/// <returns>A generator that produces arrays of random items from the collection.</returns>
 	public Generator<T[]> Pick<T>(T[] items, int count)
-		=> new PickManyGenerator<T>(items, count, count, forge.Rng);
+		=> new PickManyGenerator<T>(items, count, count, forge);
 
 	/// <summary>
 	/// Creates a generator that picks a variable number of random items from the specified collection.
@@ -43,7 +43,7 @@ public sealed class ForgeRandom(Forge forge)
 	/// <param name="maxCount">The maximum number of items to pick.</param>
 	/// <returns>A generator that produces arrays of random items from the collection.</returns>
 	public Generator<T[]> Pick<T>(T[] items, int minCount, int maxCount)
-		=> new PickManyGenerator<T>(items, minCount, maxCount, forge.Rng);
+		=> new PickManyGenerator<T>(items, minCount, maxCount, forge);
 
 	/// <summary>
 	/// Creates a generator that produces random numeric values within a specified range.
@@ -53,7 +53,7 @@ public sealed class ForgeRandom(Forge forge)
 	/// <param name="max">The maximum value (inclusive). If null, uses the maximum value of the type.</param>
 	/// <returns>A generator that produces random numeric values.</returns>
 	public Generator<T> Number<T>(T? min = null, T? max = null) where T : struct, INumber<T>, IMinMaxValue<T>
-		=> new NumberGenerator<T>(min, max, forge.Rng);
+		=> new NumberGenerator<T>(min, max, forge);
 
 	/// <summary>
 	/// Creates a generator that picks random items from a collection using specified weights.
@@ -63,7 +63,7 @@ public sealed class ForgeRandom(Forge forge)
 	/// <param name="weights">The weights corresponding to each item (higher weight = higher probability).</param>
 	/// <returns>A generator that produces random items based on their weights.</returns>
 	public Generator<T> WeightedPick<T>(T[] items, float[] weights)
-		=> new WeightedPickGenerator<T>(items, weights, forge.Rng);
+		=> new WeightedPickGenerator<T>(items, weights, forge);
 
 	/// <summary>
 	/// Creates a generator that picks random items from a collection of item-weight pairs.
@@ -72,5 +72,5 @@ public sealed class ForgeRandom(Forge forge)
 	/// <param name="items">An array of tuples containing items and their corresponding weights.</param>
 	/// <returns>A generator that produces random items based on their weights.</returns>
 	public Generator<T> WeightedPick<T>((T item, float weight)[] items)
-		=> new WeightedPickGenerator<T>(items, forge.Rng);
+		=> new WeightedPickGenerator<T>(items, forge);
 }

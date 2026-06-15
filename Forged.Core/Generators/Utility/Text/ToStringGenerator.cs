@@ -5,8 +5,8 @@ namespace Forged.Core.Generators.Utility.Text;
 /// </summary>
 /// <typeparam name="T">The type to convert to string.</typeparam>
 /// <param name="innerGenerator">The inner generator that produces values.</param>
-/// <param name="rng">The random number generator to use (not used by this generator).</param>
-public sealed class ToStringGenerator<T>(Generator<T> innerGenerator, System.Random rng) : Generator<string?>(rng)
+/// <param name="forge">The Forge instance to use.</param>
+public sealed class ToStringGenerator<T>(Generator<T> innerGenerator, Forge forge) : Generator<string?>(forge)
 {
 	/// <summary>
 	/// Generates a string representation of the generated value.

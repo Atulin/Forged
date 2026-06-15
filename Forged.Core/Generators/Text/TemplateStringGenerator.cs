@@ -6,16 +6,16 @@ namespace Forged.Core.Generators.Text;
 /// Generates strings based on a template with placeholder tokens.
 /// </summary>
 /// <param name="template">The template string containing placeholder tokens.</param>
-/// <param name="rng">The random number generator to use.</param>
+/// <param name="forge">The Forge instance to use.</param>
 /// <param name="digitToken">The character token that will be replaced with a random digit (default: '#').</param>
 /// <param name="letterToken">The character token that will be replaced with a random letter (default: '?').</param>
 /// <param name="alphanumericToken">The character token that will be replaced with a random alphanumeric character (default: '*').</param>
 public sealed class TemplateStringGenerator(
 	string template,
-	System.Random rng,
+	Forge forge,
 	char digitToken = '#',
 	char letterToken = '?',
-	char alphanumericToken = '*') : Generator<string>(rng)
+	char alphanumericToken = '*') : Generator<string>(forge)
 {
 	/// <summary>
 	/// Generates a string from the template.

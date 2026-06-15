@@ -4,18 +4,18 @@ namespace Forged.Core.Generators.Random;
 /// Generates random items from a collection using specified weights.
 /// </summary>
 /// <typeparam name="T">The type of items to pick from.</typeparam>
-public sealed class WeightedPickGenerator<T>(T[] items, float[] weights, System.Random rng) : Generator<T>(rng)
+public sealed class WeightedPickGenerator<T>(T[] items, float[] weights, Forge forge) : Generator<T>(forge)
 {
 	/// <summary>
 	/// Initializes a new instance with item-weight pairs.
 	/// </summary>
 	/// <param name="items">An array of tuples containing items and their corresponding weights.</param>
-	/// <param name="rng">The random number generator to use.</param>
-	public WeightedPickGenerator((T item, float weight)[] items, System.Random rng)
+	/// <param name="forge">The Forge instance to use.</param>
+	public WeightedPickGenerator((T item, float weight)[] items, Forge forge)
 		: this(
 			items.Select(i => i.item).ToArray(),
 			items.Select(i => i.weight).ToArray(),
-			rng
+			forge
 		)
 	{}
 

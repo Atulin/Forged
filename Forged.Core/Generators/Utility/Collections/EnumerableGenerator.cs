@@ -7,8 +7,8 @@ namespace Forged.Core.Generators.Utility.Collections;
 /// <param name="innerGenerator">The inner generator to use for generating individual values.</param>
 /// <param name="minLength">The minimum number of values to generate.</param>
 /// <param name="maxLength">The maximum number of values to generate.</param>
-/// <param name="rng">The random number generator to use.</param>
-public sealed class EnumerableGenerator<T>(Generator<T> innerGenerator, int minLength, int maxLength, System.Random rng) : Generator<IEnumerable<T>>(rng)
+/// <param name="forge">The Forge instance to use.</param>
+public sealed class EnumerableGenerator<T>(Generator<T> innerGenerator, int minLength, int maxLength, Forge forge) : Generator<IEnumerable<T>>(forge)
 {
 	/// <summary>
 	/// Generates an enumerable of random values.

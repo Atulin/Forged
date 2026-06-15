@@ -6,7 +6,7 @@ namespace Forged.Core.Generators.Random;
 /// Generates random numeric values within a specified range.
 /// </summary>
 /// <typeparam name="T">The numeric type to generate (must implement INumber&lt;T&gt; and IMinMaxValue&lt;T&gt;).</typeparam>
-public sealed class NumberGenerator<T>(T? min, T? max, System.Random rng) : Generator<T>(rng) where T : struct, INumber<T>, IMinMaxValue<T>
+public sealed class NumberGenerator<T>(T? min, T? max, Forge forge) : Generator<T>(forge) where T : struct, INumber<T>, IMinMaxValue<T>
 {
 	private readonly T _min = min ?? T.MinValue;
 	private readonly T _max = max ?? T.MaxValue;

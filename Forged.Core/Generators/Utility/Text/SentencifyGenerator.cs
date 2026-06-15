@@ -9,15 +9,15 @@ namespace Forged.Core.Generators.Utility.Text;
 /// <param name="innerGenerator">The inner generator that produces strings.</param>
 /// <param name="minSentenceLength">The minimum number of words per sentence.</param>
 /// <param name="maxSentenceLength">The maximum number of words per sentence.</param>
-/// <param name="cultureInfo">The culture to use for capitalization. If null, uses invariant culture.</param>
-/// <param name="rng">The random number generator to use.</param>
+/// <param name="forge">The Forge instance to use.</param>
+/// <param name="cultureInfo">The culture to use for capitalization. If null, uses the Forge's locale.</param>
 public sealed class SentencifyGenerator(
 	Generator<string> innerGenerator,
 	int minSentenceLength,
 	int maxSentenceLength,
-	CultureInfo? cultureInfo,
-	System.Random rng
-) : Generator<string>(rng)
+	Forge forge,
+	CultureInfo? cultureInfo = null
+) : Generator<string>(forge)
 {
 	/// <summary>
 	/// Generates a string formatted as sentences.
@@ -38,7 +38,7 @@ public sealed class SentencifyGenerator(
 
 			if (length == 1)
 			{
-				Span<char> cap = [char.ToUpper(word[0], cultureInfo ?? CultureInfo.InvariantCulture), ..word[1..]];
+				Span<char> cap = [char.ToUpper(word[0], cultureInfo ?? Locale), ..word[1..]];
 				builder.Append(cap);
 				builder.Append(' ');
 				continue;

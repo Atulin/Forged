@@ -5,8 +5,7 @@ namespace Forged.Core.Generators.Basic;
 /// </summary>
 /// <typeparam name="T">The type of the literal value.</typeparam>
 /// <param name="literal">The constant value to always return.</param>
-/// <param name="rng">The random number generator to use (not used by this generator).</param>
-public sealed class LiteralGenerator<T>(T literal, System.Random rng) : Generator<T>(rng)
+public sealed class LiteralGenerator<T>(T literal, Forge forge) : Generator<T>(forge)
 {
 	/// <summary>
 	/// Generates the literal value.

@@ -5,8 +5,8 @@ namespace Forged.Core.Generators.Temporal;
 /// </summary>
 /// <param name="min">The minimum date (inclusive). If null, uses <see cref="DateOnly.MinValue"/>.</param>
 /// <param name="max">The maximum date (inclusive). If null, uses <see cref="DateOnly.MaxValue"/>.</param>
-/// <param name="rng">The random number generator to use.</param>
-public sealed class DateOnlyGenerator(DateOnly? min, DateOnly? max, System.Random rng) : Generator<DateOnly>(rng)
+/// <param name="forge">The Forge instance to use.</param>
+public sealed class DateOnlyGenerator(DateOnly? min, DateOnly? max, Forge forge) : Generator<DateOnly>(forge)
 {
 	private readonly int _minDay = (min ?? DateOnly.MinValue).DayNumber;
 	private readonly int _maxDay = (max ?? DateOnly.MaxValue).DayNumber;

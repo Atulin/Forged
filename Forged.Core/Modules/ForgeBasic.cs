@@ -14,5 +14,5 @@ public sealed class ForgeBasic(Forge forge)
 	/// <param name="literal">The literal value to always produce.</param>
 	/// <returns>A generator that always produces the specified value.</returns>
 	public Generator<T> Literal<T>(T literal)
-		=> new LiteralGenerator<T>(literal, forge.Rng);
+		=> new LiteralGenerator<T>(literal, forge);
 }

@@ -6,8 +6,8 @@ namespace Forged.Core.Generators.Utility;
 /// <typeparam name="T">The value type to generate (must be a struct).</typeparam>
 /// <param name="innerGenerator">The inner generator to use when not returning null.</param>
 /// <param name="probability">The probability (0.0 to 1.0) of returning null.</param>
-/// <param name="rng">The random number generator to use.</param>
-public sealed class NullableOrValueGenerator<T>(Generator<T> innerGenerator, float probability, System.Random rng) : Generator<T?>(rng) where T : struct
+/// <param name="forge">The Forge instance to use.</param>
+public sealed class NullableOrValueGenerator<T>(Generator<T> innerGenerator, float probability, Forge forge) : Generator<T?>(forge) where T : struct
 {
 	/// <summary>
 	/// Generates a value from the inner generator or returns null.

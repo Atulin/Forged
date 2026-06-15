@@ -4,7 +4,7 @@ namespace Forged.Core.Generators.Random;
 /// Generates random items by picking one from a specified collection.
 /// </summary>
 /// <typeparam name="T">The type of items to pick from.</typeparam>
-public sealed class PickOneGenerator<T>(T[] items, System.Random rng) : Generator<T>(rng)
+public sealed class PickOneGenerator<T>(T[] items, Forge forge) : Generator<T>(forge)
 {
 	/// <summary>
 	/// Generates a random item from the collection.

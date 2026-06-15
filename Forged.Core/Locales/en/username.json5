@@ -1,0 +1,24 @@
+﻿{
+	"Prefixes": [
+		"xXx", "The", "i", "El", "Sir", "Lord", "Lady", "King", "Queen", "Captain",
+		"Agent", "Major", "Doctor", "Dr", "Prof", "Chef", "Sgt", "Officer", "Alpha",
+		"Mega", "Ultra", "Super", "Hyper", "Cyber", "Crypto", "Quantum", "Shadow",
+		"Ghost", "Neon", "Toxic", "Dark", "Light", "Epic", "Savage", "Mystic", "Zen",
+		"Real", "Official", "ItsMe", "Just", "Not", "Im", "Only", "Simply", "Mr", "Ms"
+	],
+	"Cores": [
+		"Sniper", "Slayer", "Warrior", "Hunter", "Knight", "Rogue", "Ninja", "Wizard",
+		"Mage", "Paladin", "Samurai", "Viking", "Hacker", "Coder", "Gamer", "Player",
+		"Phoenix", "Dragon", "Tiger", "Wolf", "Lion", "Falcon", "Eagle", "Hawk", "Viper",
+		"Cobra", "Titan", "Colossus", "Golem", "Specter", "Phantom", "Wraith", "Reaper",
+		"Demon", "Angel", "Glitch", "Matrix", "Vortex", "Storm", "Thunder", "Blaze",
+		"Frost", "Nova", "Cosmos", "Orbit", "Pixel", "Vector", "Nexus", "Apex", "Echo"
+	],
+	"Suffixes": [
+		"xXx", "YT", "TTV", "GG", "HD", "LOL", "BR", "EU", "US", "UK", "FX", "RX",
+		"99", "77", "007", "420", "67", "69", "1337", "HD", "11", "22", "33", "Bot", "God",
+		"Pro", "OP", "VIP", "MVP", "Boss", "Master", "Chief", "Hero", "Legend", "Beast",
+		"Monster", "Fiend", "Freak", "Nerd", "Geek", "Noob", "SZN", "Vibes", "Mode",
+		"Main", "Plays", "Gaming", "TV", "Live", "HQ", "Zone", "World"
+	]
+}

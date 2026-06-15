@@ -5,8 +5,8 @@ namespace Forged.Core.Generators.Text;
 /// </summary>
 /// <param name="minLength">The minimum length of the string to generate.</param>
 /// <param name="maxLength">The maximum length of the string to generate.</param>
-/// <param name="rng">The random number generator to use.</param>
-public sealed class HexStringGenerator(int minLength, int maxLength, System.Random rng) : Generator<string>(rng)
+/// <param name="forge">The Forge instance to use.</param>
+public sealed class HexStringGenerator(int minLength, int maxLength, Forge forge) : Generator<string>(forge)
 {
 	/// <summary>
 	/// Generates a random hexadecimal string.

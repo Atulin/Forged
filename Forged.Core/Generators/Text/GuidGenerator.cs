@@ -4,8 +4,8 @@ namespace Forged.Core.Generators.Text;
 /// Generates random GUIDs.
 /// </summary>
 /// <param name="kind">The kind of GUID to generate.</param>
-/// <param name="rng">The random number generator to use.</param>
-public sealed class GuidGenerator(GuidGenerator.Kind kind, System.Random rng) : Generator<Guid>(rng)
+/// <param name="forge">The Forge instance to use.</param>
+public sealed class GuidGenerator(GuidGenerator.Kind kind, Forge forge) : Generator<Guid>(forge)
 {
 	/// <summary>
 	/// Generates a random GUID.

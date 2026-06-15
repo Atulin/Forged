@@ -14,7 +14,7 @@ public sealed class ForgeText(Forge forge)
 	/// <param name="length">The exact length of the string to generate.</param>
 	/// <returns>A generator that produces random alphanumeric strings.</returns>
 	public Generator<string> Alphanumeric(int length)
-		=> new AlphanumericStringGenerator(length, length, forge.Rng);
+		=> new AlphanumericStringGenerator(length, length, forge);
 	
 	/// <summary>
 	/// Creates a generator that produces random alphanumeric strings of variable length.
@@ -23,7 +23,7 @@ public sealed class ForgeText(Forge forge)
 	/// <param name="maxLength">The maximum length of the string.</param>
 	/// <returns>A generator that produces random alphanumeric strings.</returns>
 	public Generator<string> Alphanumeric(int minLength, int maxLength)
-		=> new AlphanumericStringGenerator(minLength, maxLength, forge.Rng);
+		=> new AlphanumericStringGenerator(minLength, maxLength, forge);
 	
 	/// <summary>
 	/// Creates a generator that produces random alphabetic strings of a fixed length.
@@ -31,7 +31,7 @@ public sealed class ForgeText(Forge forge)
 	/// <param name="length">The exact length of the string to generate.</param>
 	/// <returns>A generator that produces random alphabetic strings.</returns>
 	public Generator<string> Alpha(int length)
-		=> new AlphaStringGenerator(length, length, forge.Rng);
+		=> new AlphaStringGenerator(length, length, forge);
 	
 	/// <summary>
 	/// Creates a generator that produces random alphabetic strings of variable length.
@@ -40,7 +40,7 @@ public sealed class ForgeText(Forge forge)
 	/// <param name="maxLength">The maximum length of the string.</param>
 	/// <returns>A generator that produces random alphabetic strings.</returns>
 	public Generator<string> Alpha(int minLength, int maxLength)
-		=> new AlphaStringGenerator(minLength, maxLength, forge.Rng);
+		=> new AlphaStringGenerator(minLength, maxLength, forge);
 	
 	/// <summary>
 	/// Creates a generator that produces random pronounceable strings of a fixed length.
@@ -48,7 +48,7 @@ public sealed class ForgeText(Forge forge)
 	/// <param name="length">The exact number of syllables in the string.</param>
 	/// <returns>A generator that produces random pronounceable strings.</returns>
 	public Generator<string> Pronounceable(int length)
-		=> new PronounceableStringGenerator(length, length, forge.Rng);
+		=> new PronounceableStringGenerator(length, length, forge);
 	
 	/// <summary>
 	/// Creates a generator that produces random pronounceable strings of variable length.
@@ -57,7 +57,7 @@ public sealed class ForgeText(Forge forge)
 	/// <param name="maxLength">The maximum number of syllables.</param>
 	/// <returns>A generator that produces random pronounceable strings.</returns>
 	public Generator<string> Pronounceable(int minLength, int maxLength)
-		=> new PronounceableStringGenerator(minLength, maxLength, forge.Rng);
+		=> new PronounceableStringGenerator(minLength, maxLength, forge);
 	
 	/// <summary>
 	/// Creates a generator that produces random Lorem Ipsum text of a fixed length.
@@ -65,7 +65,7 @@ public sealed class ForgeText(Forge forge)
 	/// <param name="length">The exact number of words to generate.</param>
 	/// <returns>A generator that produces random Lorem Ipsum text.</returns>
 	public Generator<string> Lorem(int length)
-		=> new LoremIpsumGenerator(length, length, forge.Rng);
+		=> new LoremIpsumGenerator(length, length, forge);
 	
 	/// <summary>
 	/// Creates a generator that produces random Lorem Ipsum text of variable length.
@@ -74,7 +74,7 @@ public sealed class ForgeText(Forge forge)
 	/// <param name="maxLength">The maximum number of words.</param>
 	/// <returns>A generator that produces random Lorem Ipsum text.</returns>
 	public Generator<string> Lorem(int minLength, int maxLength)
-		=> new LoremIpsumGenerator(minLength, maxLength, forge.Rng);
+		=> new LoremIpsumGenerator(minLength, maxLength, forge);
 
 	/// <summary>
 	/// Creates a generator that produces random hexadecimal strings of a fixed length.
@@ -82,7 +82,7 @@ public sealed class ForgeText(Forge forge)
 	/// <param name="length">The exact length of the hex string.</param>
 	/// <returns>A generator that produces random hexadecimal strings.</returns>
 	public Generator<string> Hex(int length)
-		=> new HexStringGenerator(length, length, forge.Rng);
+		=> new HexStringGenerator(length, length, forge);
 	
 	/// <summary>
 	/// Creates a generator that produces random hexadecimal strings of variable length.
@@ -91,7 +91,7 @@ public sealed class ForgeText(Forge forge)
 	/// <param name="maxLength">The maximum length of the hex string.</param>
 	/// <returns>A generator that produces random hexadecimal strings.</returns>
 	public Generator<string> Hex(int minLength, int maxLength)
-		=> new HexStringGenerator(minLength, maxLength, forge.Rng);
+		=> new HexStringGenerator(minLength, maxLength, forge);
 
 	/// <summary>
 	/// Creates a generator that produces random GUIDs.
@@ -99,7 +99,7 @@ public sealed class ForgeText(Forge forge)
 	/// <param name="kind">The kind of GUID to generate. Defaults to V4.</param>
 	/// <returns>A generator that produces random GUIDs.</returns>
 	public Generator<Guid> Guid(GuidGenerator.Kind kind = GuidGenerator.Kind.V4)
-		=> new GuidGenerator(kind, forge.Rng);
+		=> new GuidGenerator(kind, forge);
 
 	/// <summary>
 	/// Creates a generator that produces strings based on a template with placeholders.
@@ -107,5 +107,5 @@ public sealed class ForgeText(Forge forge)
 	/// <param name="template">The template string containing placeholders.</param>
 	/// <returns>A generator that produces strings from the template.</returns>
 	public Generator<string> Template(string template)
-		=> new TemplateStringGenerator(template, forge.Rng);
+		=> new TemplateStringGenerator(template, forge);
 }

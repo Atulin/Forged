@@ -9,6 +9,7 @@ public class Person
 	public required string FirstName { get; set; }
 	public required string LastName { get; set; }
 	public List<string>? MiddleNames { get; set; }
+	public string? Nickname { get; set; }
 	public bool IsActive { get; set; }
 	public DateTime? DateOfBirth { get; set; }
 	public string? EmailAddress { get; set; }

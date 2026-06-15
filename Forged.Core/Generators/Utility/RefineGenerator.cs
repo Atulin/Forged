@@ -7,8 +7,8 @@ namespace Forged.Core.Generators.Utility;
 /// <typeparam name="TNew">The type produced by the refiner function.</typeparam>
 /// <param name="innerGenerator">The inner generator whose output will be transformed.</param>
 /// <param name="refiner">The function used to transform the inner generator's output.</param>
-/// <param name="rng">The random number generator to use.</param>
-public sealed class RefineGenerator<T, TNew>(Generator<T> innerGenerator, Func<T, TNew> refiner, System.Random rng) : Generator<TNew>(rng)
+/// <param name="forge">The Forge instance to use.</param>
+public sealed class RefineGenerator<T, TNew>(Generator<T> innerGenerator, Func<T, TNew> refiner, Forge forge) : Generator<TNew>(forge)
 {
 	/// <summary>
 	/// Generates a value by first generating from the inner generator and then applying the refiner.

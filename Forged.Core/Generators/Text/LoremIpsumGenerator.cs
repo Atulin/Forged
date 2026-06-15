@@ -5,8 +5,8 @@ namespace Forged.Core.Generators.Text;
 /// </summary>
 /// <param name="minWords">The minimum number of words to generate.</param>
 /// <param name="maxWords">The maximum number of words to generate.</param>
-/// <param name="rng">The random number generator to use.</param>
-public sealed class LoremIpsumGenerator(int minWords, int maxWords, System.Random rng) : Generator<string>(rng)
+/// <param name="forge">The Forge instance to use.</param>
+public sealed class LoremIpsumGenerator(int minWords, int maxWords, Forge forge) : Generator<string>(forge)
 {
 	private static readonly string[] Lipsum =
 	[

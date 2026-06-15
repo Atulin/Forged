@@ -4,7 +4,7 @@ namespace Forged.Core.Generators.Random;
 /// Represents a generator for simulating coin tosses, producing random boolean values.
 /// </summary>
 /// <typeparam name="T">The type of value generated, constrained to boolean.</typeparam>
-public sealed class CoinTossGenerator<T>(System.Random rng) : Generator<bool>(rng)
+public sealed class CoinTossGenerator<T>(Forge forge) : Generator<bool>(forge)
 {
 	/// <summary>
 	/// Generates a random boolean value representing the outcome of a coin toss.

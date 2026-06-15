@@ -4,8 +4,8 @@ namespace Forged.Core.Generators.Utility.Temporal;
 /// Converts <see cref="DateTime"/> values to UTC time.
 /// </summary>
 /// <param name="innerGenerator">The inner generator that produces <see cref="DateTime"/> values.</param>
-/// <param name="rng">The random number generator to use (not used by this generator).</param>
-public sealed class ToUtcGenerator(Generator<DateTime> innerGenerator, System.Random rng) : Generator<DateTime>(rng)
+/// <param name="forge">The Forge instance to use.</param>
+public sealed class ToUtcGenerator(Generator<DateTime> innerGenerator, Forge forge) : Generator<DateTime>(forge)
 {
 	/// <summary>
 	/// Generates a <see cref="DateTime"/> value with UTC kind.

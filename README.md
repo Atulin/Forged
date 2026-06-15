@@ -117,6 +117,9 @@ The `Forge` instance (`f` in the lambda expressions) provides access to built-in
 - `Guid(GuidGenerator.Kind kind)` - Generate a GUID of the specified kind (supports V4 and V7).
 - `Template(string template)` - Generate a string from a template with random placeholder replacements.
 
+### `Person`
+- `Username(float prefixChance, float suffixChance, float leetChance)` - Generates a random username with configurable probability for including prefixes, suffixes, and leet-speak character substitutions.
+
 ## Modifiers & Extensions
 
 Any `Generator<T>` can be customized and composed using fluent methods. These methods can be chained to create complex generation pipelines.

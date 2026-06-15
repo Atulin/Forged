@@ -8,15 +8,15 @@ namespace Forged.Core.Generators.Utility.Text;
 /// <typeparam name="T">The type to format (must implement ISpanFormattable).</typeparam>
 /// <param name="innerGenerator">The inner generator that produces values.</param>
 /// <param name="format">The format string to use.</param>
-/// <param name="cultureInfo">The culture to use for formatting. If null, uses invariant culture.</param>
-/// <param name="rng">The random number generator to use (not used by this generator).</param>
-public sealed class ToFormattedStringGenerator<T>(Generator<T> innerGenerator, string format, CultureInfo? cultureInfo, System.Random rng)
-	: Generator<string>(rng) where T : ISpanFormattable
+/// <param name="forge">The Forge instance to use.</param>
+/// <param name="cultureInfo">The culture to use for formatting. If null, uses the Forge's locale.</param>
+public sealed class ToFormattedStringGenerator<T>(Generator<T> innerGenerator, string format, Forge forge, CultureInfo? cultureInfo = null)
+	: Generator<string>(forge) where T : ISpanFormattable
 {
 	/// <summary>
 	/// Generates a formatted string.
 	/// </summary>
 	/// <returns>A formatted string representation of the generated value.</returns>
 	public override string Generate()
-		=> innerGenerator.Generate().ToString(format, cultureInfo ?? CultureInfo.InvariantCulture);
+		=> innerGenerator.Generate().ToString(format, cultureInfo ?? Locale);
 }

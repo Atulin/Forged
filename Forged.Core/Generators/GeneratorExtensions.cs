@@ -21,7 +21,7 @@ public static class GeneratorExtensions
 		/// <param name="probability">The probability (0.0 to 1.0) of producing null.</param>
 		/// <returns>A generator that may produce null values.</returns>
 		public Generator<T?> OrNull(float probability)
-			=> new NullableOrValueGenerator<T>(generator, probability, generator.Rng);
+			=> new NullableOrValueGenerator<T>(generator, probability, generator.Forge);
 		
 		/// <summary>
 		/// Creates a generator that produces nullable values.
@@ -41,14 +41,14 @@ public static class GeneratorExtensions
 		/// </summary>
 		/// <returns>A generator that produces uppercase strings.</returns>
 		public Generator<string> ToUpper()
-			=> new UppercaseGenerator(generator, generator.Rng);
+			=> new UppercaseGenerator(generator, generator.Forge);
 		
 		/// <summary>
 		/// Creates a generator that converts strings to lowercase.
 		/// </summary>
 		/// <returns>A generator that produces lowercase strings.</returns>
 		public Generator<string> ToLower()
-			=> new LowercaseGenerator(generator, generator.Rng);
+			=> new LowercaseGenerator(generator, generator.Forge);
 		
 		/// <summary>
 		/// Creates a generator that converts strings to title case.
@@ -56,7 +56,7 @@ public static class GeneratorExtensions
 		/// <param name="cultureInfo">The culture to use for title case conversion. If null, uses invariant culture.</param>
 		/// <returns>A generator that produces title case strings.</returns>
 		public Generator<string> ToTitleCase(CultureInfo? cultureInfo = null)
-			=> new TitleCaseGenerator(generator, cultureInfo, generator.Rng);
+			=> new TitleCaseGenerator(generator, generator.Forge, cultureInfo);
 		
 		/// <summary>
 		/// Creates a generator that capitalizes the first character of strings.
@@ -64,7 +64,7 @@ public static class GeneratorExtensions
 		/// <param name="cultureInfo">The culture to use for capitalization. If null, uses invariant culture.</param>
 		/// <returns>A generator that produces strings with the first character capitalized.</returns>
 		public Generator<string> Capitalize(CultureInfo? cultureInfo = null)
-			=> new CapitalizeGenerator(generator, cultureInfo, generator.Rng);
+			=> new CapitalizeGenerator(generator, generator.Forge, cultureInfo);
 		
 		/// <summary>
 		/// Creates a generator that converts strings into properly formatted sentences.
@@ -73,7 +73,7 @@ public static class GeneratorExtensions
 		/// <param name="cultureInfo">The culture to use for capitalization. If null, uses invariant culture.</param>
 		/// <returns>A generator that produces properly formatted sentences.</returns>
 		public Generator<string> Sentencify(int sentenceLength, CultureInfo? cultureInfo = null)
-			=> new SentencifyGenerator(generator, sentenceLength, sentenceLength, cultureInfo, generator.Rng);
+			=> new SentencifyGenerator(generator, sentenceLength, sentenceLength, generator.Forge, cultureInfo);
 		
 		/// <summary>
 		/// Creates a generator that converts strings into properly formatted sentences with variable length.
@@ -83,7 +83,7 @@ public static class GeneratorExtensions
 		/// <param name="cultureInfo">The culture to use for capitalization. If null, uses invariant culture.</param>
 		/// <returns>A generator that produces properly formatted sentences.</returns>
 		public Generator<string> Sentencify(int minSentenceLength, int maxSentenceLength, CultureInfo? cultureInfo = null)
-			=> new SentencifyGenerator(generator, minSentenceLength, maxSentenceLength, cultureInfo, generator.Rng);
+			=> new SentencifyGenerator(generator, minSentenceLength, maxSentenceLength, generator.Forge, cultureInfo);
 	}
 
 	/// <summary>
@@ -96,35 +96,35 @@ public static class GeneratorExtensions
 		/// </summary>
 		/// <returns>A generator that produces UTC DateTime values.</returns>
 		public Generator<DateTime> ToUtc()
-			=> new ToUtcGenerator(generator, generator.Rng);
+			=> new ToUtcGenerator(generator, generator.Forge);
 		
 		/// <summary>
 		/// Creates a generator that converts DateTime values to local time.
 		/// </summary>
 		/// <returns>A generator that produces local DateTime values.</returns>
 		public Generator<DateTime> ToLocal()
-			=> new ToLocalGenerator(generator, generator.Rng);
+			=> new ToLocalGenerator(generator, generator.Forge);
 		
 		/// <summary>
 		/// Creates a generator that extracts the date component from DateTime values.
 		/// </summary>
 		/// <returns>A generator that produces DateOnly values.</returns>
 		public Generator<DateOnly> ToDateOnly()
-			=> new DateOnlyFromDateTimeGenerator(generator, generator.Rng);
+			=> new DateOnlyFromDateTimeGenerator(generator, generator.Forge);
 		
 		/// <summary>
 		/// Creates a generator that extracts the time component from DateTime values.
 		/// </summary>
 		/// <returns>A generator that produces TimeOnly values.</returns>
 		public Generator<TimeOnly> ToTimeOnly()
-			=> new TimeOnlyFromDateTimeGenerator(generator, generator.Rng);
+			=> new TimeOnlyFromDateTimeGenerator(generator, generator.Forge);
 		
 		/// <summary>
 		/// Creates a generator that truncates DateTime values to date precision.
 		/// </summary>
 		/// <returns>A generator that produces DateTime values with time component set to midnight.</returns>
 		public Generator<DateTime> TruncateToDate()
-			=> new TruncateToDateGenerator(generator, generator.Rng);
+			=> new TruncateToDateGenerator(generator, generator.Forge);
 	}
 
 	/// <summary>
@@ -134,7 +134,7 @@ public static class GeneratorExtensions
 	/// <param name="generator">The generator to convert.</param>
 	/// <returns>A generator that produces string representations.</returns>
 	public static Generator<string?> ToString<T>(this Generator<T> generator)
-		=> new ToStringGenerator<T>(generator, generator.Rng);
+		=> new ToStringGenerator<T>(generator, generator.Forge);
 
 	/// <summary>
 	/// Converts values from a generator to formatted strings.
@@ -145,7 +145,7 @@ public static class GeneratorExtensions
 	/// <param name="cultureInfo">The culture to use for formatting. If null, uses invariant culture.</param>
 	/// <returns>A generator that produces formatted strings.</returns>
 	public static Generator<string> ToString<T>(this Generator<T> generator, string format, CultureInfo? cultureInfo = null) where T : ISpanFormattable
-		=> new ToFormattedStringGenerator<T>(generator, format, cultureInfo, generator.Rng);
+		=> new ToFormattedStringGenerator<T>(generator, format, generator.Forge, cultureInfo);
 
 	/// <summary>
 	/// Converts enumerables from a generator to lists.
@@ -154,7 +154,7 @@ public static class GeneratorExtensions
 	/// <param name="generator">The generator to convert.</param>
 	/// <returns>A generator that produces lists.</returns>
 	public static Generator<List<T>> AsList<T>(this Generator<IEnumerable<T>> generator)
-		=> new RefineGenerator<IEnumerable<T>, List<T>>(generator, static e => e.ToList(), generator.Rng);
+		=> new RefineGenerator<IEnumerable<T>, List<T>>(generator, static e => e.ToList(), generator.Forge);
 
 	/// <summary>
 	/// Converts collections from a generator to lists.
@@ -163,7 +163,7 @@ public static class GeneratorExtensions
 	/// <param name="generator">The generator to convert.</param>
 	/// <returns>A generator that produces lists.</returns>
 	public static Generator<List<T>> AsList<T>(this Generator<ICollection<T>> generator)
-		=> new RefineGenerator<ICollection<T>, List<T>>(generator, static c => c.ToList(), generator.Rng);
+		=> new RefineGenerator<ICollection<T>, List<T>>(generator, static c => c.ToList(), generator.Forge);
 
 	/// <summary>
 	/// Converts enumerables from a generator to hash sets.
@@ -172,7 +172,7 @@ public static class GeneratorExtensions
 	/// <param name="generator">The generator to convert.</param>
 	/// <returns>A generator that produces hash sets.</returns>
 	public static Generator<HashSet<T>> AsHashSet<T>(this Generator<IEnumerable<T>> generator)
-		=> new RefineGenerator<IEnumerable<T>, HashSet<T>>(generator, static e => e.ToHashSet(), generator.Rng);
+		=> new RefineGenerator<IEnumerable<T>, HashSet<T>>(generator, static e => e.ToHashSet(), generator.Forge);
 
 	/// <summary>
 	/// Converts collections from a generator to hash sets.
@@ -181,7 +181,7 @@ public static class GeneratorExtensions
 	/// <param name="generator">The generator to convert.</param>
 	/// <returns>A generator that produces hash sets.</returns>
 	public static Generator<HashSet<T>> AsHashSet<T>(this Generator<ICollection<T>> generator)
-		=> new RefineGenerator<ICollection<T>, HashSet<T>>(generator, static c => c.ToHashSet(), generator.Rng);
+		=> new RefineGenerator<ICollection<T>, HashSet<T>>(generator, static c => c.ToHashSet(), generator.Forge);
 
 	/// <summary>
 	/// Converts enumerables from a generator to dictionaries.

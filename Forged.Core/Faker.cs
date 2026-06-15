@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Forged.Core;
 
 /// <summary>
@@ -5,12 +7,12 @@ namespace Forged.Core;
 /// </summary>
 /// <typeparam name="TModel">The type of model to generate.</typeparam>
 /// <param name="random">The random number generator to use for generating data.</param>
-public abstract class Faker<TModel>(Random? random = null)
+public abstract class Faker<TModel>(Random? random = null, CultureInfo? locale = null)
 {
     /// <summary>
     /// Gets the underlying <see cref="Forge"/> instance used for generating data.
     /// </summary>
-    public Forge Forge { get; } = new(random);
+    public Forge Forge { get; } = new(random, locale);
 
     /// <summary>
     /// Generates a single fake model instance.

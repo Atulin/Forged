@@ -5,13 +5,23 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    </PropertyGroup>
     
     <ItemGroup>
         <AssemblyAttribute Include="AutoSeal.SealPublicClasses" />
     </ItemGroup>
 
     <ItemGroup>
+        <EmbeddedResource Include="Locales\**\*.json5" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="Atulin.SealAnalyzer" Version="1.0.0" PrivateAssets="all" />
+      <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
+      <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.9" />
     </ItemGroup>
 
 </Project>
