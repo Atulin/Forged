@@ -1,6 +1,6 @@
 using System.Text.Json;
-using Forged.Core.Generators;
 using Forged.Core.Generators.Basic;
+using Forged.Core.Generators.Extensions;
 using Forged.Core.Generators.Text;
 using Forged.Demo;
 
