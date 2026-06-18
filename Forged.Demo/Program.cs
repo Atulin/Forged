@@ -1,7 +1,12 @@
 using System.Text.Json;
 using Forged.Core.Generators;
+using Forged.Core.Generators.Basic;
 using Forged.Core.Generators.Text;
 using Forged.Demo;
+
+// Alas, `out var` does not work in object initializers
+LiteralGenerator<string> first = null!;
+LiteralGenerator<string> last = null!;
 
 var faker = new PersonFaker
 {
@@ -12,7 +17,8 @@ var faker = new PersonFaker
 	// Generate a pronounceable first name
 	FirstName = f => f.Text
 		.Pronounceable(1, 3) // pronounceable word with a minimum of 1 and a maximum of 3 syllables
-		.Capitalize(),       // capitalize the first letter
+		.Capitalize()        // capitalize the first letter
+		.Memo(out first),    // store the first name in a variable
 
 	// Generate a pronounceable last name comprising one or two parts, e.g. "Skłodowska-Curie"
 	LastName = f => f.Text
@@ -21,7 +27,11 @@ var faker = new PersonFaker
 		.Capitalize()        // capitalize the first letter
 		.Array(1, 2)		 // get an array of 1 or 2 of those words
 		.Refine(x => string.Join("-", x)) // join the array into a single string
-		.Refine(x => f.Random.CoinToss() ? $"Von {x}" : x), // add "Von" prefix if coin toss is true
+		.Refine(x => f.Random.CoinToss() ? $"Von {x}" : x) // add "Von" prefix if coin toss is true
+		.Memo(out last),     // store the last name in a variable
+	
+	// Generate a full name, combining first and last names
+	FullName = f => f.Basic.Literal($"{first} {last}"),
 	
 	// Generate a list of random middle names
 	MiddleNames = f => f.Text

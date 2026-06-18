@@ -1,5 +1,7 @@
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using Forged.Core.Core;
+using Forged.Core.Generators.Basic;
 using Forged.Core.Generators.Utility;
 using Forged.Core.Generators.Utility.Collections;
 
@@ -132,6 +134,30 @@ public abstract class Generator<T>(Forge forge) : IGenerator<T>
 	public Generator<HashSet<T>> HashSet(int minLength, int maxLength)
 		=> new EnumerableGenerator<T>(this, minLength, maxLength, Forge).Refine<HashSet<T>>(static e => e.ToHashSet());
 
+
+	/// <summary>
+	/// Captures the generated value and creates a <see cref="LiteralGenerator{T}"/> instance based on that value.
+	/// </summary>
+	/// <param name="literal">The output parameter that receives the created <see cref="LiteralGenerator{T}"/> instance.</param>
+	/// <returns>A <see cref="LiteralGenerator{T}"/> instance based on the generated value.</returns>
+	public LiteralGenerator<T> Memo(out LiteralGenerator<T> literal)
+	{
+		var value = Generate();
+		literal = new LiteralGenerator<T>(value, Forge);
+		return literal;
+	}
+
+	/// <summary>
+	/// Casts the generated value to the specified type <typeparamref name="TOut"/>.
+	/// </summary>
+	/// <typeparam name="TOut">The target type to cast the generated value to.</typeparam>
+	/// <returns>A generator producing values of type <typeparamref name="TOut"/> or null if the cast is not possible.</returns>
+	public IGenerator<TOut?> Cast<TOut>() where TOut : T
+	{
+		var value = Generate();
+		return new LiteralGenerator<TOut?>((TOut?)value, Forge);
+	}
+	
 	/// <summary>
 	/// Returns a string representation of the generated value.
 	/// </summary>

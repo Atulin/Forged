@@ -8,6 +8,7 @@ public class Person
 	public required Guid Id { get; set; }
 	public required string FirstName { get; set; }
 	public required string LastName { get; set; }
+	public required string FullName { get; set;}
 	public List<string>? MiddleNames { get; set; }
 	public string? Nickname { get; set; }
 	public bool IsActive { get; set; }
