@@ -1,12 +1,12 @@
 using System.Text.Json;
-using Forged.Core.Generators.Basic;
 using Forged.Core.Generators.Extensions;
 using Forged.Core.Generators.Text;
+using Forged.Core.Generators.Utility;
 using Forged.Demo;
 
 // Alas, `out var` does not work in object initializers
-LiteralGenerator<string> first = null!;
-LiteralGenerator<string> last = null!;
+MemoValueGenerator<string> first = null!;
+MemoValueGenerator<string> last = null!;
 
 var faker = new PersonFaker
 {
@@ -30,8 +30,8 @@ var faker = new PersonFaker
 		.Refine(x => f.Random.CoinToss() ? $"Von {x}" : x) // add "Von" prefix if coin toss is true
 		.Memo(out last),     // store the last name in a variable
 	
-	// Generate a full name, combining first and last names
-	FullName = f => f.Basic.Literal($"{first} {last}"),
+	// Generate a full name, combining first and last names dynamically using Func
+	FullName = f => f.Basic.Func(() => $"{first} {last}"),
 	
 	// Generate a list of random middle names
 	MiddleNames = f => f.Text

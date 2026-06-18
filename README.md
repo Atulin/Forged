@@ -79,12 +79,30 @@ var faker = new PersonFaker(new Random(12345))
 };
 ```
 
+### Referencing Other Properties
+
+If you need to reference an already-generated value, you can use `.Memo()` and `.Func()` methods:
+
+```csharp
+// Unfortunate workaround, as `out var` does not work in object initializers.
+MemoValueGenerator<string> first = null!;
+MemoValueGenerator<string> last = null!;
+
+var faker = new PersonFaker
+{
+    FirstName = f => f.Text.Pronounceable(5, 10).Memo(out first),
+    LastName = f => f.Text.Pronounceable(5, 10).Memo(out last),
+    MiddleNames = f => f.Basic.Func(() => $"{first} {last}"),
+}
+```
+
 ## Available Generators
 
 The `Forge` instance (`f` in the lambda expressions) provides access to built-in generators categorized by modules:
 
 ### `Basic`
 - `.Literal(T value)` - Creates a generator that always returns the specified literal value.
+- `.Func(Func<T> func)` - Creates a generator that invokes the specified function.
 
 ### `Random`
 - `Pick<T>(params T[] items)` - Pick a single random item from the given collection.
@@ -136,6 +154,7 @@ Any `Generator<T>` can be customized and composed using fluent methods. These me
 - `.List(int minLength, int maxLength)` - Generates a `List<T>` with a variable number of items.
 - `.HashSet(int length)` - Generates a `HashSet<T>` with a fixed number of unique items.
 - `.HashSet(int minLength, int maxLength)` - Generates a `HashSet<T>` with a variable number of unique items.
+- `.Cast<TOut>()` - Casts the generated value to the specified type.
 
 ### Nullable & Struct Extensions
 - `.OrNull(float probability)` - For struct generators, returns null with the specified probability.

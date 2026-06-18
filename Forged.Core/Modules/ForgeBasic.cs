@@ -15,4 +15,12 @@ public sealed class ForgeBasic(Forge forge)
 	/// <returns>A generator that always produces the specified value.</returns>
 	public Generator<T> Literal<T>(T literal)
 		=> new LiteralGenerator<T>(literal, forge);
+
+	/// <summary>
+	/// Creates a generator that invokes the specified function to produce a value.
+	/// </summary>
+	/// <param name="func">The function to invoke.</param>
+	/// <returns>A generator that produces the value returned by the function.</returns>
+	public Generator<T> Func<T>(Func<T> func)
+		=> new FuncGenerator<T>(func, forge);
 }

@@ -135,15 +135,15 @@ public abstract class Generator<T>(Forge forge) : IGenerator<T>
 
 
 	/// <summary>
-	/// Captures the generated value and creates a <see cref="LiteralGenerator{T}"/> instance based on that value.
+	/// Captures the generated value dynamically so it can be reused in the same generation cycle.
 	/// </summary>
-	/// <param name="literal">The output parameter that receives the created <see cref="LiteralGenerator{T}"/> instance.</param>
-	/// <returns>A <see cref="LiteralGenerator{T}"/> instance based on the generated value.</returns>
-	public LiteralGenerator<T> Memo(out LiteralGenerator<T> literal)
+	/// <param name="memoizedValue">The output parameter that receives the created <see cref="MemoValueGenerator{T}"/> instance.</param>
+	/// <returns>A <see cref="MemoGenerator{T}"/> instance based on the generated value.</returns>
+	public MemoGenerator<T> Memo(out MemoValueGenerator<T> memoizedValue)
 	{
-		var value = Generate();
-		literal = new LiteralGenerator<T>(value, Forge);
-		return literal;
+		var memoGenerator = new MemoGenerator<T>(this, Forge);
+		memoizedValue = new MemoValueGenerator<T>(memoGenerator, Forge);
+		return memoGenerator;
 	}
 
 	/// <summary>
