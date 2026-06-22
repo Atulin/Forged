@@ -12,7 +12,7 @@ var modules = Directory.GetDirectories(isUtility ? "Forged.Core/Generators/Utili
 var chosenModule = AnsiConsole.Prompt(
 	new SelectionPrompt<string>()
 		.Title("Select the module to add the generator to:")
-		.AddChoices(modules.Add("Other")));
+		.AddChoices([..modules, "Other"]));
 
 var newModule = false;
 if (chosenModule == "Other")
