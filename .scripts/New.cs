@@ -3,9 +3,11 @@
 using System.Collections.Immutable;
 using Spectre.Console;
 
-var modules = Directory.GetDirectories("Forged.Core/Generators")
+var isUtility = AnsiConsole.Confirm("Is this a utility generator?", false);
+
+var modules = Directory.GetDirectories(isUtility ? "Forged.Core/Generators/Utility" : "Forged.Core/Generators")
 	.Select(p => p.Split('/', '\\')[^1])
-	.ToImmutableHashSet();
+	.ToImmutableSortedSet(StringComparer.OrdinalIgnoreCase);
 
 var chosenModule = AnsiConsole.Prompt(
 	new SelectionPrompt<string>()
@@ -26,9 +28,16 @@ if (newModule)
 	await File.WriteAllTextAsync($"Forged.Core/Modules/Forge{chosenModule}.cs", ForgeTemplate(chosenModule, chosenName));
 }
 
-Directory.CreateDirectory($"Forged.Core/Generators/{chosenModule}");
-await File.WriteAllTextAsync($"Forged.Core/Generators/{chosenModule}/{chosenName}Generator.cs", Template(chosenModule, chosenName));
-
+if (isUtility)
+{
+	Directory.CreateDirectory($"Forged.Core/Generators/Utility/{chosenModule}");
+	await File.WriteAllTextAsync($"Forged.Core/Generators//Utility/{chosenModule}/{chosenName}Generator.cs", UtilityTemplate(chosenModule, chosenName));
+}
+else
+{
+	Directory.CreateDirectory($"Forged.Core/Generators/{chosenModule}");
+	await File.WriteAllTextAsync($"Forged.Core/Generators/{chosenModule}/{chosenName}Generator.cs", Template(chosenModule, chosenName));
+}
 return;
 
 string Template(string module, string name) => $$"""
@@ -37,6 +46,17 @@ string Template(string module, string name) => $$"""
      /// <summary>
      /// </summary>
      public sealed class {{name}}Generator<T>(Forge forge) : Generator<T>(forge)
+     {
+        public override T Generate() => throw new NotImplementedException();
+     }
+     """;
+
+string UtilityTemplate(string module, string name) => $$"""
+     namespace Forged.Core.Generators.Utility.{{module}};
+
+     /// <summary>
+     /// </summary>
+     public sealed class {{name}}Generator<T>(IGenerator<T> innerGenerator, Forge forge) : Generator<T>(forge)
      {
         public override T Generate() => throw new NotImplementedException();
      }
