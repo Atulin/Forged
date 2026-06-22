@@ -1,0 +1,27 @@
+﻿{
+	"Tld": [
+		"com",
+		"org",
+		"net",
+		"ninja",
+		"info",
+		"tech",
+		"dev",
+		"party",
+		"it",
+		"au",
+		"us",
+		"uk",
+		"nz",
+	],
+	"CcSld": [
+		"co",
+		"com",
+		"gov",
+		"edu",
+		"mil",
+		"ac",
+		"net",
+		"org",
+	]
+}

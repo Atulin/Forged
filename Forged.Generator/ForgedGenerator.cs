@@ -87,7 +87,7 @@ public class ForgedGenerator : IIncrementalGenerator
 		}
 
 		sb.AppendLine();
-		sb.AppendLine($"    public {typeToGenerate.Name}Faker(Random? random = null) : base(random) {{ }}");
+		sb.AppendLine($"    public {typeToGenerate.Name}Faker(Random? random = null, System.Globalization.CultureInfo? locale = null) : base(random, locale) {{ }}");
 
 		sb.AppendLine();
 		sb.AppendLine($"    public override {typeToGenerate.Name} Get()");

@@ -63,18 +63,20 @@ public sealed class ForgeText(Forge forge)
 	/// Creates a generator that produces random Lorem Ipsum text of a fixed length.
 	/// </summary>
 	/// <param name="length">The exact number of words to generate.</param>
+	/// <param name="options">Optional settings for generating the Lorem Ipsum text.</param>
 	/// <returns>A generator that produces random Lorem Ipsum text.</returns>
-	public Generator<string> Lorem(int length)
-		=> new LoremIpsumGenerator(length, length, forge);
+	public Generator<string> Lorem(int length, LoremIpsumGenerator.Options? options = null)
+		=> new LoremIpsumGenerator(length, length, options, forge);
 
 	/// <summary>
 	/// Creates a generator that produces random Lorem Ipsum text of variable length.
 	/// </summary>
 	/// <param name="minLength">The minimum number of words.</param>
 	/// <param name="maxLength">The maximum number of words.</param>
+	/// <param name="options">Optional settings for generating the Lorem Ipsum text.</param>
 	/// <returns>A generator that produces random Lorem Ipsum text.</returns>
-	public Generator<string> Lorem(int minLength, int maxLength)
-		=> new LoremIpsumGenerator(minLength, maxLength, forge);
+	public Generator<string> Lorem(int minLength, int maxLength, LoremIpsumGenerator.Options? options = null)
+		=> new LoremIpsumGenerator(minLength, maxLength, options, forge);
 
 	/// <summary>
 	/// Creates a generator that produces random waffle text with a specified number of sentences

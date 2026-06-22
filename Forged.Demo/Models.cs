@@ -11,8 +11,8 @@ public class Person
 	public required string FullName { get; set;}
 	public List<string>? MiddleNames { get; set; }
 	public string? Nickname { get; set; }
+	public required string Email { get; set; }
 	public bool IsActive { get; set; }
 	public DateTime? DateOfBirth { get; set; }
-	public string? EmailAddress { get; set; }
 	public string? Bio { get; set; }
 }

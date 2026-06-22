@@ -1,5 +1,7 @@
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using Forged.Core.Generators.Extensions;
+using Forged.Core.Generators.Internet;
 using Forged.Core.Generators.Text;
 using Forged.Core.Generators.Utility;
 using Forged.Demo;
@@ -41,9 +43,17 @@ var faker = new PersonFaker
 		.List(0, 3),  // generate a list of 0 to 3 names
 	
 	// Generate a random username, with 20% chance of being null
-	Nickname = f => f.Person
+	Nickname = f => f.Internet
 		.Username()
 		.OrDefault(.2f),
+	
+	// Generate a random email address using a known provider and user's name and surname
+	Email = f => f.Internet
+		.Email(EmailKind.Known, f.Basic
+			.Func(() => $"{first.Range(0, 3)}{last}") // Base the email on first 3 letters of first name and a full last name
+			.Replace(new Regex("\\W"), "")   // Remove all non-alphanumeric characters
+			.ToLower()                                // Convert to lowercase
+		),
 
 	// Generate a random date of birth
 	DateOfBirth = f => f.Temporal

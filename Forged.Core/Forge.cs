@@ -42,9 +42,9 @@ public sealed class Forge
     public ForgeBasic Basic { get; }
 
     /// <summary>
-    /// Gets the module for generating person-related data.
+    /// Gets the module for generating internet data.
     /// </summary>
-    public ForgePerson Person { get; }
+    public ForgeInternet Internet { get; }
     
     /// <summary>
     /// Initializes a new instance of the <see cref="Forge"/> class.
@@ -60,6 +60,6 @@ public sealed class Forge
 	    Temporal = new ForgeTemporal(this);
 	    Text = new ForgeText(this);
         Basic = new ForgeBasic(this);
-        Person = new ForgePerson(this);
+        Internet = new ForgeInternet(this);
     }
 }

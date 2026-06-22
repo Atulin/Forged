@@ -79,6 +79,17 @@ var faker = new PersonFaker(new Random(12345))
 };
 ```
 
+### Localization
+
+You can optionally provide a `CultureInfo` instance to the faker, which will be utilized by modifiers that support localization:
+
+```csharp
+var faker = new PersonFaker(locale: new CultureInfo("fr-FR")) 
+{
+    // ...
+};
+```
+
 ### Referencing Other Properties
 
 If you need to reference an already-generated value, you can use `.Memo()` and `.Func()` methods:
@@ -128,15 +139,17 @@ The `Forge` instance (`f` in the lambda expressions) provides access to built-in
 - `Alpha(int minLength, int maxLength)` - Generate a random alphabetic string of variable length.
 - `Pronounceable(int length)` - Generate a random pronounceable string (syllable-based) of fixed length.
 - `Pronounceable(int minLength, int maxLength)` - Generate a random pronounceable string of variable length.
-- `Lorem(int length)` - Generate Lorem Ipsum text with a fixed number of words.
-- `Lorem(int minLength, int maxLength)` - Generate Lorem Ipsum text with a variable number of words.
+- `Lorem(int length, LoremIpsumGenerator.Options? options = null)` - Generate Lorem Ipsum text with a fixed number of words.
+- `Lorem(int minLength, int maxLength, LoremIpsumGenerator.Options? options = null)` - Generate Lorem Ipsum text with a variable number of words.
 - `Hex(int length)` - Generate a random hexadecimal string of fixed length.
 - `Hex(int minLength, int maxLength)` - Generate a random hexadecimal string of variable length.
 - `Guid(GuidGenerator.Kind kind)` - Generate a GUID of the specified kind (supports V4 and V7).
 - `Template(string template)` - Generate a string from a template with random placeholder replacements.
 
-### `Person`
+### `Internet`
 - `Username(float prefixChance, float suffixChance, float leetChance)` - Generates a random username with configurable probability for including prefixes, suffixes, and leet-speak character substitutions.
+- `Domain(float ccSldChance = 0.0f)` - Generates a random domain name.
+- `Email(EmailKind kind = EmailKind.Random, IGenerator<string>? provider = null)` - Generates a random email address.
 
 ## Modifiers & Extensions
 
@@ -168,6 +181,10 @@ Any `Generator<T>` can be customized and composed using fluent methods. These me
 ### String-Specific Extensions
 - `.ToUpper()` - Converts generated strings to uppercase.
 - `.ToLower()` - Converts generated strings to lowercase.
+- `.Range(int start, int? end = null)` - Produces substrings within the specified range.
+- `.Replace(string oldValue, string newValue)` - Replaces all occurrences of a specified string with another string.
+- `.Replace(char oldValue, char newValue)` - Replaces all occurrences of a specified char with another char.
+- `.Replace(Regex regex, string newValue)` - Replaces substrings matching a regular expression with another string.
 - `.ToTitleCase(CultureInfo? cultureInfo)` - Converts generated strings to title case using the specified culture.
 - `.Capitalize(CultureInfo? cultureInfo)` - Capitalizes the first character of generated strings.
 - `.Sentencify(int sentenceLength, CultureInfo? cultureInfo)` - Formats strings as proper sentences with a fixed word count.

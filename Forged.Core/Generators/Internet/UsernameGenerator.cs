@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using JetBrains.Annotations;
 
-namespace Forged.Core.Generators.Person;
+namespace Forged.Core.Generators.Internet;
 
 /// <summary>
 /// Generates random usernames with configurable options for prefixes, suffixes, and leet-speak substitutions.
@@ -50,7 +50,7 @@ public sealed class UsernameGenerator(float prefixChance, float suffixChance, fl
 	/// <returns>A randomly generated username that may include a prefix, suffix, and leet-speak substitutions based on the configured probabilities.</returns>
 	public override string Generate()
 	{
-		var data = FileLoader.LoadData(Locale.Name, "username", UserDataContext.Default.UserData);
+		var data = FileLoader.LoadData(Locale.Name, "internet/username", UserDataContext.Default.UserData);
 
 		var usePrefix = Rng.NextSingle() < prefixChance;
 		var useSuffix = Rng.NextSingle() < suffixChance;
