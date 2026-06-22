@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Forged.Core.Core;
 using JetBrains.Annotations;
 using NetEscapades.EnumGenerators;
 
@@ -25,8 +26,8 @@ public sealed class EmailGenerator(EmailKind kind, IGenerator<string>? nameGener
 
 		var domain = kind switch
 		{
-			EmailKind.Known => Rng.GetItems(_providers.ToArray(), 1)[0],
-			EmailKind.Example => Rng.GetItems(["example.com", "example.org", "example.net"], 1)[0],
+			EmailKind.Known => Rng.GetItem(_providers.ToArray()),
+			EmailKind.Example => Rng.GetItem(["example.com", "example.org", "example.net"]),
 			EmailKind.Random => $"{Forge.Text.Pronounceable(1, 3)}.{Forge.Internet.Domain()}",
 			_ => throw new ArgumentOutOfRangeException(nameof(kind), kind, null)
 		};

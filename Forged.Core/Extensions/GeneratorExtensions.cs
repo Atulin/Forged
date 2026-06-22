@@ -1,7 +1,8 @@
 using System.Globalization;
+using Forged.Core.Generators;
 using Forged.Core.Generators.Utility.Text;
 
-namespace Forged.Core.Generators.Extensions;
+namespace Forged.Core.Extensions;
 
 /// <summary>
 /// Provides general extension methods for the <see cref="Generator{T}"/> class.

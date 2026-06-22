@@ -1,6 +1,7 @@
+using Forged.Core.Generators;
 using Forged.Core.Generators.Utility;
 
-namespace Forged.Core.Generators.Extensions;
+namespace Forged.Core.Extensions;
 
 /// <summary>
 /// Extension methods for ICollection generators.

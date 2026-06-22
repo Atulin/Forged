@@ -1,6 +1,7 @@
+using Forged.Core.Generators;
 using Forged.Core.Generators.Utility.Temporal;
 
-namespace Forged.Core.Generators.Extensions;
+namespace Forged.Core.Extensions;
 
 /// <summary>
 /// Extension methods for DateTime generators.

@@ -1,6 +1,7 @@
 using System.Collections.Frozen;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Forged.Core.Core;
 using JetBrains.Annotations;
 
 namespace Forged.Core.Generators.Internet;
@@ -52,8 +53,8 @@ public sealed class UsernameGenerator(float prefixChance, float suffixChance, fl
 	{
 		var data = FileLoader.LoadData(Locale.Name, "internet/username", UserDataContext.Default.UserData);
 
-		var usePrefix = Rng.NextSingle() < prefixChance;
-		var useSuffix = Rng.NextSingle() < suffixChance;
+		var usePrefix = Rng.Chance(prefixChance);
+		var useSuffix = Rng.Chance(suffixChance);
 
 		var prefix = usePrefix ? data.Prefixes[Rng.Next(data.Prefixes.Length)] : string.Empty;
 		var suffix = useSuffix ? data.Suffixes[Rng.Next(data.Suffixes.Length)] : string.Empty;
@@ -67,11 +68,11 @@ public sealed class UsernameGenerator(float prefixChance, float suffixChance, fl
 		var newCore = new List<char>(core.Length);
 		foreach (var ch in core)
 		{
-			if (Rng.NextSingle() < leetChance)
+			if (Rng.Chance(leetChance))
 			{
 				if (_leetReplacements.TryGetValue(ch, out var replacement))
 				{
-					newCore.AddRange(Rng.GetItems(replacement, 1)[0]);
+					newCore.AddRange(Rng.GetItem(replacement));
 				}
 				
 				newCore.Add(ch);

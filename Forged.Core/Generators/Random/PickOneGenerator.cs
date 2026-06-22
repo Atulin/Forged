@@ -1,3 +1,5 @@
+using Forged.Core.Core;
+
 namespace Forged.Core.Generators.Random;
 
 /// <summary>
@@ -10,5 +12,5 @@ public sealed class PickOneGenerator<T>(T[] items, Forge forge) : Generator<T>(f
 	/// Generates a random item from the collection.
 	/// </summary>
 	/// <returns>A randomly selected item from the collection.</returns>
-	public override T Generate() => items[Rng.Next(items.Length)];
+	public override T Generate() => Rng.GetItem(items);
 }

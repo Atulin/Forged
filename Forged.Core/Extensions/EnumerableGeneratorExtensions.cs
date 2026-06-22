@@ -1,7 +1,8 @@
+using Forged.Core.Generators;
 using Forged.Core.Generators.Utility;
 using Forged.Core.Generators.Utility.Collections;
 
-namespace Forged.Core.Generators.Extensions;
+namespace Forged.Core.Extensions;
 
 /// <summary>
 /// Extension methods for IEnumerable generators.

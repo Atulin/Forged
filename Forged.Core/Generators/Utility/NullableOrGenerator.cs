@@ -1,3 +1,5 @@
+using Forged.Core.Core;
+
 namespace Forged.Core.Generators.Utility;
 
 /// <summary>
@@ -14,5 +16,5 @@ public sealed class NullableOrGenerator<T>(Generator<T> innerGenerator, T? fallb
 	/// Generates a value from the inner generator or returns the fallback.
 	/// </summary>
 	/// <returns>Either the fallback value or a value from the inner generator.</returns>
-	public override T? Generate() => Rng.NextDouble() < probability ? fallback : innerGenerator.Generate();
+	public override T? Generate() => Rng.Chance(probability) ? fallback : innerGenerator.Generate();
 }

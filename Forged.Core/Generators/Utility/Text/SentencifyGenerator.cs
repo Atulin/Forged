@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using Forged.Core.Core;
 
 namespace Forged.Core.Generators.Utility.Text;
 
@@ -44,7 +45,7 @@ public sealed class SentencifyGenerator(
 				continue;
 			}
 			
-			if (length >= minSentenceLength && (length >= maxSentenceLength || Rng.NextDouble() < 0.15))
+			if (length >= minSentenceLength && (length >= maxSentenceLength || Rng.Chance(0.15f)))
 			{
 				builder.Append(word);
 				builder.Append('.');

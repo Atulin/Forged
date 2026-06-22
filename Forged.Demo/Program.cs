@@ -1,6 +1,6 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Forged.Core.Generators.Extensions;
+using Forged.Core.Extensions;
 using Forged.Core.Generators.Internet;
 using Forged.Core.Generators.Text;
 using Forged.Core.Generators.Utility;

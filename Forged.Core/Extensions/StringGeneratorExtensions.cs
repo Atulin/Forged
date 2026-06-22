@@ -1,8 +1,9 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
+using Forged.Core.Generators;
 using Forged.Core.Generators.Utility.Text;
 
-namespace Forged.Core.Generators.Extensions;
+namespace Forged.Core.Extensions;
 
 /// <summary>
 /// Extension methods for string generators.

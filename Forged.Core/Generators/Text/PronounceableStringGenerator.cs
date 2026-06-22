@@ -1,4 +1,5 @@
 using System.Text;
+using Forged.Core.Core;
 
 namespace Forged.Core.Generators.Text;
 
@@ -41,9 +42,9 @@ public sealed class PronounceableStringGenerator(int minSyllables, int maxSyllab
 
 		for (var i = 0; i < length; i++)
 		{
-			var onset = Onsets[Rng.Next(Onsets.Length)];
-			var nucleus = Nuclei[Rng.Next(Nuclei.Length)];
-			var coda = Codas[Rng.Next(Codas.Length)];
+			var onset = Rng.GetItem(Onsets);
+			var nucleus = Rng.GetItem(Nuclei);
+			var coda = Rng.GetItem(Codas);
 
 			// Don't start a syllable with a heavy onset if it's in the middle
 			if (i > 0 && onset.Length > 1 && Rng.Next(2) == 0)

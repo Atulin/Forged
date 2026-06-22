@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Forged.Core.Core;
 using JetBrains.Annotations;
 
 namespace Forged.Core.Generators.Internet;
@@ -31,14 +32,14 @@ public sealed class DomainGenerator : Generator<string>
 	{
 		var data = _cache.Value;
 
-		var domain = Rng.GetItems(data.Tld, 1)[0];
-		if (_ccSldChance <= float.Epsilon || Rng.NextDouble() <= _ccSldChance)
+		var domain = Rng.GetItem(data.Tld);
+		if (_ccSldChance  <= 0 || Rng.Chance(_ccSldChance))
 		{
 			return domain;
 		}
 
 		var slds = data.CcSld.Except([domain]).ToArray();
-		var sld = Rng.GetItems(slds, 1)[0];
+		var sld = Rng.GetItem(slds);
 
 		return $"{sld}.{domain}";
 	}
