@@ -72,7 +72,11 @@ var faker = new PersonFaker
 
 	// Generate a random bio
 	Bio = f => f.Text
-		.Waffle(f.Random.Number<int>(3, 6), WaffleStyle.Fiction)
+		.Waffle(f.Random.Number<int>(3, 6), WaffleStyle.Fiction),
+	
+	// Generate a random luck score based on a dice roll
+	Luck = f => f.Random
+		.Dice("2d6+1d10-3"),
 };
 
 // Get 5 random people

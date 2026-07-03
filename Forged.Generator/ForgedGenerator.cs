@@ -35,7 +35,7 @@ public class ForgedGenerator : IIncrementalGenerator
 		var typesToGenerate = context.SyntaxProvider
 			.ForAttributeWithMetadataName(
 				"Forged.Core.FakeAttribute",
-				predicate: static (s, _) => s is ClassDeclarationSyntax or RecordDeclarationSyntax,
+				predicate: static (s, _) => s is ClassDeclarationSyntax or RecordDeclarationSyntax or StructDeclarationSyntax,
 				transform: static (ctx, _) => GetSemanticTargetForGeneration(ctx.SemanticModel, ctx.TargetNode)
 			)
 			.Where(static m => m is not null);

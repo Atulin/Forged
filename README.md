@@ -122,6 +122,7 @@ The `Forge` instance (`f` in the lambda expressions) provides access to built-in
 - `Number<T>(T? min, T? max)` - Generate a random numeric value within the specified range (supports all numeric types).
 - `WeightedPick<T>(T[] items, float[] weights)` - Pick an item from the collection using specified weights for probability distribution.
 - `WeightedPick<T>((T item, float weight)[] items)` - Pick an item from an array of item-weight tuples.
+- `Dice(string expression, RoundingMode mode)` - Roll dice using a dice expression (e.g. `2d6+4`).
 
 ### `Temporal`
 - `Between(DateTime? min, DateTime? max)` - Generate a random `DateTime` within the specified range.

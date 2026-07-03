@@ -81,4 +81,13 @@ public sealed class ForgeRandom(Forge forge)
 	/// <returns>A generator that produces random items based on their weights.</returns>
 	public Generator<T> WeightedPick<T>((T item, float weight)[] items)
 		=> new WeightedPickGenerator<T>(items, forge);
+
+	/// <summary>
+	/// Creates a random integer generator based on a dice expression, allowing for complex dice roll calculations with optional rounding.
+	/// </summary>
+	/// <param name="expression">The dice expression to evaluate (e.g., "2d6+1d10-3"), which specifies the dice type, quantity, and modifiers.</param>
+	/// <param name="mode">The rounding mode to apply to the result (Floor, Round, or Ceiling). Defaults to RoundingMode.Round.</param>
+	/// <returns>A generator that produces integers based on the specified dice expression and rounding mode.</returns>
+	public Generator<int> Dice(string expression, RoundingMode mode = RoundingMode.Round)
+		=> new DiceGenerator(expression, mode, forge);
 }

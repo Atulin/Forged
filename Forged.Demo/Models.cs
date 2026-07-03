@@ -15,4 +15,5 @@ public class Person
 	public bool IsActive { get; set; }
 	public DateTime? DateOfBirth { get; set; }
 	public string? Bio { get; set; }
+	public required int Luck { get; init; }
 }
