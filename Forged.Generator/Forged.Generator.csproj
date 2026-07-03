@@ -9,7 +9,22 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <MeziantouPolyfill_IncludedPolyfills>
+            T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute;
+            T:System.Runtime.CompilerServices.IsExternalInit;
+        </MeziantouPolyfill_IncludedPolyfills>
+    </PropertyGroup>
+    
     <ItemGroup>
+        <PackageReference Include="AssemblyMetadata.Generators" Version="2.2.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Meziantou.Polyfill" Version="1.0.157">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="5.3.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

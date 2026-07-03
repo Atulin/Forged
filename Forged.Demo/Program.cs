@@ -83,3 +83,10 @@ foreach (var person in people)
 {
 	Console.WriteLine(JsonSerializer.Serialize(person, new JsonSerializerOptions { WriteIndented = true }));
 }
+
+return;
+
+namespace Forged.Demo
+{
+	public partial class PersonFaker;
+}
