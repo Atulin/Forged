@@ -32,18 +32,39 @@ public class ForgedGenerator : IIncrementalGenerator
 
 	public void Initialize(IncrementalGeneratorInitializationContext context)
 	{
-		var typesToGenerate = context.SyntaxProvider
+		var typesToFake = context.SyntaxProvider
 			.ForAttributeWithMetadataName(
 				"Forged.Core.FakeAttribute",
 				predicate: static (s, _) => s is ClassDeclarationSyntax or RecordDeclarationSyntax or StructDeclarationSyntax,
-				transform: static (ctx, _) => GetSemanticTargetForGeneration(ctx.SemanticModel, ctx.TargetNode)
+				transform: static (ctx, _) => GetFakedTypes(ctx.SemanticModel, ctx.TargetNode)
 			)
-			.Where(static m => m is not null);
+			.Where(static m => m is not null)
+			.Select(static (m, _) => m!)
+			.Collect();
 
-		context.RegisterSourceOutput(typesToGenerate, static (spc, source) => Execute(spc, source));
+		var fakersToGenerate = context.SyntaxProvider
+			.ForAttributeWithMetadataName(
+				"Forged.Core.FakerAttribute`1",
+				predicate: static (s, _) => s is ClassDeclarationSyntax,
+				transform: static (ctx, _) => GetFakers(ctx.SemanticModel, ctx.TargetNode)
+			)
+			.Where(static m => m is not null)
+			.Select(static (m, _) => m!)
+			.Collect();
+		
+		var combined = typesToFake
+			.Combine(fakersToGenerate);
+
+		context.RegisterSourceOutput(combined, static (spc, source) => {
+			var (types, fakers) = source;
+			foreach (var ttg in types.Concat(fakers))
+			{
+				Execute(spc, ttg);
+			}
+		});
 	}
 
-	private static TypeToGenerate? GetSemanticTargetForGeneration(SemanticModel semanticModel, SyntaxNode node)
+	private static TypeToGenerate? GetFakedTypes(SemanticModel semanticModel, SyntaxNode node)
 	{
 		if (semanticModel.GetDeclaredSymbol(node) is not INamedTypeSymbol symbol)
 		{
@@ -66,16 +87,46 @@ public class ForgedGenerator : IIncrementalGenerator
 			Properties: properties.ToEquatableReadOnlyList()
 		);
 	}
-
-	private static void Execute(SourceProductionContext context, TypeToGenerate? typeToGenerate)
+	
+	private static TypeToGenerate? GetFakers(SemanticModel semanticModel, SyntaxNode node)
 	{
-		if (typeToGenerate is null) return;
+		if (semanticModel.GetDeclaredSymbol(node) is not INamedTypeSymbol symbol)
+		{
+			return null;
+		}
+		
+		var attribute = symbol.GetAttributes().FirstOrDefault(a => a.AttributeClass?.Name == "FakerAttribute");
+		if (attribute is not { AttributeClass: { IsGenericType: true, TypeArguments: [ INamedTypeSymbol targetType ] }  })
+		{
+			return null;
+		}
+		
+		var properties = targetType.GetMembers()
+			.OfType<IPropertySymbol>()
+			.Where(p => p.SetMethod is not null && p.DeclaredAccessibility == Accessibility.Public)
+			.Select(p => new PropertyToGenerate(
+				Name: p.Name,
+				Type: p.Type.ToDisplayString(),
+				IsRequired: p.IsRequired
+			))
+			.ToList();
 
+		return new TypeToGenerate(
+			Namespace: targetType.ContainingNamespace.IsGlobalNamespace ? string.Empty : targetType.ContainingNamespace.ToDisplayString(),
+			Name: targetType.Name,
+			Properties: properties.ToEquatableReadOnlyList(),
+			FakerName: symbol.Name
+		);
+	}
+
+	private static void Execute(SourceProductionContext context, TypeToGenerate typeToGenerate)
+	{
 		var w = new IndentedWriter();
 		w.WriteLine(Header);
 		w.WriteLine("#nullable enable");
-
-
+		
+		var fakerName = typeToGenerate.FakerName ?? $"{typeToGenerate.Name}Faker";
+		
 		if (!string.IsNullOrEmpty(typeToGenerate.Namespace))
 		{
 			w.WriteLine();
@@ -85,7 +136,7 @@ public class ForgedGenerator : IIncrementalGenerator
 		w.WriteLine();
 		w.WriteLine(Attributes);
 
-		w.WriteLine($"public partial class {typeToGenerate.Name}Faker : global::Forged.Core.Faker<{typeToGenerate.Name}>");
+		w.WriteLine($"public partial class {fakerName} : global::Forged.Core.Faker<{typeToGenerate.Name}>");
 		w.BodyBlock(() => {
 
 			foreach (var prop in typeToGenerate.Properties)
@@ -105,7 +156,7 @@ public class ForgedGenerator : IIncrementalGenerator
 
 			w.WriteLine();
 			w.WriteLine("// Constructor");
-			w.WriteLine($"public {typeToGenerate.Name}Faker(global::System.Random? random = null, global::System.Globalization.CultureInfo? locale = null) : base(random, locale) {{ }}");
+			w.WriteLine($"public {fakerName}(global::System.Random? random = null, global::System.Globalization.CultureInfo? locale = null) : base(random, locale) {{ }}");
 
 			w.WriteLine();
 			w.WriteLine($"public override {typeToGenerate.Name} Get()");
@@ -132,8 +183,8 @@ public class ForgedGenerator : IIncrementalGenerator
 				});
 			});
 		});
-
-		context.AddSource($"{typeToGenerate.Name}Faker.g.cs", SourceText.From(w.ToString(), Encoding.UTF8));
+		
+		context.AddSource($"{fakerName}.g.cs", SourceText.From(w.ToString(), Encoding.UTF8));
 	}
 
 	private static string Decapitalize(string input)
@@ -141,7 +192,7 @@ public class ForgedGenerator : IIncrementalGenerator
 		var span = input.AsSpan();
 		Span<char> result = stackalloc char[span.Length];
 		result[0] = char.ToLowerInvariant(span[0]);
-		span.Slice(1).CopyTo(result.Slice(1));
+		span[1..].CopyTo(result[1..]);
 		return result.ToString();
 	}
 }

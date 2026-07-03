@@ -21,10 +21,6 @@ Forged allows you to declaratively define how your models should be faked, lever
 2. Decorate your model with `[Fake]`:
 
 ```csharp
-using Forged.Core;
-
-namespace MyProject;
-
 [Fake]
 public class Person
 {
@@ -35,6 +31,13 @@ public class Person
     public bool IsActive { get; set; }
     public DateTime? DateOfBirth { get; set; }
 }
+```
+
+or create a partial class with `[Faker<T>]` attribute:
+
+```csharp
+[Faker<Person>]
+public partial class PersonFaker;
 ```
 
 3. The source generator will automatically create a `{ModelName}Faker` class for you. Configure it and generate data!
@@ -68,9 +71,13 @@ var person = faker.Get();
 var people = faker.Get(5);
 ```
 
+> [!INFO]
+> When using the `Faker<T>` attribute, the generated faker will have the same name,
+> not `{ModelName}Faker`.
+
 ### Deterministic Generation
 
-If you need reproducible results (e.g., in unit tests), you can provide a seeded `Random` instance to the faker:
+If you need reproducible results (e.g. in unit tests), you can provide a seeded `Random` instance to the faker:
 
 ```csharp
 var faker = new PersonFaker(new Random(12345)) 

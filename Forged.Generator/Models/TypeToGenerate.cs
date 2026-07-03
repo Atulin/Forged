@@ -1,7 +1,10 @@
-﻿namespace Forged.Generator.Models;
+﻿using Forged.Generator.Helpers;
+
+namespace Forged.Generator.Models;
 
 public sealed record TypeToGenerate(
 	string Namespace, 
-	string Name, 
-	EquatableReadOnlyList<PropertyToGenerate> Properties
+	string Name,
+	EquatableReadOnlyList<PropertyToGenerate> Properties,
+	string? FakerName = null
 );

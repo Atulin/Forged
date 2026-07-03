@@ -1,7 +1,7 @@
-﻿namespace Forged.Generator;
-
-using System.Collections;
+﻿using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+
+namespace Forged.Generator.Helpers;
 
 [ExcludeFromCodeCoverage]
 public static class EquatableReadOnlyList

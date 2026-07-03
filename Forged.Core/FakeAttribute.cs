@@ -4,6 +4,4 @@ namespace Forged.Core;
 /// Marker attribute for classes or structs that represent fake data models.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-public sealed class FakeAttribute : Attribute
-{
-}
+public sealed class FakeAttribute : Attribute;

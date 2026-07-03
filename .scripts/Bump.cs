@@ -52,13 +52,29 @@ else if (!string.IsNullOrEmpty(version.Release))
 		: version.Release;
 }
 
-var newVersion = new SemanticVersion(
-	version.Major + (part == "Major" ? 1 : 0),
-	version.Minor + (part == "Minor" ? 1 : 0),
-	version.Patch + (part == "Patch" ? 1 : 0),
-	tag,
-	null
-);
+var major = version.Major;
+var minor = version.Minor;
+var patch = version.Patch;
+
+switch (part)
+{
+	case "Major":
+		major++;
+		minor = 0;
+		patch = 0;
+		break;
+	case "Minor":
+		minor++;
+		patch = 0;
+		break;
+	case "Patch":
+		patch++;
+		break;
+	case "Build":
+		break;
+}
+
+var newVersion = new SemanticVersion(major, minor, patch, tag, null);
 
 AnsiConsole.MarkupLine($"[green]Bumping to: [bold]{newVersion}[/][/]");
 

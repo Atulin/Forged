@@ -17,3 +17,13 @@ public class Person
 	public string? Bio { get; set; }
 	public required int Luck { get; init; }
 }
+
+public class Address
+{
+	public required string StreetName { get; init; }
+	public required string StreetNumber { get; init; }
+	public required string City { get; init; }
+}
+
+[Faker<Address>]
+public partial class AddressGenerator;

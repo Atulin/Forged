@@ -11,8 +11,12 @@
 
     <PropertyGroup>
         <MeziantouPolyfill_IncludedPolyfills>
+            T:System.Runtime.CompilerServices.CompilerRequiredAttribute;
+            T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute;
             T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute;
             T:System.Runtime.CompilerServices.IsExternalInit;
+            T:System.Index;
+            T:System.Range;
         </MeziantouPolyfill_IncludedPolyfills>
     </PropertyGroup>
     
