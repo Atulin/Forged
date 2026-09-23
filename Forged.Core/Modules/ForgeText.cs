@@ -1,3 +1,5 @@
+using System.Text;
+using Forged.Core.Core;
 using Forged.Core.Generators;
 using Forged.Core.Generators.Text;
 
@@ -120,4 +122,48 @@ public sealed class ForgeText(Forge forge)
 	/// <returns>A generator that produces strings from the template.</returns>
 	public Generator<string> Template(string template)
 		=> new TemplateStringGenerator(template, forge);
+
+	/// <summary>
+	/// Creates a generator that produces random characters based on the specified character kind.
+	/// </summary>
+	/// <param name="kind">
+	/// The category of characters to generate, such as alphanumeric, alphabetical, numeric, or printable.
+	/// Defaults to printable characters.
+	/// </param>
+	/// <returns>A generator that produces random characters of the specified type.</returns>
+	public Generator<char> Char(CharKind kind = CharKind.Printable)
+		=> new CharGenerator(kind, forge);
+
+	/// <summary>
+	/// Creates a generator that produces random character arrays based on the specified constraints.
+	/// </summary>
+	/// <param name="minCount">The minimum number of characters to generate.</param>
+	/// <param name="maxCount">The maximum number of characters to generate.</param>
+	/// <param name="kind">The type of characters to include, such as alphanumeric or printable characters.</param>
+	/// <returns>A generator that produces random character arrays.</returns>
+	public Generator<char[]> Chars(int minCount, int maxCount, CharKind kind = CharKind.Printable)
+		=> new CharsGenerator(minCount, maxCount, kind, forge);
+
+	/// <summary>
+	/// Creates a generator that produces random arrays of characters based on the specified count and character kind.
+	/// </summary>
+	/// <param name="count">The exact number of characters to generate.</param>
+	/// <param name="kind">The type of characters to include in the generated array (e.g., Printable, Alphanumeric).</param>
+	/// <returns>A generator that produces random arrays of characters with the specified count and character kind.</returns>
+	public Generator<char[]> Chars(int count, CharKind kind = CharKind.Printable)
+		=> new CharsGenerator(count, count, kind, forge);
+
+	/// <summary>
+	/// Creates a generator that produces random emojis strings.
+	/// </summary>
+	/// <returns>A generator that produces random emojis.</returns>
+	public Generator<string> Emoji()
+		=> new EmojiGenerator(forge);
+
+	/// <summary>
+	/// Creates a generator that produces random arrays of Unicode runes, each representing a single emoji.
+	/// </summary>
+	/// <returns>A generator that produces arrays of runes, where each rune corresponds to an emoji.</returns>
+	public Generator<Rune[]> EmojiRunes()
+		=> new EmojiGenerator(forge).Refine(e => e.EnumerateRunes().ToArray());
 }

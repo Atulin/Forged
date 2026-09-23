@@ -1,7 +1,14 @@
 <Solution>
-  <Project Path="Forged.Core/Forged.Core.csproj" />
-  <Project Path="Forged.Demo/Forged.Demo.csproj" />
-  <Project Path="Forged.Generator/Forged.Generator.csproj" />
-  <Project Path="Forged/Forged.csproj" />
-  <Project Path="Forged.Tests/Forged.Tests.csproj" />
+    <Project Path="Forged.Core/Forged.Core.csproj"/>
+    <Project Path="Forged.Demo/Forged.Demo.csproj"/>
+    <Project Path="Forged.Generator/Forged.Generator.csproj"/>
+    <Project Path="Forged/Forged.csproj"/>
+    <Project Path="Forged.Tests/Forged.Tests.csproj"/>
+
+    <Folder Name="/scripts/">
+        <File Path=".scripts/Bump.cs"/>
+        <File Path=".scripts/New.cs"/>
+        <File Path=".scripts/UpdateEmoji.cs"/>
+        <File Path="taskfile.yml" />
+    </Folder>
 </Solution>

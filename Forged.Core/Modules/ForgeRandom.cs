@@ -44,6 +44,27 @@ public sealed class ForgeRandom(Forge forge)
 	/// <returns>A generator that produces arrays of random items from the collection.</returns>
 	public Generator<T[]> Pick<T>(T[] items, int minCount, int maxCount)
 		=> new PickManyGenerator<T>(items, minCount, maxCount, forge);
+	
+	/// <summary>
+	/// Creates a generator that picks a fixed number of random unique items from the specified collection.
+	/// </summary>
+	/// <typeparam name="T">The type of items to pick from.</typeparam>
+	/// <param name="items">The collection of items to pick from.</param>
+	/// <param name="count">The exact number of items to pick each time.</param>
+	/// <returns>A generator that produces arrays of random unique items from the collection.</returns>
+	public Generator<T[]> PickUnique<T>(T[] items, int count)
+		=> new PickManyUniqueGenerator<T>(items, count, count, forge);
+
+	/// <summary>
+	/// Creates a generator that picks a variable number of random unique items from the specified collection.
+	/// </summary>
+	/// <typeparam name="T">The type of items to pick from.</typeparam>
+	/// <param name="items">The collection of items to pick from.</param>
+	/// <param name="minCount">The minimum number of items to pick.</param>
+	/// <param name="maxCount">The maximum number of items to pick.</param>
+	/// <returns>A generator that produces arrays of random unique items from the collection.</returns>
+	public Generator<T[]> PickUnique<T>(T[] items, int minCount, int maxCount)
+		=> new PickManyUniqueGenerator<T>(items, minCount, maxCount, forge);
 
 	/// <summary>
 	/// Creates a generator that randomly selects a single value from the provided enum.

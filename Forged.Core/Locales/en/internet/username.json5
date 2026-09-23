@@ -1,5 +1,5 @@
 ﻿{
-	"Prefixes": [
+	Prefixes: [
 		"Agent",
 		"Alpha",
 		"Captain",
@@ -47,7 +47,7 @@
 		"i",
 		"xXx",
 	],
-	"Cores": [
+	Cores: [
 		"Angel",
 		"Apex",
 		"Blaze",
@@ -99,7 +99,7 @@
 		"Wolf",
 		"Wraith",
 	],
-	"Suffixes": [
+	Suffixes: [
 		"007",
 		"11",
 		"1337",
@@ -152,5 +152,5 @@
 		"YT",
 		"Zone",
 		"xXx",
-	]
+	],
 }

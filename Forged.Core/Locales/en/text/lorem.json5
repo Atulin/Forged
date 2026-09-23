@@ -8,7 +8,7 @@
 	"lorem",
 	"ipsum",
 	"dolor",
-	
+
 	// Base lipsum corpus
 	"ad",
 	"adipiscing",
@@ -72,7 +72,7 @@
 	"velit",
 	"veniam",
 	"voluptate",
-	
+
 	// Extended Latin-like
 	"a",
 	"ab",
@@ -1128,5 +1128,5 @@
 	"vulnus",
 	"vulpes",
 	"vulticulus",
-	"xiphias"
+	"xiphias",
 ]

@@ -1,0 +1,22 @@
+﻿// The asterisk (*) indicates the infix should be glued to the surname.
+[
+	"Von",
+	"De",
+	"Da",
+	"Di*",
+	"Del",
+	"Van der",
+	"Van den",
+	"Af",
+	"Av",
+	"Mac*",
+	"Mc*",
+	"Al",
+	"Dos",
+	"Das",
+	"O'*",
+	"Ibn",
+	"Ben-*",
+	"Al-*",
+	"El-*",
+]

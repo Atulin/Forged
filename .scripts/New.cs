@@ -73,7 +73,7 @@ string ForgeTemplate(string module, string name) => $$"""
 		/// <summary>
 		/// </summary>
 		public Generator<T> {{name}}<T>()
-			=> new {{name}}Generator<T>(forge.Rng);
+			=> new {{name}}Generator<T>(forge);
 	}
 	""";
                      

@@ -13,5 +13,20 @@ internal static class RandomExtensions
 		{
 			return items[rng.Next(items.Length)];
 		}
+
+		internal T GetItem<T>(List<T> items)
+		{
+			return items[rng.Next(items.Count)];
+		}
+		
+		internal IEnumerable<T> GetShuffled<T>(params T[] items)
+		{
+			var indexes = Enumerable.Range(0, items.Length).ToArray();
+			rng.Shuffle(indexes);
+			foreach (var i in indexes)
+			{
+				yield return items[i];
+			}
+		}
 	}
 }

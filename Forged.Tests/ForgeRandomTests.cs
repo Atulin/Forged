@@ -369,4 +369,57 @@ public class ForgeRandomTests
         var forge = NewForge(66);
         await Assert.That(() => forge.Random.Dice("2d6 3").Generate()).Throws<InvalidOperationException>();
     }
+
+    [Test]
+    public async Task PickUnique_FixedCount_ReturnsUniqueItemsFromTheCollection()
+    {
+        var forge = NewForge(100);
+        var items = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        var values = Draw(forge.Random.PickUnique(items, 5), 100);
+
+        foreach (var value in values)
+        {
+            await Assert.That(value).Count().IsEqualTo(5);
+            await Assert.That(value.Distinct().Count()).IsEqualTo(5);
+            await Assert.That(value.All(items.Contains)).IsTrue();
+        }
+    }
+
+    [Test]
+    public async Task PickUnique_WithCountEqualToCollectionSize_ReturnsAllItemsOnce()
+    {
+        var forge = NewForge(101);
+        var items = new[] { "a", "b", "c", "d" };
+        var value = forge.Random.PickUnique(items, items.Length).Generate();
+
+        await Assert.That(value).Count().IsEqualTo(items.Length);
+        await Assert.That(value.Distinct().Count()).IsEqualTo(items.Length);
+        await Assert.That(value.All(items.Contains)).IsTrue();
+        await Assert.That(items.All(value.Contains)).IsTrue();
+    }
+
+    [Test]
+    public async Task PickUnique_VariableCount_ProducesUniqueItemsWithinBounds()
+    {
+        var forge = NewForge(102);
+        var items = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        for (var i = 0; i < 50; i++)
+        {
+            var value = forge.Random.PickUnique(items, 3, 8).Generate();
+            await Assert.That(value.Length).IsInRange(3, 8);
+            await Assert.That(value.Distinct().Count()).IsEqualTo(value.Length);
+            await Assert.That(value.All(items.Contains)).IsTrue();
+        }
+    }
+
+    [Test]
+    public async Task PickUnique_DuplicateSourceItems_ProducesUniqueResults()
+    {
+        var forge = NewForge(103);
+        var items = new[] { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5 };
+        var value = forge.Random.PickUnique(items, 5).Generate();
+
+        await Assert.That(value.Distinct().Count()).IsEqualTo(value.Length);
+        await Assert.That(value.All(items.Contains)).IsTrue();
+    }
 }

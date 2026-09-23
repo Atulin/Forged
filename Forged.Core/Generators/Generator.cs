@@ -21,7 +21,7 @@ public abstract class Generator<T>(Forge forge) : IGenerator<T>
 
 	protected CultureInfo Locale => Forge.Locale;
 
-	protected FileLoader FileLoader => Forge.FileLoader;
+	internal FileLoader FileLoader => Forge.FileLoader;
 
 	
 	/// <summary>

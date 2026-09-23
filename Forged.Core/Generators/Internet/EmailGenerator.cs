@@ -26,7 +26,7 @@ public sealed class EmailGenerator(EmailKind kind, IGenerator<string>? nameGener
 
 		var domain = kind switch
 		{
-			EmailKind.Known => Rng.GetItem([.. _providers]),
+			EmailKind.Known => Rng.GetItem(_providers.ToList()),
 			EmailKind.Example => Rng.GetItem("example.com", "example.org", "example.net"),
 			EmailKind.Random => $"{Forge.Text.Pronounceable(1, 3)}.{Forge.Internet.Domain()}",
 			_ => throw new ArgumentOutOfRangeException(nameof(kind), kind, null)

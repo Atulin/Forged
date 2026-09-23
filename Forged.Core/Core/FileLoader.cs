@@ -5,7 +5,7 @@ using Microsoft.Extensions.FileProviders;
 
 namespace Forged.Core.Core;
 
-public sealed class FileLoader
+internal sealed class FileLoader
 {
 	private readonly EmbeddedFileProvider _fileProvider = new(typeof(FileLoader).Assembly);
 

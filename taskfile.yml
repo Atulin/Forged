@@ -1,7 +1,18 @@
 ﻿version: 3
-silent: true
+
+vars:
+  EXEC: 
+    sh: command -v bun >/dev/null 2>&1 && echo "bunx" || echo "npx"
 
 tasks:
   new: dotnet run ./.scripts/New.cs
+  
   bump: dotnet run ./.scripts/Bump.cs ./Forged/Forged.csproj
+  
+  update-emoji: dotnet run ./.scripts/UpdateEmoji.cs
+  
+  format-locale: 
+    dir: ./Forged.Core/Locales
+    cmd: "{{.EXEC}} oxfmt . -c .oxfmtrc.jsonc"
+  
   test: dotnet test -c Release --coverage --coverage-output coverage.cobertura.xml --coverage-output-format cobertura

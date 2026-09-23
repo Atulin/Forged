@@ -1,6 +1,6 @@
 ﻿{
-	"Fiction": {
-		"Subjects": [
+	Fiction: {
+		Subjects: [
 			"the old man",
 			"the young woman",
 			"the traveler",
@@ -20,9 +20,9 @@
 			"the hunter",
 			"the girl",
 			"the boy",
-			"the watchman"
+			"the watchman",
 		],
-		"Verbs": [
+		Verbs: [
 			"watched",
 			"observed",
 			"crossed",
@@ -42,9 +42,9 @@
 			"surveyed",
 			"avoided",
 			"searched",
-			"found"
+			"found",
 		],
-		"Objects": [
+		Objects: [
 			"the road",
 			"the river",
 			"the orchard",
@@ -64,9 +64,9 @@
 			"the narrow path",
 			"the wooden fence",
 			"the abandoned house",
-			"the silent meadow"
+			"the silent meadow",
 		],
-		"Adjectives": [
+		Adjectives: [
 			"grey",
 			"silent",
 			"cold",
@@ -86,9 +86,9 @@
 			"overgrown",
 			"rain-soaked",
 			"shadowed",
-			"bleak"
+			"bleak",
 		],
-		"Templates": [
+		Templates: [
 			"{subject} {verb} {object}.",
 			"{subject} {verb} the {adjective} {object}.",
 			"Beyond {object}, {subject} {verb}.",
@@ -98,11 +98,11 @@
 			"{subject} {verb} toward {object}.",
 			"{subject} slowly {verb} {object}.",
 			"The {adjective} wind accompanied {subject} as they {verb} {object}.",
-			"{subject} {verb} past {object}."
-		]
+			"{subject} {verb} past {object}.",
+		],
 	},
-	"Technical": {
-		"Subjects": [
+	Technical: {
+		Subjects: [
 			"the old man",
 			"the young woman",
 			"the traveler",
@@ -122,9 +122,9 @@
 			"the hunter",
 			"the girl",
 			"the boy",
-			"the watchman"
+			"the watchman",
 		],
-		"Verbs": [
+		Verbs: [
 			"watched",
 			"observed",
 			"crossed",
@@ -144,9 +144,9 @@
 			"surveyed",
 			"avoided",
 			"searched",
-			"found"
+			"found",
 		],
-		"Objects": [
+		Objects: [
 			"the road",
 			"the river",
 			"the orchard",
@@ -166,9 +166,9 @@
 			"the narrow path",
 			"the wooden fence",
 			"the abandoned house",
-			"the silent meadow"
+			"the silent meadow",
 		],
-		"Adjectives": [
+		Adjectives: [
 			"grey",
 			"silent",
 			"cold",
@@ -188,9 +188,9 @@
 			"overgrown",
 			"rain-soaked",
 			"shadowed",
-			"bleak"
+			"bleak",
 		],
-		"Templates": [
+		Templates: [
 			"{subject} {verb} {object}.",
 			"{subject} {verb} the {adjective} {object}.",
 			"Beyond {object}, {subject} {verb}.",
@@ -200,7 +200,7 @@
 			"{subject} {verb} toward {object}.",
 			"{subject} slowly {verb} {object}.",
 			"The {adjective} wind accompanied {subject} as they {verb} {object}.",
-			"{subject} {verb} past {object}."
-		]
-	}
+			"{subject} {verb} past {object}.",
+		],
+	},
 }
