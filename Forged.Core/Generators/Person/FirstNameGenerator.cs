@@ -3,8 +3,9 @@ using Forged.Core.Core;
 namespace Forged.Core.Generators.Person;
 
 /// <summary>
+/// A sealed generator that produces male or female first names based on weighted probabilities.
 /// </summary>
-public sealed class FirstNameGenerator(float female, float male, Forge forge) : Generator<string>(forge)
+public sealed class FirstNameGenerator(float male, float female, Forge forge) : Generator<string>(forge)
 {
 	public override string Generate()
 	{

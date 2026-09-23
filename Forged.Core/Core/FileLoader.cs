@@ -20,7 +20,7 @@ internal sealed class FileLoader
 			var (provider, info) = ctx;
 			var (locale, file) = target;
 
-			if (file.EndsWith(".json5"))
+			if (file.EndsWith(".json5") || file.EndsWith(".jsonc"))
 			{
 				file = file[..^6];
 			}
@@ -30,17 +30,17 @@ internal sealed class FileLoader
 				file = file[..^5];
 			}
 
-			var fileInfo = provider.GetFileInfo($"Locales/{locale}/{file}.json5");
+			var fileInfo = provider.GetFileInfo($"Locales/{locale}/{file}.jsonc");
 
 			if (!fileInfo.Exists && locale.Contains('-'))
 			{
 				var baseLocale = locale.Split('-')[0];
-				fileInfo = provider.GetFileInfo($"Locales/{baseLocale}/{file}.json5");
+				fileInfo = provider.GetFileInfo($"Locales/{baseLocale}/{file}.jsonc");
 			}
 
 			if (!fileInfo.Exists)
 			{
-				fileInfo = provider.GetFileInfo($"Locales/en/{file}.json5");
+				fileInfo = provider.GetFileInfo($"Locales/en/{file}.jsonc");
 			}
 
 			using var stream = fileInfo.CreateReadStream();

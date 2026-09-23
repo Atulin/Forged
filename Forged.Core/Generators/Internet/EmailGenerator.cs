@@ -1,8 +1,5 @@
 using System.Collections.Concurrent;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Forged.Core.Core;
-using JetBrains.Annotations;
 using NetEscapades.EnumGenerators;
 
 namespace Forged.Core.Generators.Internet;
@@ -20,7 +17,7 @@ public sealed class EmailGenerator(EmailKind kind, IGenerator<string>? nameGener
 
 	public override string Generate()
 	{
-		_providers ??= [.. FileLoader.LoadData(Locale.Name, "internet/email", EmailDataContext.Default.ListString)];
+		_providers ??= [.. FileLoader.LoadData(Locale.Name, "internet/email", CommonContext.Default.ListString)];
 
 		var name = (nameGenerator ?? Forge.Internet.Username(leetChance: 0)).Generate();
 
@@ -61,12 +58,3 @@ public enum EmailKind
 	/// </summary>
 	Random,
 }
-
-[UsedImplicitly]
-[JsonSerializable(typeof(List<string>))]
-[JsonSourceGenerationOptions(
-	AllowTrailingCommas = true,
-	ReadCommentHandling = JsonCommentHandling.Skip,
-	PropertyNameCaseInsensitive = true
-)]
-internal sealed partial class EmailDataContext : JsonSerializerContext;

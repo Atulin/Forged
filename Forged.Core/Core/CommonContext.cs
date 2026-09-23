@@ -5,6 +5,8 @@ using JetBrains.Annotations;
 namespace Forged.Core.Core;
 
 [JsonSerializable(typeof(List<string>))]
+[JsonSerializable(typeof(Dictionary<string, string>))]
+
 [JsonSourceGenerationOptions(
 	ReadCommentHandling = JsonCommentHandling.Skip,
 	AllowTrailingCommas = true,

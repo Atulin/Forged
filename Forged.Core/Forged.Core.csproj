@@ -15,7 +15,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Locales\**\*.json5" />
+        <EmbeddedResource Include="Locales\**\*.jsonc" />
+        <EmbeddedResource Remove="Locales\.oxfmtrc.jsonc" />
     </ItemGroup>
 
     <ItemGroup>

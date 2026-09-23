@@ -1,6 +1,5 @@
 using System.Collections.Concurrent;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Forged.Core.Core;
 using JetBrains.Annotations;
 
 namespace Forged.Core.Generators.Text;
@@ -23,7 +22,7 @@ public sealed class LoremIpsumGenerator(int minWords, int maxWords, LoremIpsumGe
 	/// <returns>A random Lorem Ipsum string with the specified number of words.</returns>
 	public override string Generate()
 	{
-		_cache ??= new(FileLoader.LoadData("en", "text/lorem", LoremContext.Default.ListString));
+		_cache ??= [.. FileLoader.LoadData("en", "text/lorem", CommonContext.Default.ListString)];
 		
 		var length = minWords == maxWords
 			? minWords
@@ -45,8 +44,3 @@ public sealed class LoremIpsumGenerator(int minWords, int maxWords, LoremIpsumGe
 	[UsedImplicitly]
 	public sealed record Options(int Starter = 0);
 }
-
-[UsedImplicitly]
-[JsonSerializable(typeof(List<string>))]
-[JsonSourceGenerationOptions(AllowTrailingCommas = true, ReadCommentHandling = JsonCommentHandling.Skip)]
-internal sealed partial class LoremContext : JsonSerializerContext;

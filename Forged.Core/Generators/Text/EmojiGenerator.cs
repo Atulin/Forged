@@ -1,6 +1,5 @@
 using System.Collections.Frozen;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Forged.Core.Core;
 
 namespace Forged.Core.Generators.Text;
 
@@ -15,7 +14,7 @@ public sealed class EmojiGenerator(Forge forge) : Generator<string>(forge)
 	{
 		if (_emojiCache is null)
 		{
-			var file = FileLoader.LoadData("en", "text/emoji", JsonContext.Default.DictionaryStringString);
+			var file = FileLoader.LoadData("en", "text/emoji", CommonContext.Default.DictionaryStringString);
 			_emojiCache = file.ToFrozenDictionary();
 		}
 
@@ -23,8 +22,3 @@ public sealed class EmojiGenerator(Forge forge) : Generator<string>(forge)
 		return _emojiCache.Values[index];
 	}
 }
-
-
-[JsonSerializable(typeof(Dictionary<string, string>))]
-[JsonSourceGenerationOptions(ReadCommentHandling = JsonCommentHandling.Skip, AllowTrailingCommas = true)]
-internal sealed partial class JsonContext : JsonSerializerContext;

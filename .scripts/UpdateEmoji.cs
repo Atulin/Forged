@@ -27,7 +27,7 @@ foreach (var line in span.EnumerateLines())
 
 Console.WriteLine($"Found {emojis.Count} emojis");
 
-const string path = "./Forged.Core/Locales/en/text/emoji.json5";
+const string path = "./Forged.Core/Locales/en/text/emoji.jsonc";
 
 var json = JsonSerializer.Serialize(emojis, new DictionaryContext(new JsonSerializerOptions
 {

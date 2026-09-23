@@ -1,13 +1,14 @@
 {
-  "overrides": [
-    {
-      "files": ["*.json5"],
-      "options": {
-        "tabWidth": 4,
-        "useTabs": true,
-        "trailingComma": "all",
-        "singleQuote": false,
-      },
-    },
-  ],
+	"overrides": [
+		{
+			"files": ["*.jsonc"],
+			"options": {
+				"tabWidth": 4,
+				"useTabs": true,
+				"trailingComma": "all",
+				"singleQuote": false,
+				"quoteProps": "preserve",
+			},
+		},
+	],
 }
