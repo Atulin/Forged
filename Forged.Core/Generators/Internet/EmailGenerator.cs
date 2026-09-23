@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using Forged.Core.Core;
 using NetEscapades.EnumGenerators;
 
@@ -13,22 +12,20 @@ namespace Forged.Core.Generators.Internet;
 /// <exception cref="ArgumentOutOfRangeException">Thrown if an invalid <see cref="EmailKind"/> is provided.</exception>
 public sealed class EmailGenerator(EmailKind kind, IGenerator<string>? nameGenerator, Forge forge) : Generator<string>(forge)
 {
-	private static ConcurrentBag<string>? _providers;
-
 	public override string Generate()
 	{
-		_providers ??= [.. FileLoader.LoadData(Locale.Name, "internet/email", CommonContext.Default.ListString)];
+		var providers = FileLoader.LoadData(Locale.Name, "internet/email", CommonContext.Default.ListString);
 
 		var name = (nameGenerator ?? Forge.Internet.Username(leetChance: 0)).Generate();
 
 		var domain = kind switch
 		{
-			EmailKind.Known => Rng.GetItem(_providers.ToList()),
+			EmailKind.Known => Rng.GetItem(providers.ToList()),
 			EmailKind.Example => Rng.GetItem("example.com", "example.org", "example.net"),
 			EmailKind.Random => $"{Forge.Text.Pronounceable(1, 3)}.{Forge.Internet.Domain()}",
 			_ => throw new ArgumentOutOfRangeException(nameof(kind), kind, null)
 		};
-		
+
 		return $"{name}@{domain}";
 	}
 }
@@ -49,10 +46,12 @@ public enum EmailKind
 	/// Email addresses with domains from a predefined list of commonly used providers.
 	/// </summary>
 	Known,
+
 	/// <summary>
 	/// Email addresses with domains explicitly designed for testing, such as "example.com".
 	/// </summary>
 	Example,
+
 	/// <summary>
 	/// Email addresses with randomly generated domain names.
 	/// </summary>
