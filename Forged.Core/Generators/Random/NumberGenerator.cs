@@ -17,10 +17,10 @@ public sealed class NumberGenerator<T>(T? min, T? max, Forge forge) : Generator<
 	/// <returns>A random numeric value between the specified minimum and maximum.</returns>
 	public override T Generate()
 	{
-		var range = _max - _min;
-		var ratio = Rng.NextDouble();
-		var scale = T.CreateChecked(ratio);
+		var min = double.CreateTruncating(_min);
+		var max = double.CreateTruncating(_max);
+		var value = min + (max - min) * Rng.NextDouble();
 
-		return _min + range * scale;
+		return T.CreateSaturating(value);
 	}
 }

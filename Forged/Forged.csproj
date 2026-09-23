@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
 
         <PackageId>Atulin.Forged</PackageId>
-        <PackageVersion>1.0.0</PackageVersion>
+        <PackageVersion>1.1.0</PackageVersion>
         <Title>Atulin.Forged</Title>
         <Description>A fast, strict, and strongly-typed data generator (faker) for C# powered by Source Generators.</Description>
         <Authors>Atulin</Authors>

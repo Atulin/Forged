@@ -68,14 +68,9 @@ public sealed class UsernameGenerator(float prefixChance, float suffixChance, fl
 		var newCore = new List<char>(core.Length);
 		foreach (var ch in core)
 		{
-			if (Rng.Chance(leetChance))
+			if (Rng.Chance(leetChance) && _leetReplacements.TryGetValue(ch, out var replacement))
 			{
-				if (_leetReplacements.TryGetValue(ch, out var replacement))
-				{
-					newCore.AddRange(Rng.GetItem(replacement));
-				}
-				
-				newCore.Add(ch);
+				newCore.AddRange(Rng.GetItem(replacement));
 			}
 			else
 			{

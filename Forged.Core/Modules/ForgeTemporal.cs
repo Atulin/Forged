@@ -48,7 +48,7 @@ public sealed class ForgeTemporal(Forge forge)
 	/// <param name="earliest">The earliest possible date. If null, defaults to one year ago from today.</param>
 	/// <returns>A generator that produces random past <see cref="DateOnly"/> values.</returns>
 	public Generator<DateOnly> DateInPast(DateOnly? earliest = null)
-		=> new DateOnlyGenerator(DateOnly.FromDateTime(DateTime.UtcNow), earliest, forge);
+		=> new DateOnlyGenerator(earliest, DateOnly.FromDateTime(DateTime.UtcNow), forge);
 
 	/// <summary>
 	/// Creates a generator that produces random <see cref="DateOnly"/> values in the future.
@@ -56,7 +56,7 @@ public sealed class ForgeTemporal(Forge forge)
 	/// <param name="latest">The latest possible date. If null, defaults to one year from today.</param>
 	/// <returns>A generator that produces random future <see cref="DateOnly"/> values.</returns>
 	public Generator<DateOnly> DateInFuture(DateOnly? latest = null)
-		=> new DateOnlyGenerator(latest, DateOnly.FromDateTime(DateTime.UtcNow), forge);
+		=> new DateOnlyGenerator(DateOnly.FromDateTime(DateTime.UtcNow), latest, forge);
 
 	/// <summary>
 	/// Creates a generator that produces random <see cref="TimeOnly"/> values within a specified range.

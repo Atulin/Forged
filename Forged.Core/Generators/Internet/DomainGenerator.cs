@@ -33,12 +33,17 @@ public sealed class DomainGenerator : Generator<string>
 		var data = _cache.Value;
 
 		var domain = Rng.GetItem(data.Tld);
-		if (_ccSldChance  <= 0 || Rng.Chance(_ccSldChance))
+		if (_ccSldChance <= 0 || !Rng.Chance(_ccSldChance))
 		{
 			return domain;
 		}
 
 		var slds = data.CcSld.Except([domain]).ToArray();
+		if (slds.Length == 0)
+		{
+			return domain;
+		}
+
 		var sld = Rng.GetItem(slds);
 
 		return $"{sld}.{domain}";

@@ -35,25 +35,7 @@ internal static class TemplateCompiler
 
 		return tokens;
 	}
-
-	public static string Render(List<Token> tokens, Dictionary<string, string> values)
-	{
-		var sb = new StringBuilder();
-
-		foreach (var token in tokens)
-		{
-			var part = token switch
-			{
-				Literal l => l.Value,
-				Placeholder p => values[p.Key],
-				_ => throw new InvalidOperationException("Token was somehow neither literal nor placeholder"),
-			};
-			sb.Append(part);
-		}
-		
-		return sb.ToString();
-	}
-
+	
 	public static string Render(List<Token> tokens, Dictionary<string, Func<string>> values)
 	{
 		var sb = new StringBuilder();

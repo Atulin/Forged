@@ -26,7 +26,7 @@ public sealed class WaffleGenerator(int sentences, WaffleStyle style, Forge forg
 		);
 
 		var sb = new StringBuilder();
-		for (var i = 0; i <= sentences; i++)
+		for (var i = 0; i < sentences; i++)
 		{
 			var template = templates[Rng.Next(templates.Length)];
 			var rendered = TemplateCompiler.Render(template, new Dictionary<string, Func<string>>
@@ -41,7 +41,7 @@ public sealed class WaffleGenerator(int sentences, WaffleStyle style, Forge forg
 			sb.Append(' ');
 		}
 
-		if (sb[^1] == ' ')
+		if (sb.Length > 0 && sb[^1] == ' ')
 		{
 			sb.Remove(sb.Length - 1, 1);
 		}
