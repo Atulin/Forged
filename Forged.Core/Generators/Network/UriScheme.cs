@@ -12,18 +12,18 @@ public sealed class UriScheme(bool strip, Forge forge) : Generator<string>(forge
 {
 	private readonly ImmutableArray<string> _protocols =
 	[
-		"http://",
-		"https://",
+		"file:///",
 		"ftp://",
 		"ftps://",
-		"sftp://",
-		"file:///",
+		"git://",
+		"http://",
+		"https://",
+		"magnet:",
 		"mailto:",
-		"tel:",
+		"sftp://",
 		"sms:",
 		"ssh://",
-		"git://",
-		"magnet:",
+		"tel:",
 	];
 
 	public override string Generate()

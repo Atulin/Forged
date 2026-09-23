@@ -31,9 +31,9 @@ public sealed class ForgeNetwork(Forge forge)
 	/// <param name="ipv6Chance">The probability (0 to 1) of generating an IPv6 address as opposed to IPv4. Defaults to 0.45.</param>
 	/// <returns>A generator instance that produces IP addresses.</returns>
 	public Generator<IPAddress> IpAddress(float publicChance = 1.0f, float ipv6Chance = .45f)
-		=> forge.Rng.Chance(ipv6Chance)
-			? Ipv6(publicChance) 
-			: Ipv4(publicChance);
+		=> forge.Basic.Func(() => forge.Rng.Chance(ipv6Chance)
+			? Ipv6(publicChance).Generate()
+			: Ipv4(publicChance).Generate());
 
 	/// <summary>
 	/// Generates a network port number based on the provided parameters.

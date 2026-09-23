@@ -181,6 +181,17 @@ The `Forge` instance (`f` in the lambda expressions) provides access to built-in
 - `Domain(float ccSldChance = 0.0f)` - Generates a random domain name.
 - `Email(EmailKind kind = EmailKind.Random, IGenerator<string>? provider = null)` - Generates a random email address (`EmailKind.Known`, `EmailKind.Example`, or with a custom provider).
 
+### `Network`
+- `Ipv4(float publicChance = 1.0f)` - Generates a random IPv4 address. When `publicChance` is 1, reserved ranges (private, loopback, multicast, etc.) are excluded.
+- `Ipv6(float publicChance = 1.0f)` - Generates a random IPv6 address. When `publicChance` is 1, the address is restricted to global unicast (`2000::/3`).
+- `IpAddress(float publicChance = 1.0f, float ipv6Chance = 0.45f)` - Generates a random IP address, picking IPv4 or IPv6 per generation based on `ipv6Chance`.
+- `Port(float wellKnownChance = 0.0f)` - Generates a random network port. When `wellKnownChance` is 0, well-known ports (1–1023) are excluded.
+- `Endpoint(float ipv6Chance = 0.45f, float publicChance = 1.0f, float wellKnownPortChance = 0.0f)` - Generates a random `IPEndPoint` combining an IP address and a port.
+- `Ipv4Endpoint(float publicChance = 1.0f, float wellKnownPortChance = 0.0f)` - Generates a random IPv4 `IPEndPoint`.
+- `Ipv6Endpoint(float publicChance = 1.0f, float wellKnownPortChance = 0.0f)` - Generates a random IPv6 `IPEndPoint`.
+- `UriScheme(bool strip = false)` - Generates a random URI scheme from well-known protocols (e.g. `https://`, `mailto:`). Pass `strip: true` to drop the colon and path delimiters (e.g. `https`, `mailto`).
+- `MacAddress(float locallyAdministeredChance = 0.0f)` - Generates a random unicast MAC address. When `locallyAdministeredChance` is 1, the locally-administered bit is set (per IEEE 802).
+
 ### `Person`
 - `FirstName(float male = 0.5f, float female = 0.5f)` - Generate a first name based on gender probabilities.
 - `LastName(float hyphenated = 0.04f, float compound = 0.02f)` - Generate a single, hyphenated, or compound last name.
