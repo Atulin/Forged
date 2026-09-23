@@ -2,6 +2,7 @@ using System.Globalization;
 using Forged.Core;
 using Forged.Core.Generators;
 using Forged.Core.Generators.Random;
+using Forged.Core.Generators.Random.DiceGeneratorHelpers;
 
 namespace Forged.Tests;
 
@@ -306,6 +307,23 @@ public class ForgeRandomTests
     {
         var forge = NewForge(88);
         await Assert.That(() => forge.Random.Dice("0d0").Generate()).Throws<InvalidOperationException>();
+    }
+
+[Test]
+    public async Task Dice_InvalidRoundingMode_Throws()
+    {
+        var forge = NewForge(89);
+        var generator = new DiceGenerator("1d6", (RoundingMode)int.MaxValue, forge);
+
+        await Assert.That(generator.Generate).Throws<ArgumentOutOfRangeException>();
+    }
+
+    [Test]
+    public async Task DiceAlgebra_UnknownBinaryOperator_Throws()
+    {
+        var generator = new BinaryNode(new NumberNode(1), TokenType.End, new NumberNode(2));
+
+        await Assert.That(() => generator.Evaluate(new Random(1))).Throws<InvalidOperationException>();
     }
 
     [Test]

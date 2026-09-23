@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 
 namespace Forged.Core.Core;
 
@@ -46,7 +47,7 @@ internal static class TemplateCompiler
 			{
 				Literal l => l.Value,
 				Placeholder p => values[p.Key](),
-				_ => throw new InvalidOperationException("Token was somehow neither literal nor placeholder"),
+				_ => throw new UnreachableException("Token was somehow neither literal nor placeholder"),
 			};
 			sb.Append(part);
 		}

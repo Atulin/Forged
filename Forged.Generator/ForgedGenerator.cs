@@ -1,9 +1,10 @@
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Forged.Generator.Helpers;
 using Forged.Generator.Models;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Forged.Generator;
 
@@ -66,10 +67,7 @@ public class ForgedGenerator : IIncrementalGenerator
 
 	private static TypeToGenerate? GetFakedTypes(SemanticModel semanticModel, SyntaxNode node)
 	{
-		if (semanticModel.GetDeclaredSymbol(node) is not INamedTypeSymbol symbol)
-		{
-			return null;
-		}
+		if (semanticModel.GetDeclaredSymbol(node) is not INamedTypeSymbol symbol) return NoTypeToGenerate();
 
 		var properties = symbol.GetMembers()
 			.OfType<IPropertySymbol>()
@@ -90,16 +88,10 @@ public class ForgedGenerator : IIncrementalGenerator
 	
 	private static TypeToGenerate? GetFakers(SemanticModel semanticModel, SyntaxNode node)
 	{
-		if (semanticModel.GetDeclaredSymbol(node) is not INamedTypeSymbol symbol)
-		{
-			return null;
-		}
+		if (semanticModel.GetDeclaredSymbol(node) is not INamedTypeSymbol symbol) return NoTypeToGenerate();
 		
 		var attribute = symbol.GetAttributes().FirstOrDefault(a => a.AttributeClass?.Name == "FakerAttribute");
-		if (attribute is not { AttributeClass: { IsGenericType: true, TypeArguments: [ INamedTypeSymbol targetType ] }  })
-		{
-			return null;
-		}
+		if (attribute is not { AttributeClass: { IsGenericType: true, TypeArguments: [ INamedTypeSymbol targetType ] } }) return NoTypeToGenerate();
 		
 		var properties = targetType.GetMembers()
 			.OfType<IPropertySymbol>()
@@ -118,6 +110,9 @@ public class ForgedGenerator : IIncrementalGenerator
 			FakerName: symbol.Name
 		);
 	}
+
+	[ExcludeFromCodeCoverage]
+	private static TypeToGenerate? NoTypeToGenerate() => null;
 
 	private static void Execute(SourceProductionContext context, TypeToGenerate typeToGenerate)
 	{

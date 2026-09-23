@@ -8,6 +8,7 @@
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
         <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+        <TestingPlatformCommandLineArguments>$(TestingPlatformCommandLineArguments) --config-file $(MSBuildThisFileDirectory)testconfig.json</TestingPlatformCommandLineArguments>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,6 +19,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Forged.Core\Forged.Core.csproj" />
+        <ProjectReference Include="..\Forged.Generator\Forged.Generator.csproj" />
         <ProjectReference Include="..\Forged.Generator\Forged.Generator.csproj" OutputItemType="Analyzer" />
     </ItemGroup>
 

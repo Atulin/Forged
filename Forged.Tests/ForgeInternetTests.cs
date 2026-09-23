@@ -129,4 +129,13 @@ public class ForgeInternetTests
 
         await Assert.That(Regex.IsMatch(value, @"^bob@example\.(com|org|net)$")).IsTrue();
     }
+
+    [Test]
+    public async Task Email_InvalidKind_Throws()
+    {
+        var forge = NewForge(50);
+        var generator = new EmailGenerator((EmailKind)int.MaxValue, null, forge);
+
+        await Assert.That(generator.Generate).Throws<ArgumentOutOfRangeException>();
+    }
 }

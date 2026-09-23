@@ -4,3 +4,4 @@ silent: true
 tasks:
   new: dotnet run ./.scripts/New.cs
   bump: dotnet run ./.scripts/Bump.cs ./Forged/Forged.csproj
+  test: dotnet test -c Release --coverage --coverage-output coverage.cobertura.xml --coverage-output-format cobertura

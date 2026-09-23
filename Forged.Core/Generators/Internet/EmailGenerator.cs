@@ -20,14 +20,14 @@ public sealed class EmailGenerator(EmailKind kind, IGenerator<string>? nameGener
 
 	public override string Generate()
 	{
-		_providers ??= new(FileLoader.LoadData(Locale.Name, "internet/email", EmailDataContext.Default.ListString));
+		_providers ??= [.. FileLoader.LoadData(Locale.Name, "internet/email", EmailDataContext.Default.ListString)];
 
 		var name = (nameGenerator ?? Forge.Internet.Username(leetChance: 0)).Generate();
 
 		var domain = kind switch
 		{
-			EmailKind.Known => Rng.GetItem(_providers.ToArray()),
-			EmailKind.Example => Rng.GetItem(["example.com", "example.org", "example.net"]),
+			EmailKind.Known => Rng.GetItem([.. _providers]),
+			EmailKind.Example => Rng.GetItem("example.com", "example.org", "example.net"),
 			EmailKind.Random => $"{Forge.Text.Pronounceable(1, 3)}.{Forge.Internet.Domain()}",
 			_ => throw new ArgumentOutOfRangeException(nameof(kind), kind, null)
 		};

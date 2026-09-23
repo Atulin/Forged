@@ -3,6 +3,8 @@
 [![NuGet](https://img.shields.io/nuget/v/Atulin.Forged.svg)](https://www.nuget.org/packages/Atulin.Forged)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![.NET 10](https://img.shields.io/badge/.NET-10.0-purple.svg)](https://dotnet.microsoft.com/)
+[![Coverage Status](https://coveralls.io/repos/github/Atulin/Forged/badge.svg?branch=master)](https://coveralls.io/github/Atulin/Forged?branch=master)
+[![Tests & Coverage](https://github.com/Atulin/Forged/actions/workflows/coverage.yml/badge.svg?branch=master)](https://github.com/Atulin/Forged/actions/workflows/coverage.yml)
 
 A fast, strict, and strongly-typed data generator (faker) for C# powered by Source Generators.
 
