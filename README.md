@@ -16,6 +16,7 @@ Forged allows you to declaratively define how your models should be faked, lever
 - 🛡️ **Strict & Type-Safe**: Respects your class properties. If a property in your model is `required`, the faker will force you to provide a generator for it at compile time.
 - 🌊 **Fluent API**: A clean and readable fluent API for configuring generators and their modifiers.
 - 🎲 **Deterministic**: Pass a seeded `Random` instance to the faker to generate the exact same data every time.
+- 🌐 **Localized**: Pass a `CultureInfo` to localize generated data and locale-aware modifiers.
 
 ## Quick Start
 
@@ -45,8 +46,8 @@ public partial class PersonFaker;
 3. The source generator will automatically create a `{ModelName}Faker` class for you. Configure it and generate data!
 
 ```csharp
-using Forged.Core.Generators; 
-using Forged.Core.Generators.Text; 
+using Forged.Core.Generators;
+using Forged.Core.Generators.Text;
 
 // The faker properties match your model's properties!
 var faker = new PersonFaker
@@ -54,16 +55,15 @@ var faker = new PersonFaker
     Id = f => f.Text.Guid(GuidGenerator.Kind.V7),
     FirstName = f => f.Text.Alphanumeric(10),
     LastName = f => f.Text.Alphanumeric(10),
-    
+
     // Non-required properties can be omitted, but you can still provide a generator:
     MiddleNames = f => f.Text
         .Alphanumeric(5)
-        .Collection(3)
-        .Refine(c => c.ToList()) // Map to List<string>
-        .OrDefault(0.5f),        // 50% chance of being default (null)
-        
+        .List(0, 3)                // Map to a List<string> of 0 to 3 items
+        .OrDefault(0.5f),          // 50% chance of being default (null)
+
     DateOfBirth = f => f.Temporal.Past().OrNull(0.2f), // 20% chance to be null
-    IsActive = f => f.Random.Pick(true, false)
+    IsActive = f => f.Random.CoinToss()
 };
 
 // Generate a single item
@@ -82,7 +82,7 @@ var people = faker.Get(5);
 If you need reproducible results (e.g. in unit tests), you can provide a seeded `Random` instance to the faker:
 
 ```csharp
-var faker = new PersonFaker(new Random(12345)) 
+var faker = new PersonFaker(new Random(12345))
 {
     // ...
 };
@@ -90,10 +90,10 @@ var faker = new PersonFaker(new Random(12345))
 
 ### Localization
 
-You can optionally provide a `CultureInfo` instance to the faker, which will be utilized by modifiers that support localization:
+You can optionally provide a `CultureInfo` instance to the faker, which will be utilized by modifiers and generators that support localization:
 
 ```csharp
-var faker = new PersonFaker(locale: new CultureInfo("fr-FR")) 
+var faker = new PersonFaker(locale: new CultureInfo("fr-FR"))
 {
     // ...
 };
@@ -125,13 +125,17 @@ The `Forge` instance (`f` in the lambda expressions) provides access to built-in
 - `.Func(Func<T> func)` - Creates a generator that invokes the specified function.
 
 ### `Random`
-- `Pick<T>(params T[] items)` - Pick a single random item from the given collection.
-- `Pick<T>(T[] items, int count)` - Pick an exact number of random items from the collection.
-- `Pick<T>(T[] items, int minCount, int maxCount)` - Pick a variable number of random items from the collection.
-- `Number<T>(T? min, T? max)` - Generate a random numeric value within the specified range (supports all numeric types).
+- `.CoinToss()` - Generate a random boolean (heads/tails).
+- `.Pick<T>(params T[] items)` - Pick a single random item from the given collection.
+- `.Pick<T>(T[] items, int count)` - Pick an exact number of random items from the collection.
+- `.Pick<T>(T[] items, int minCount, int maxCount)` - Pick a variable number of random items from the collection.
+- `.Pick<TEnum>()` - Pick a random value from an enum (`T : struct, Enum`).
+- `.PickUnique<T>(T[] items, int count)` - Pick an exact number of unique items from the collection.
+- `.PickUnique<T>(T[] items, int minCount, int maxCount)` - Pick a variable number of unique items from the collection.
+- `Number<T>(T? min, T? max)` - Generate a random numeric value within the specified range (supports all `INumber<T>` types).
 - `WeightedPick<T>(T[] items, float[] weights)` - Pick an item from the collection using specified weights for probability distribution.
 - `WeightedPick<T>((T item, float weight)[] items)` - Pick an item from an array of item-weight tuples.
-- `Dice(string expression, RoundingMode mode)` - Roll dice using a dice expression (e.g. `2d6+4`).
+- `Dice(string expression, RoundingMode mode)` - Roll dice using a dice expression (e.g. `2d6+1d10-3`).
 
 ### `Temporal`
 - `Between(DateTime? min, DateTime? max)` - Generate a random `DateTime` within the specified range.
@@ -141,6 +145,10 @@ The `Forge` instance (`f` in the lambda expressions) provides access to built-in
 - `DateInPast(DateOnly? earliest)` - Generate a random `DateOnly` in the past, with an optional earliest bound.
 - `DateInFuture(DateOnly? latest)` - Generate a random `DateOnly` in the future, with an optional latest bound.
 - `TimeBetween(TimeOnly? min, TimeOnly? max)` - Generate a random `TimeOnly` within the specified range.
+- `DateTimeOffsetBetween(DateTimeOffset? min, DateTimeOffset? max)` - Generate a random `DateTimeOffset` within the specified range.
+- `DateTimeOffsetInPast(DateTimeOffset? earliest)` - Generate a random `DateTimeOffset` in the past, with an optional earliest bound.
+- `DateTimeOffsetInFuture(DateTimeOffset? latest)` - Generate a random `DateTimeOffset` in the future, with an optional latest bound.
+- `TimeSpanBetween(TimeSpan? min, TimeSpan? max)` - Generate a random `TimeSpan` within the specified range.
 
 ### `Text`
 - `Alphanumeric(int length)` - Generate a random alphanumeric string of fixed length.
@@ -151,15 +159,29 @@ The `Forge` instance (`f` in the lambda expressions) provides access to built-in
 - `Pronounceable(int minLength, int maxLength)` - Generate a random pronounceable string of variable length.
 - `Lorem(int length, LoremIpsumGenerator.Options? options = null)` - Generate Lorem Ipsum text with a fixed number of words.
 - `Lorem(int minLength, int maxLength, LoremIpsumGenerator.Options? options = null)` - Generate Lorem Ipsum text with a variable number of words.
+- `Waffle(int sentences, WaffleStyle style = WaffleStyle.Technical)` - Generate dummy filler sentences (e.g. `WaffleStyle.Fiction`, `WaffleStyle.Technical`).
 - `Hex(int length)` - Generate a random hexadecimal string of fixed length.
 - `Hex(int minLength, int maxLength)` - Generate a random hexadecimal string of variable length.
-- `Guid(GuidGenerator.Kind kind)` - Generate a GUID of the specified kind (supports V4 and V7).
-- `Template(string template)` - Generate a string from a template with random placeholder replacements.
+- `Guid(GuidGenerator.Kind kind = Kind.V4)` - Generate a GUID of the specified kind (supports V4 and V7).
+- `Template(string template)` - Generate a string from a template with random placeholder replacements (`#` digit, `?` letter, `*` alphanumeric).
+- `Char(CharKind kind = CharKind.Printable)` - Generate a random character (e.g. `CharKind.Ascii`, `Printable`, `Alphanumeric`, `Alphabetical`, `Numeric`).
+- `Chars(int count, CharKind kind = CharKind.Printable)` - Generate a random character array of fixed length.
+- `Chars(int minCount, int maxCount, CharKind kind = CharKind.Printable)` - Generate a random character array of variable length.
+- `Emoji()` - Generate a random emoji (sourced from unicode.org data).
+- `EmojiRunes()` - Generate a random emoji as an array of `System.Text.Rune`.
 
 ### `Internet`
-- `Username(float prefixChance, float suffixChance, float leetChance)` - Generates a random username with configurable probability for including prefixes, suffixes, and leet-speak character substitutions.
+- `Username(float prefixChance = 0.5f, float suffixChance = 0.5f, float leetChance = 0.1f)` - Generates a random username with configurable probability for including prefixes, suffixes, and leet-speak character substitutions.
 - `Domain(float ccSldChance = 0.0f)` - Generates a random domain name.
-- `Email(EmailKind kind = EmailKind.Random, IGenerator<string>? provider = null)` - Generates a random email address.
+- `Email(EmailKind kind = EmailKind.Random, IGenerator<string>? provider = null)` - Generates a random email address (`EmailKind.Known`, `EmailKind.Example`, or with a custom provider).
+
+### `Person`
+- `FirstName(float male = 0.5f, float female = 0.5f)` - Generate a first name based on gender probabilities.
+- `LastName(float hyphenated = 0.04f, float compound = 0.02f)` - Generate a single, hyphenated, or compound last name.
+- `NamePrefix()` - Generate a name prefix (titles and honorifics, e.g. "Dr.", "Mrs.").
+- `NameInfix()` - Generate a name infix (e.g. "van", "de").
+- `NameSuffix()` - Generate a name suffix (e.g. "Jr.", "Sr.", "III").
+- `FullName(...)` - Generate a full name, with probabilities for gender, middle name, hyphenation, compound names, prefix, infix, and suffix.
 
 ## Modifiers & Extensions
 
@@ -169,6 +191,7 @@ Any `Generator<T>` can be customized and composed using fluent methods. These me
 - `.Or(T other, float probability)` - Returns an alternative value with the specified probability (e.g., 0.2f = 20% chance).
 - `.OrDefault(float probability)` - Returns the default value for type T with the specified probability.
 - `.Refine<TNew>(Func<T, TNew> refiner)` - Transforms the generated value using the provided function.
+- `.Memo(out MemoValueGenerator<T> value)` - Captures the generated value for reuse within the same generation cycle. Use the captured `MemoValueGenerator<T>` inside other generators (via its implicit conversion to `T`).
 - `.Enumerable(int length)` - Generates an `IEnumerable<T>` with a fixed number of items.
 - `.Enumerable(int minLength, int maxLength)` - Generates an `IEnumerable<T>` with a variable number of items.
 - `.Array(int length)` - Generates a `T[]` array with a fixed number of items.
@@ -183,7 +206,8 @@ Any `Generator<T>` can be customized and composed using fluent methods. These me
 - `.OrNull(float probability)` - For struct generators, returns null with the specified probability.
 - `.Nullable()` - Converts a struct generator to a nullable struct generator.
 
-### Collection Conversion Extensions
+### Enumerable & Collection Extensions
+- `.Shuffle()` - Shuffles the generated `IEnumerable<T>`.
 - `.AsList()` - Converts an `IEnumerable<T>` or `ICollection<T>` generator to a `List<T>` generator.
 - `.AsHashSet()` - Converts an `IEnumerable<T>` or `ICollection<T>` generator to a `HashSet<T>` generator.
 - `.AsDictionary<T, TKey, TValue>(keySelector, valueSelector)` - Converts an `IEnumerable<T>` generator to a `Dictionary<TKey, TValue>` using the provided selectors.
@@ -195,10 +219,10 @@ Any `Generator<T>` can be customized and composed using fluent methods. These me
 - `.Replace(string oldValue, string newValue)` - Replaces all occurrences of a specified string with another string.
 - `.Replace(char oldValue, char newValue)` - Replaces all occurrences of a specified char with another char.
 - `.Replace(Regex regex, string newValue)` - Replaces substrings matching a regular expression with another string.
-- `.ToTitleCase(CultureInfo? cultureInfo)` - Converts generated strings to title case using the specified culture.
-- `.Capitalize(CultureInfo? cultureInfo)` - Capitalizes the first character of generated strings.
-- `.Sentencify(int sentenceLength, CultureInfo? cultureInfo)` - Formats strings as proper sentences with a fixed word count.
-- `.Sentencify(int minSentenceLength, int maxSentenceLength, CultureInfo? cultureInfo)` - Formats strings as proper sentences with a variable word count.
+- `.ToTitleCase(CultureInfo? cultureInfo = null)` - Converts generated strings to title case using the specified culture.
+- `.Capitalize(CultureInfo? cultureInfo = null)` - Capitalizes the first character of generated strings.
+- `.Sentencify(int sentenceLength, CultureInfo? cultureInfo = null)` - Formats strings as proper sentences with a fixed word count.
+- `.Sentencify(int minSentenceLength, int maxSentenceLength, CultureInfo? cultureInfo = null)` - Formats strings as proper sentences with a variable word count.
 
 ### Temporal-Specific Extensions (DateTime)
 - `.ToUtc()` - Converts generated DateTime values to UTC.
@@ -209,4 +233,16 @@ Any `Generator<T>` can be customized and composed using fluent methods. These me
 
 ### Formatting Extensions
 - `.ToString()` - Converts generated values to their string representation.
-- `.ToString(string format, CultureInfo? cultureInfo)` - Converts generated values to formatted strings using the specified format and culture (for types implementing `ISpanFormattable`).
+- `.ToString(string format, CultureInfo? cultureInfo = null)` - Converts generated values to formatted strings using the specified format and culture (for types implementing `ISpanFormattable`).
+
+## Development
+
+Forged uses a [Taskfile](https://taskfile.dev) (`taskfile.yml`) and scripts in `.scripts/` for common development tasks:
+
+- `task new` - Scaffold a new generator (interactively) or module.
+- `task bump` - Bump the package version.
+- `task update-emoji` - Update the emoji corpus from unicode.org data.
+- `task format-locale` - Format the locale data files.
+- `task test` - Run the test suite with coverage.
+
+Locale data is stored as embedded `.jsonc` files under `Forged.Core/Locales/` (currently `en`, with fallback for other locales).
