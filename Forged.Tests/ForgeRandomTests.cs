@@ -8,418 +8,621 @@ namespace Forged.Tests;
 
 public enum Color
 {
-    Red,
-    Green,
-    Blue,
+	Red,
+	Green,
+	Blue,
 }
 
 public class ForgeRandomTests
 {
-    private static Forge NewForge(int seed)
-        => new(new Random(seed), CultureInfo.InvariantCulture);
+	private static Forge NewForge(int seed)
+		=> new(new Random(seed), CultureInfo.InvariantCulture);
 
-    private static List<T> Draw<T>(Generator<T> generator, int count)
-    {
-        var values = new List<T>(count);
-        for (var i = 0; i < count; i++)
-        {
-            values.Add(generator.Generate());
-        }
-        return values;
-    }
+	private static List<T> Draw<T>(Generator<T> generator, int count)
+	{
+		var values = new List<T>(count);
+		for (var i = 0; i < count; i++)
+		{
+			values.Add(generator.Generate());
+		}
+		return values;
+	}
 
-    [Test]
-    public async Task CoinToss_ProducesBothOutcomes_OverManyDraws()
-    {
-        var forge = NewForge(5678);
-        var values = Draw(forge.Random.CoinToss(), 200);
+	[Test]
+	public async Task CoinToss_ProducesBothOutcomes_OverManyDraws()
+	{
+		var forge = NewForge(5678);
+		var values = Draw(forge.Random.CoinToss(), 200);
 
-        await Assert.That(values.Count(v => v)).IsGreaterThan(0);
-        await Assert.That(values.Count(v => !v)).IsGreaterThan(0);
-    }
+		await Assert.That(values.Count(v => v)).IsGreaterThan(0);
+		await Assert.That(values.Count(v => !v)).IsGreaterThan(0);
+	}
 
-    [Test]
-    public async Task Pick_ReturnsItemsOnlyFromTheSuppliedCollection()
-    {
-        var forge = NewForge(99);
-        var values = Draw(forge.Random.Pick(1, 2, 3), 100);
+	[Test]
+	public async Task Pick_ReturnsItemsOnlyFromTheSuppliedCollection()
+	{
+		var forge = NewForge(99);
+		var values = Draw(forge.Random.Pick(1, 2, 3), 100);
 
-        foreach (var value in values)
-        {
-            await Assert.That(value).IsInRange(1, 3);
-        }
-    }
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsInRange(1, 3);
+		}
+	}
 
-    [Test]
-    public async Task Pick_PicksFromMultipleItems_OverManyDraws()
-    {
-        var forge = NewForge(771);
-        var distinct = Draw(forge.Random.Pick("a", "b", "c"), 100).Distinct().ToList();
+	[Test]
+	public async Task Pick_PicksFromMultipleItems_OverManyDraws()
+	{
+		var forge = NewForge(771);
+		var distinct = Draw(forge.Random.Pick("a", "b", "c"), 100).Distinct().ToList();
 
-        await Assert.That(distinct.Count).IsGreaterThan(1);
-    }
+		await Assert.That(distinct.Count).IsGreaterThan(1);
+	}
 
-    [Test]
-    public async Task Pick_WithExactCount_ReturnsThatManyItems()
-    {
-        var forge = NewForge(440);
-        var values = forge.Random.Pick([1, 2, 3, 4, 5], 5).Generate();
+	[Test]
+	public async Task Pick_WithExactCount_ReturnsThatManyItems()
+	{
+		var forge = NewForge(440);
+		var values = forge.Random.Pick([1, 2, 3, 4, 5], 5).Generate();
 
-        await Assert.That(values).Count().IsEqualTo(5);
-        foreach (var value in values)
-        {
-            await Assert.That(value).IsInRange(1, 5);
-        }
-    }
+		await Assert.That(values).Count().IsEqualTo(5);
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsInRange(1, 5);
+		}
+	}
 
-    [Test]
-    public async Task Pick_WithMinAndMaxCount_StaysWithinRange()
-    {
-        var forge = NewForge(3);
-        for (var i = 0; i < 30; i++)
-        {
-            var values = forge.Random.Pick(["x", "y", "z"], 2, 4).Generate();
-            await Assert.That(values.Length).IsInRange(2, 4);
-        }
-    }
+	[Test]
+	public async Task Pick_WithMinAndMaxCount_StaysWithinRange()
+	{
+		var forge = NewForge(3);
+		for (var i = 0; i < 30; i++)
+		{
+			var values = forge.Random.Pick(["x", "y", "z"], 2, 4).Generate();
+			await Assert.That(values.Length).IsInRange(2, 4);
+		}
+	}
 
-    [Test]
-    public async Task Pick_ForEnum_ReturnsAValidEnumValue()
-    {
-        var forge = NewForge(81);
-        var values = Draw(forge.Random.Pick<Color>(), 50);
+	[Test]
+	public async Task Pick_ForEnum_ReturnsAValidEnumValue()
+	{
+		var forge = NewForge(81);
+		var values = Draw(forge.Random.Pick<Color>(), 50);
 
-        foreach (var value in values)
-        {
-            await Assert.That(Enum.IsDefined(value)).IsTrue();
-        }
-    }
+		foreach (var value in values)
+		{
+			await Assert.That(Enum.IsDefined(value)).IsTrue();
+		}
+	}
 
-    [Test]
-    public async Task Number_IntegerType_ProducesValuesWithinTheRange_AndVaries()
-    {
-        var forge = NewForge(4242);
-        var values = Draw(forge.Random.Number<int>(3, 6), 200);
+	[Test]
+	public async Task Number_IntegerType_ProducesValuesWithinTheRange_AndVaries()
+	{
+		var forge = NewForge(4242);
+		var values = Draw(forge.Random.Number<int>(3, 6), 200);
 
-        foreach (var value in values)
-        {
-            await Assert.That(value).IsInRange(3, 6);
-        }
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsInRange(3, 6);
+		}
 
-        await Assert.That(values.Distinct().Count()).IsGreaterThan(1);
-    }
+		await Assert.That(values.Distinct().Count()).IsGreaterThan(1);
+	}
 
-    [Test]
-    public async Task Number_IntegerType_WithExplicitBounds_IncludesTheMinimum()
-    {
-        var forge = NewForge(5);
-        var values = Draw(forge.Random.Number<int>(10, 10), 10);
+	[Test]
+	public async Task Number_IntegerType_WithExplicitBounds_IncludesTheMinimum()
+	{
+		var forge = NewForge(5);
+		var values = Draw(forge.Random.Number<int>(10, 10), 10);
 
-        foreach (var value in values)
-        {
-            await Assert.That(value).IsEqualTo(10);
-        }
-    }
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsEqualTo(10);
+		}
+	}
 
-    [Test]
-    public async Task Number_FloatingPointType_ProducesValuesWithinTheRange()
-    {
-        var forge = NewForge(2024);
-        var values = Draw(forge.Random.Number<double>(0, 1), 100);
+	[Test]
+	public async Task Number_FloatingPointType_ProducesValuesWithinTheRange()
+	{
+		var forge = NewForge(2024);
+		var values = Draw(forge.Random.Number<double>(0, 1), 100);
 
-        foreach (var value in values)
-        {
-            await Assert.That(value).IsInRange(0, 1);
-        }
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsInRange(0, 1);
+		}
 
-        await Assert.That(values.Distinct().Count()).IsGreaterThan(1);
-    }
+		await Assert.That(values.Distinct().Count()).IsGreaterThan(1);
+	}
 
-    [Test]
-    public async Task Number_LongType_ProducesValuesWithinTheRange()
-    {
-        var forge = NewForge(808);
-        var values = Draw(forge.Random.Number<long>(100_000, 200_000), 100);
+	[Test]
+	public async Task Number_LongType_ProducesValuesWithinTheRange()
+	{
+		var forge = NewForge(808);
+		var values = Draw(forge.Random.Number<long>(100_000, 200_000), 100);
 
-        foreach (var value in values)
-        {
-            await Assert.That(value).IsInRange(100_000, 200_000);
-        }
-    }
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsInRange(100_000, 200_000);
+		}
+	}
 
-    [Test]
-    public async Task Number_WithNullBounds_UsesTheFullTypeRange()
-    {
-        var forge = NewForge(12);
-        var values = Draw(forge.Random.Number<byte>(), 200);
+	[Test]
+	public async Task Number_WithNullBounds_UsesTheFullTypeRange()
+	{
+		var forge = NewForge(12);
+		var values = Draw(forge.Random.Number<byte>(), 200);
 
-        foreach (var value in values)
-        {
-            await Assert.That(value).IsInRange(byte.MinValue, byte.MaxValue);
-        }
-    }
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsInRange(byte.MinValue, byte.MaxValue);
+		}
+	}
 
-    [Test]
-    public async Task Number_IsDeterministic_ForTheSameSeed()
-    {
-        var forge1 = NewForge(7);
-        var forge2 = NewForge(7);
+	[Test]
+	public async Task Number_IsDeterministic_ForTheSameSeed()
+	{
+		var forge1 = NewForge(7);
+		var forge2 = NewForge(7);
 
-        var expected = forge1.Random.Number<int>(1, 100).Generate();
-        var actual = forge2.Random.Number<int>(1, 100).Generate();
+		var expected = forge1.Random.Number<int>(1, 100).Generate();
+		var actual = forge2.Random.Number<int>(1, 100).Generate();
 
-        await Assert.That(actual).IsEqualTo(expected);
-    }
+		await Assert.That(actual).IsEqualTo(expected);
+	}
 
-    [Test]
-    public async Task Number_ExtremeUnsignedBounds_DoNotThrow()
-    {
-        var forge = NewForge(42);
-        var values = Draw(forge.Random.Number<ulong>(ulong.MinValue, ulong.MaxValue), 1000);
+	[Test]
+	public async Task Number_ExtremeUnsignedBounds_DoNotThrow()
+	{
+		var forge = NewForge(42);
+		var values = Draw(forge.Random.Number<ulong>(ulong.MinValue, ulong.MaxValue), 1000);
 
-        foreach (var value in values)
-        {
-            await Assert.That(value).IsInRange(ulong.MinValue, ulong.MaxValue);
-        }
-    }
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsInRange(ulong.MinValue, ulong.MaxValue);
+		}
+	}
 
-    [Test]
-    public async Task Number_ExtremeUnsignedNearMaxBounds_DoNotThrow()
-    {
-        var forge = NewForge(42);
-        var values = Draw(forge.Random.Number<ulong>(ulong.MaxValue - 1000, ulong.MaxValue), 1000);
+	[Test]
+	public async Task Number_ExtremeUnsignedNearMaxBounds_DoNotThrow()
+	{
+		var forge = NewForge(42);
+		var values = Draw(forge.Random.Number<ulong>(ulong.MaxValue - 1000, ulong.MaxValue), 1000);
 
-        foreach (var value in values)
-        {
-            await Assert.That(value).IsInRange(ulong.MaxValue - 1000, ulong.MaxValue);
-        }
-    }
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsInRange(ulong.MaxValue - 1000, ulong.MaxValue);
+		}
+	}
 
-    [Test]
-    public async Task Number_ExtremeSignedBounds_DoNotThrow()
-    {
-        var forge = NewForge(42);
-        var values = Draw(forge.Random.Number<long>(long.MinValue, long.MaxValue), 1000);
+	[Test]
+	public async Task Number_ExtremeSignedBounds_DoNotThrow()
+	{
+		var forge = NewForge(42);
+		var values = Draw(forge.Random.Number<long>(long.MinValue, long.MaxValue), 1000);
 
-        foreach (var value in values)
-        {
-            await Assert.That(value).IsInRange(long.MinValue, long.MaxValue);
-        }
-    }
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsInRange(long.MinValue, long.MaxValue);
+		}
+	}
 
-    [Test]
-    public async Task WeightedPick_HonorsZeroWeights()
-    {
-        var forge = NewForge(97);
-        var generator = forge.Random.WeightedPick([1, 2], [1f, 0f]);
+	[Test]
+	public async Task WeightedPick_HonorsZeroWeights()
+	{
+		var forge = NewForge(97);
+		var generator = forge.Random.WeightedPick([1, 2], [1f, 0f]);
 
-        for (var i = 0; i < 50; i++)
-        {
-            await Assert.That(generator.Generate()).IsEqualTo(1);
-        }
-    }
+		for (var i = 0; i < 50; i++)
+		{
+			await Assert.That(generator.Generate()).IsEqualTo(1);
+		}
+	}
 
-    [Test]
-    public async Task WeightedPick_TupleOverload_HonorsWeights()
-    {
-        var forge = NewForge(97);
-        var generator = forge.Random.WeightedPick([(10, 1f), (20, 0f)]);
+	[Test]
+	public async Task WeightedPick_TupleOverload_HonorsWeights()
+	{
+		var forge = NewForge(97);
+		var generator = forge.Random.WeightedPick([(10, 1f), (20, 0f)]);
 
-        for (var i = 0; i < 50; i++)
-        {
-            await Assert.That(generator.Generate()).IsEqualTo(10);
-        }
-    }
+		for (var i = 0; i < 50; i++)
+		{
+			await Assert.That(generator.Generate()).IsEqualTo(10);
+		}
+	}
 
-    [Test]
-    public async Task WeightedPick_RejectsMismatchedLengths()
-    {
-        var forge = NewForge(1);
-        var generator = forge.Random.WeightedPick([1, 2], [1f]);
+	[Test]
+	public async Task WeightedPick_RejectsMismatchedLengths()
+	{
+		var forge = NewForge(1);
+		var generator = forge.Random.WeightedPick([1, 2], [1f]);
 
-        await Assert.That(generator.Generate).Throws<ArgumentException>();
-    }
+		await Assert.That(generator.Generate).Throws<ArgumentException>();
+	}
 
-    [Test]
-    public async Task WeightedPick_WithNaNWeights_FallsBackToTheLastItem()
-    {
-        var forge = NewForge(1);
-        var generator = forge.Random.WeightedPick([1, 2], [float.NaN, 1f]);
+	[Test]
+	public async Task WeightedPick_WithNaNWeights_FallsBackToTheLastItem()
+	{
+		var forge = NewForge(1);
+		var generator = forge.Random.WeightedPick([1, 2], [float.NaN, 1f]);
 
-        for (var i = 0; i < 20; i++)
-        {
-            await Assert.That(generator.Generate()).IsEqualTo(2);
-        }
-    }
+		for (var i = 0; i < 20; i++)
+		{
+			await Assert.That(generator.Generate()).IsEqualTo(2);
+		}
+	}
 
-    [Test]
-    public async Task Dice_SingleDie_StaysWithinDieBounds()
-    {
-        var forge = NewForge(33);
-        for (var i = 0; i < 100; i++)
-        {
-            await Assert.That(forge.Random.Dice("1d6").Generate()).IsInRange(1, 6);
-        }
-    }
+	[Test]
+	public async Task Dice_SingleDie_StaysWithinDieBounds()
+	{
+		var forge = NewForge(33);
+		for (var i = 0; i < 100; i++)
+		{
+			await Assert.That(forge.Random.Dice("1d6").Generate()).IsInRange(1, 6);
+		}
+	}
 
-    [Test]
-    public async Task Dice_MultiDieWithModifier_StaysWithinExpectedBounds()
-    {
-        var forge = NewForge(22);
-        for (var i = 0; i < 200; i++)
-        {
-            await Assert.That(forge.Random.Dice("2d6+3").Generate()).IsInRange(5, 15);
-        }
-    }
+	[Test]
+	public async Task Dice_MultiDieWithModifier_StaysWithinExpectedBounds()
+	{
+		var forge = NewForge(22);
+		for (var i = 0; i < 200; i++)
+		{
+			await Assert.That(forge.Random.Dice("2d6+3").Generate()).IsInRange(5, 15);
+		}
+	}
 
-    [Test]
-    public async Task Dice_ParenthesizedExpression_IsEvaluatedCorrectly()
-    {
-        var forge = NewForge(55);
-        for (var i = 0; i < 100; i++)
-        {
-            await Assert.That(forge.Random.Dice("(1d6+1d6)*2").Generate()).IsInRange(4, 24);
-        }
-    }
+	[Test]
+	public async Task Dice_ParenthesizedExpression_IsEvaluatedCorrectly()
+	{
+		var forge = NewForge(55);
+		for (var i = 0; i < 100; i++)
+		{
+			await Assert.That(forge.Random.Dice("(1d6+1d6)*2").Generate()).IsInRange(4, 24);
+		}
+	}
 
-    [Test]
-    public async Task Dice_BareDie_DefaultsToOneDie()
-    {
-        var forge = NewForge(66);
-        for (var i = 0; i < 100; i++)
-        {
-            await Assert.That(forge.Random.Dice("d20").Generate()).IsInRange(1, 20);
-        }
-    }
+	[Test]
+	public async Task Dice_BareDie_DefaultsToOneDie()
+	{
+		var forge = NewForge(66);
+		for (var i = 0; i < 100; i++)
+		{
+			await Assert.That(forge.Random.Dice("d20").Generate()).IsInRange(1, 20);
+		}
+	}
 
-    [Test]
-    public async Task Dice_NegativeModifier_IsApplied()
-    {
-        var forge = NewForge(77);
-        for (var i = 0; i < 100; i++)
-        {
-            await Assert.That(forge.Random.Dice("1d6-1").Generate()).IsInRange(0, 5);
-        }
-    }
+	[Test]
+	public async Task Dice_NegativeModifier_IsApplied()
+	{
+		var forge = NewForge(77);
+		for (var i = 0; i < 100; i++)
+		{
+			await Assert.That(forge.Random.Dice("1d6-1").Generate()).IsInRange(0, 5);
+		}
+	}
 
-    [Test]
-    public async Task Dice_InvalidExpression_Throws()
-    {
-        var forge = NewForge(88);
-        await Assert.That(() => forge.Random.Dice("0d0").Generate()).Throws<InvalidOperationException>();
-    }
+	[Test]
+	public async Task Dice_InvalidExpression_Throws()
+	{
+		var forge = NewForge(88);
+		await Assert.That(() => forge.Random.Dice("0d0").Generate()).Throws<InvalidOperationException>();
+	}
 
-[Test]
-    public async Task Dice_InvalidRoundingMode_Throws()
-    {
-        var forge = NewForge(89);
-        var generator = new DiceGenerator("1d6", (RoundingMode)int.MaxValue, forge);
+	[Test]
+	public async Task Dice_InvalidRoundingMode_Throws()
+	{
+		var forge = NewForge(89);
+		var generator = new DiceGenerator("1d6", (RoundingMode)int.MaxValue, forge);
 
-        await Assert.That(generator.Generate).Throws<ArgumentOutOfRangeException>();
-    }
+		await Assert.That(generator.Generate).Throws<ArgumentOutOfRangeException>();
+	}
 
-    [Test]
-    public async Task DiceAlgebra_UnknownBinaryOperator_Throws()
-    {
-        var generator = new BinaryNode(new NumberNode(1), TokenType.End, new NumberNode(2));
+	[Test]
+	public async Task DiceAlgebra_UnknownBinaryOperator_Throws()
+	{
+		var generator = new BinaryNode(new NumberNode(1), TokenType.End, new NumberNode(2));
 
-        await Assert.That(() => generator.Evaluate(new Random(1))).Throws<InvalidOperationException>();
-    }
+		await Assert.That(() => generator.Evaluate(new Random(1))).Throws<InvalidOperationException>();
+	}
 
-    [Test]
-    public async Task Dice_FloorMode_AlwaysFloorsTheResult()
-    {
-        var forge = NewForge(33);
-        for (var i = 0; i < 20; i++)
-        {
-            await Assert.That(forge.Random.Dice("10/4", RoundingMode.Floor).Generate()).IsEqualTo(2);
-        }
-    }
+	[Test]
+	public async Task Dice_FloorMode_AlwaysFloorsTheResult()
+	{
+		var forge = NewForge(33);
+		for (var i = 0; i < 20; i++)
+		{
+			await Assert.That(forge.Random.Dice("10/4", RoundingMode.Floor).Generate()).IsEqualTo(2);
+		}
+	}
 
-    [Test]
-    public async Task Dice_CeilingMode_AlwaysCeilsTheResult()
-    {
-        var forge = NewForge(33);
-        for (var i = 0; i < 20; i++)
-        {
-            await Assert.That(forge.Random.Dice("10/4", RoundingMode.Ceiling).Generate()).IsEqualTo(3);
-        }
-    }
+	[Test]
+	public async Task Dice_CeilingMode_AlwaysCeilsTheResult()
+	{
+		var forge = NewForge(33);
+		for (var i = 0; i < 20; i++)
+		{
+			await Assert.That(forge.Random.Dice("10/4", RoundingMode.Ceiling).Generate()).IsEqualTo(3);
+		}
+	}
 
-    [Test]
-    public async Task Dice_UnaryMinus_ProducesNonPositiveResults()
-    {
-        var forge = NewForge(44);
-        for (var i = 0; i < 100; i++)
-        {
-            await Assert.That(forge.Random.Dice("-d6").Generate()).IsInRange(-6, -1);
-        }
-    }
+	[Test]
+	public async Task Dice_UnaryMinus_ProducesNonPositiveResults()
+	{
+		var forge = NewForge(44);
+		for (var i = 0; i < 100; i++)
+		{
+			await Assert.That(forge.Random.Dice("-d6").Generate()).IsInRange(-6, -1);
+		}
+	}
 
-    [Test]
-    public async Task Dice_MissingOperand_Throws()
-    {
-        var forge = NewForge(55);
-        await Assert.That(() => forge.Random.Dice("2+").Generate()).Throws<InvalidOperationException>();
-    }
+	[Test]
+	public async Task Dice_MissingOperand_Throws()
+	{
+		var forge = NewForge(55);
+		await Assert.That(() => forge.Random.Dice("2+").Generate()).Throws<InvalidOperationException>();
+	}
 
-    [Test]
-    public async Task Dice_UnexpectedCharacterInExpression_Throws()
-    {
-        var forge = NewForge(66);
-        await Assert.That(() => forge.Random.Dice("2d6 3").Generate()).Throws<InvalidOperationException>();
-    }
+	[Test]
+	public async Task Dice_UnexpectedCharacterInExpression_Throws()
+	{
+		var forge = NewForge(66);
+		await Assert.That(() => forge.Random.Dice("2d6 3").Generate()).Throws<InvalidOperationException>();
+	}
 
-    [Test]
-    public async Task PickUnique_FixedCount_ReturnsUniqueItemsFromTheCollection()
-    {
-        var forge = NewForge(100);
-        var items = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-        var values = Draw(forge.Random.PickUnique(items, 5), 100);
+	[Test]
+	public async Task PickUnique_FixedCount_ReturnsUniqueItemsFromTheCollection()
+	{
+		var forge = NewForge(100);
+		var items = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+		var values = Draw(forge.Random.PickUnique(items, 5), 100);
 
-        foreach (var value in values)
-        {
-            await Assert.That(value).Count().IsEqualTo(5);
-            await Assert.That(value.Distinct().Count()).IsEqualTo(5);
-            await Assert.That(value.All(items.Contains)).IsTrue();
-        }
-    }
+		foreach (var value in values)
+		{
+			await Assert.That(value).Count().IsEqualTo(5);
+			await Assert.That(value.Distinct().Count()).IsEqualTo(5);
+			await Assert.That(value.All(items.Contains)).IsTrue();
+		}
+	}
 
-    [Test]
-    public async Task PickUnique_WithCountEqualToCollectionSize_ReturnsAllItemsOnce()
-    {
-        var forge = NewForge(101);
-        var items = new[] { "a", "b", "c", "d" };
-        var value = forge.Random.PickUnique(items, items.Length).Generate();
+	[Test]
+	public async Task PickUnique_WithCountEqualToCollectionSize_ReturnsAllItemsOnce()
+	{
+		var forge = NewForge(101);
+		var items = new[] { "a", "b", "c", "d" };
+		var value = forge.Random.PickUnique(items, items.Length).Generate();
 
-        await Assert.That(value).Count().IsEqualTo(items.Length);
-        await Assert.That(value.Distinct().Count()).IsEqualTo(items.Length);
-        await Assert.That(value.All(items.Contains)).IsTrue();
-        await Assert.That(items.All(value.Contains)).IsTrue();
-    }
+		await Assert.That(value).Count().IsEqualTo(items.Length);
+		await Assert.That(value.Distinct().Count()).IsEqualTo(items.Length);
+		await Assert.That(value.All(items.Contains)).IsTrue();
+		await Assert.That(items.All(value.Contains)).IsTrue();
+	}
 
-    [Test]
-    public async Task PickUnique_VariableCount_ProducesUniqueItemsWithinBounds()
-    {
-        var forge = NewForge(102);
-        var items = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-        for (var i = 0; i < 50; i++)
-        {
-            var value = forge.Random.PickUnique(items, 3, 8).Generate();
-            await Assert.That(value.Length).IsInRange(3, 8);
-            await Assert.That(value.Distinct().Count()).IsEqualTo(value.Length);
-            await Assert.That(value.All(items.Contains)).IsTrue();
-        }
-    }
+	[Test]
+	public async Task PickUnique_VariableCount_ProducesUniqueItemsWithinBounds()
+	{
+		var forge = NewForge(102);
+		var items = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+		for (var i = 0; i < 50; i++)
+		{
+			var value = forge.Random.PickUnique(items, 3, 8).Generate();
+			await Assert.That(value.Length).IsInRange(3, 8);
+			await Assert.That(value.Distinct().Count()).IsEqualTo(value.Length);
+			await Assert.That(value.All(items.Contains)).IsTrue();
+		}
+	}
 
-    [Test]
-    public async Task PickUnique_DuplicateSourceItems_ProducesUniqueResults()
-    {
-        var forge = NewForge(103);
-        var items = new[] { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5 };
-        var value = forge.Random.PickUnique(items, 5).Generate();
+	[Test]
+	public async Task PickUnique_DuplicateSourceItems_ProducesUniqueResults()
+	{
+		var forge = NewForge(103);
+		var items = new[] { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5 };
+		var value = forge.Random.PickUnique(items, 5).Generate();
 
-        await Assert.That(value.Distinct().Count()).IsEqualTo(value.Length);
-        await Assert.That(value.All(items.Contains)).IsTrue();
-    }
+		await Assert.That(value.Distinct().Count()).IsEqualTo(value.Length);
+		await Assert.That(value.All(items.Contains)).IsTrue();
+	}
+
+	[Test]
+	public async Task Uniform_IntegerType_ProducesValuesWithinTheRange_AndVaries()
+	{
+		var forge = NewForge(4242);
+		var values = Draw(forge.Random.Uniform<int>(3, 6), 200);
+
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsInRange(3, 6);
+		}
+
+		await Assert.That(values.Distinct().Count()).IsGreaterThan(1);
+	}
+
+	[Test]
+	public async Task Uniform_FloatingPointType_ProducesValuesWithinTheRange()
+	{
+		var forge = NewForge(2024);
+		var values = Draw(forge.Random.Uniform<double>(0, 1), 100);
+
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsInRange(0, 1);
+		}
+
+		await Assert.That(values.Distinct().Count()).IsGreaterThan(1);
+	}
+
+	[Test]
+	public async Task Uniform_IsDeterministic_ForTheSameSeed()
+	{
+		var forge1 = NewForge(7);
+		var forge2 = NewForge(7);
+
+		var expected = forge1.Random.Uniform<int>(1, 100).Generate();
+		var actual = forge2.Random.Uniform<int>(1, 100).Generate();
+
+		await Assert.That(actual).IsEqualTo(expected);
+	}
+
+	[Test]
+	public async Task Normal_ProducesValuesAroundTheMean_AndVaries()
+	{
+		var forge = NewForge(11);
+		var values = Draw(forge.Random.Normal<double>(10, 2), 1000);
+
+		var mean = values.Average();
+
+		await Assert.That(values.Distinct().Count()).IsGreaterThan(1);
+		await Assert.That(mean).IsInRange(9.5, 10.5);
+		await Assert.That(values.All(double.IsFinite)).IsTrue();
+	}
+
+	[Test]
+	public async Task Normal_ZeroStdDev_AlwaysProducesTheMean()
+	{
+		var forge = NewForge(21);
+		var values = Draw(forge.Random.Normal<double>(5, 0), 50);
+
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsEqualTo(5d);
+		}
+	}
+
+	[Test]
+	public async Task Exponential_ProducesNonNegativeValues_AndVaries()
+	{
+		var forge = NewForge(31);
+		var values = Draw(forge.Random.Exponential<double>(1), 1000);
+
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsGreaterThanOrEqualTo(0);
+		}
+
+		await Assert.That(values.Distinct().Count()).IsGreaterThan(1);
+	}
+
+	[Test]
+	public async Task Exponential_NonPositiveRate_Throws()
+	{
+		var forge = NewForge(41);
+
+		await Assert.That(() => forge.Random.Exponential<double>(0)).Throws<ArgumentOutOfRangeException>();
+	}
+
+	[Test]
+	public async Task Bernoulli_ProbabilityOne_AlwaysProducesOne()
+	{
+		var forge = NewForge(51);
+		var values = Draw(forge.Random.Bernoulli<int>(1), 50);
+
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsEqualTo(1);
+		}
+	}
+
+	[Test]
+	public async Task Bernoulli_ProbabilityZero_AlwaysProducesZero()
+	{
+		var forge = NewForge(52);
+		var values = Draw(forge.Random.Bernoulli<int>(0), 50);
+
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsEqualTo(0);
+		}
+	}
+
+	[Test]
+	public async Task Bernoulli_ProducesBothOutcomes_OverManyDraws()
+	{
+		var forge = NewForge(61);
+		var values = Draw(forge.Random.Bernoulli<double>(0.5), 200);
+		var ones = values.Count(v => (int)v == 1);
+		var zeros = values.Count(v => (int)v == 0);
+
+		await Assert.That(ones).IsGreaterThan(0);
+		await Assert.That(zeros).IsGreaterThan(0);
+	}
+
+	[Test]
+	public async Task Bernoulli_OutOfRangeProbability_Throws()
+	{
+		var forge = NewForge(62);
+
+		await Assert.That(() => forge.Random.Bernoulli<double>(1.5)).Throws<ArgumentOutOfRangeException>();
+	}
+
+	[Test]
+	public async Task Poisson_ZeroLambda_AlwaysProducesZero()
+	{
+		var forge = NewForge(71);
+		var values = Draw(forge.Random.Poisson<int>(0), 50);
+
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsEqualTo(0);
+		}
+	}
+
+	[Test]
+	public async Task Poisson_ProducesNonNegativeIntegers_AndVaries()
+	{
+		var forge = NewForge(72);
+		var values = Draw(forge.Random.Poisson<int>(3), 1000);
+
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsGreaterThanOrEqualTo(0);
+		}
+
+		await Assert.That(values.Distinct().Count()).IsGreaterThan(1);
+	}
+
+	[Test]
+	public async Task Poisson_LargeLambda_ProducesNonNegativeValues_WithoutHanging()
+	{
+		var forge = NewForge(73);
+		var values = Draw(forge.Random.Poisson<double>(1000), 100);
+
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsGreaterThanOrEqualTo(0);
+		}
+	}
+
+	[Test]
+	public async Task Poisson_NegativeLambda_Throws()
+	{
+		var forge = NewForge(74);
+
+		await Assert.That(() => forge.Random.Poisson<int>(-1)).Throws<ArgumentOutOfRangeException>();
+	}
+
+	[Test]
+	public async Task LogNormal_ProducesPositiveValues_AndVaries()
+	{
+		var forge = NewForge(81);
+		var values = Draw(forge.Random.LogNormal<double>(0, 1), 1000);
+
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsGreaterThan(0);
+		}
+
+		await Assert.That(values.Distinct().Count()).IsGreaterThan(1);
+	}
+
+	[Test]
+	public async Task LogNormal_ZeroStdDev_AlwaysProducesTheExponentialOfTheMean()
+	{
+		var forge = NewForge(82);
+		var values = Draw(forge.Random.LogNormal<double>(Math.Log(2), 0), 50);
+
+		foreach (var value in values)
+		{
+			await Assert.That(value).IsEqualTo(Math.Exp(Math.Log(2)));
+		}
+	}
 }

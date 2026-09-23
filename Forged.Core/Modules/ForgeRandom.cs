@@ -14,7 +14,7 @@ public sealed class ForgeRandom(Forge forge)
 	/// </summary>
 	public Generator<bool> CoinToss()
 		=> new CoinTossGenerator<bool>(forge);
-	
+
 	/// <summary>
 	/// Creates a generator that picks a random item from the specified collection.
 	/// </summary>
@@ -44,7 +44,7 @@ public sealed class ForgeRandom(Forge forge)
 	/// <returns>A generator that produces arrays of random items from the collection.</returns>
 	public Generator<T[]> Pick<T>(T[] items, int minCount, int maxCount)
 		=> new PickManyGenerator<T>(items, minCount, maxCount, forge);
-	
+
 	/// <summary>
 	/// Creates a generator that picks a fixed number of random unique items from the specified collection.
 	/// </summary>
@@ -83,6 +83,63 @@ public sealed class ForgeRandom(Forge forge)
 	/// <returns>A generator that produces random numeric values.</returns>
 	public Generator<T> Number<T>(T? min = null, T? max = null) where T : struct, INumber<T>, IMinMaxValue<T>
 		=> new NumberGenerator<T>(min, max, forge);
+
+	/// <summary>
+	/// Creates a generator that produces random numeric values following a uniform distribution within a specified range.
+	/// </summary>
+	/// <typeparam name="T">The numeric type to generate.</typeparam>
+	/// <param name="min">The minimum value (inclusive). If null, uses the minimum value of the type.</param>
+	/// <param name="max">The maximum value (inclusive). If null, uses the maximum value of the type.</param>
+	/// <returns>A generator that produces random numeric values from a uniform distribution.</returns>
+	public Generator<T> Uniform<T>(T? min = null, T? max = null) where T : struct, INumber<T>, IMinMaxValue<T>
+		=> Number(min, max);
+
+	/// <summary>
+	/// Creates a generator that produces random numeric values following a normal (Gaussian) distribution.
+	/// </summary>
+	/// <typeparam name="T">The numeric type to generate.</typeparam>
+	/// <param name="mean">The mean of the distribution. If null, uses 0.</param>
+	/// <param name="stdDev">The standard deviation of the distribution. If null, uses 1.</param>
+	/// <returns>A generator that produces random numeric values from a normal distribution.</returns>
+	public Generator<T> Normal<T>(T? mean = null, T? stdDev = null) where T : struct, INumber<T>
+		=> new NormalGenerator<T>(mean, stdDev, forge);
+
+	/// <summary>
+	/// Creates a generator that produces random numeric values following an exponential distribution.
+	/// </summary>
+	/// <typeparam name="T">The numeric type to generate.</typeparam>
+	/// <param name="rate">The rate of the distribution (inverse of the mean). If null, uses 1.</param>
+	/// <returns>A generator that produces random non-negative numeric values from an exponential distribution.</returns>
+	public Generator<T> Exponential<T>(T? rate = null) where T : struct, INumber<T>
+		=> new ExponentialGenerator<T>(rate, forge);
+
+	/// <summary>
+	/// Creates a generator that produces random numeric values following a Bernoulli distribution.
+	/// </summary>
+	/// <typeparam name="T">The numeric type to generate.</typeparam>
+	/// <param name="probability">The probability of producing 1. If null, uses 0.5.</param>
+	/// <returns>A generator that produces 1 with the specified probability and otherwise 0.</returns>
+	public Generator<T> Bernoulli<T>(T? probability = null) where T : struct, INumber<T>
+		=> new BernoulliGenerator<T>(probability, forge);
+
+	/// <summary>
+	/// Creates a generator that produces random non-negative integer values following a Poisson distribution.
+	/// </summary>
+	/// <typeparam name="T">The numeric type to generate.</typeparam>
+	/// <param name="lambda">The mean (and variance) of the distribution. If null, uses 1.</param>
+	/// <returns>A generator that produces random non-negative integer values from a Poisson distribution.</returns>
+	public Generator<T> Poisson<T>(T? lambda = null) where T : struct, INumber<T>
+		=> new PoissonGenerator<T>(lambda, forge);
+
+	/// <summary>
+	/// Creates a generator that produces random positive numeric values following a log-normal distribution.
+	/// </summary>
+	/// <typeparam name="T">The numeric type to generate.</typeparam>
+	/// <param name="mean">The mean of the underlying normal distribution (natural logarithm). If null, uses 0.</param>
+	/// <param name="stdDev">The standard deviation of the underlying normal distribution. If null, uses 1.</param>
+	/// <returns>A generator that produces random positive numeric values from a log-normal distribution.</returns>
+	public Generator<T> LogNormal<T>(T? mean = null, T? stdDev = null) where T : struct, INumber<T>
+		=> new LogNormalGenerator<T>(mean, stdDev, forge);
 
 	/// <summary>
 	/// Creates a generator that picks random items from a collection using specified weights.

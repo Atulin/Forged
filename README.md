@@ -133,6 +133,12 @@ The `Forge` instance (`f` in the lambda expressions) provides access to built-in
 - `.PickUnique<T>(T[] items, int count)` - Pick an exact number of unique items from the collection.
 - `.PickUnique<T>(T[] items, int minCount, int maxCount)` - Pick a variable number of unique items from the collection.
 - `Number<T>(T? min, T? max)` - Generate a random numeric value within the specified range (supports all `INumber<T>` types).
+- `Uniform<T>(T? min, T? max)` - Generate a random numeric value uniformly distributed within the specified range (same as `Number`).
+- `Normal<T>(T? mean, T? stdDev)` - Generate a random numeric value from a normal (Gaussian) distribution (defaults: mean `0`, stdDev `1`).
+- `Exponential<T>(T? rate)` - Generate a random non-negative numeric value from an exponential distribution (default rate `1`, mean = `1/rate`).
+- `Bernoulli<T>(T? probability)` - Generate a random `1` or `0` from a Bernoulli distribution with the given success probability (default `0.5`).
+- `Poisson<T>(T? lambda)` - Generate a random non-negative integer from a Poisson distribution with the given mean (default `1`).
+- `LogNormal<T>(T? mean, T? stdDev)` - Generate a random positive numeric value from a log-normal distribution (defaults: underlying mean `0`, stdDev `1`).
 - `WeightedPick<T>(T[] items, float[] weights)` - Pick an item from the collection using specified weights for probability distribution.
 - `WeightedPick<T>((T item, float weight)[] items)` - Pick an item from an array of item-weight tuples.
 - `Dice(string expression, RoundingMode mode)` - Roll dice using a dice expression (e.g. `2d6+1d10-3`).
