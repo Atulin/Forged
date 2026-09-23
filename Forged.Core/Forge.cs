@@ -50,6 +50,12 @@ public sealed class Forge
     /// Gets the module for generating person (name) data.
     /// </summary>
     public ForgePerson Person { get; }
+
+    /// <summary>
+    /// Gets the module that provides methods for generating network-related data,
+    /// such as IP addresses and port numbers.
+    /// </summary>
+    public ForgeNetwork Network { get; set; }
     
     /// <summary>
     /// Initializes a new instance of the <see cref="Forge"/> class.
@@ -67,5 +73,6 @@ public sealed class Forge
         Basic = new ForgeBasic(this);
         Internet = new ForgeInternet(this);
         Person = new ForgePerson(this);
+        Network = new ForgeNetwork(this);
     }
 }
