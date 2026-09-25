@@ -101,24 +101,22 @@ var faker = new PersonFaker(locale: new CultureInfo("fr-FR"))
 
 ### Referencing Other Properties
 
-If you need to reference an already-generated value, you can use `.Memo()` and `.Func()` methods:
+Generated fakers expose a typed `Generated` facade for referencing other properties in the same generation. The `f` lambda parameter is a `GenerationContext<TModel>` that forwards the built-in modules from the underlying `Forge`:
 
 ```csharp
-// Unfortunate workaround, as `out var` does not work in object initializers.
-MemoValueGenerator<string> first = null!;
-MemoValueGenerator<string> last = null!;
-
 var faker = new PersonFaker
 {
-    FirstName = f => f.Text.Pronounceable(5, 10).Memo(out first),
-    LastName = f => f.Text.Pronounceable(5, 10).Memo(out last),
-    MiddleNames = f => f.Basic.Func(() => $"{first} {last}"),
+    FirstName = f => f.Text.Pronounceable(5, 10),
+    LastName = f => f.Text.Pronounceable(5, 10),
+    FullName = f => f.Basic.Func(() => $"{f.Generated.FirstName} {f.Generated.LastName}"),
 }
 ```
 
+The referenced properties are resolved lazily and cached for each `Get()` call, so declaration order does not matter. `.Memo()` remains available for arbitrary intermediate values. The facade uses C# 14 extension properties, so consuming projects must target C# 14 or later. Explicit faker delegate declarations should use `Func<GenerationContext<TModel>, IGenerator<T>>`; inferred lambdas do not need to change.
+
 ## Available Generators
 
-The `Forge` instance (`f` in the lambda expressions) provides access to built-in generators categorized by modules:
+The `GenerationContext<TModel>` instance (`f` in the lambda expressions) provides access to built-in generators categorized by modules:
 
 ### `Basic`
 - `.Literal(T value)` - Creates a generator that always returns the specified literal value.

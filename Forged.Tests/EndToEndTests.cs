@@ -116,6 +116,25 @@ public class EndToEndTests
     }
 
     [Test]
+    public async Task GeneratedReferences_ResolveOncePerGet()
+    {
+        var forge = NewForge(95);
+        var calls = 0;
+        var faker = new PersonFaker
+        {
+            Id = _ => forge.Text.Guid(),
+            FirstName = _ => forge.Basic.Literal("Alice"),
+            LastName = f => f.Basic.Func(() => $"{f.Generated.FirstName}-{++calls}"),
+        };
+
+        var first = faker.Get();
+        var second = faker.Get();
+
+        await Assert.That(first.LastName).IsEqualTo("Alice-1");
+        await Assert.That(second.LastName).IsEqualTo("Alice-2");
+    }
+
+    [Test]
     public async Task LocaleFallback_UnknownLocale_UsesTheEnglishLocaleData()
     {
         var forge = new Forge(new Random(94), new CultureInfo("de-DE"));

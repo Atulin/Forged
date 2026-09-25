@@ -6,13 +6,19 @@ namespace Forged.Core;
 /// Base class for creating fake data models. Inherit from this class to define custom model generators.
 /// </summary>
 /// <typeparam name="TModel">The type of model to generate.</typeparam>
-/// <param name="random">The random number generator to use for generating data.</param>
-public abstract class Faker<TModel>(Random? random = null, CultureInfo? locale = null)
+public abstract class Faker<TModel>
 {
     /// <summary>
     /// Gets the underlying <see cref="Forge"/> instance used for generating data.
     /// </summary>
-    public Forge Forge { get; } = new(random, locale);
+    public Forge Forge { get; }
+    public GenerationContext<TModel> Context { get; }
+
+    protected Faker(Random? random = null, CultureInfo? locale = null)
+    {
+        Forge = new(random, locale);
+        Context = new(Forge);
+    }
 
     /// <summary>
     /// Generates a single fake model instance.

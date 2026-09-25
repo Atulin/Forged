@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using Forged.Core;
-using Forged.Core.Generators;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Assembly = System.Reflection.Assembly;
@@ -81,6 +80,16 @@ public class SourceGeneratorTests
             public int Age { get; set; }
             public string? Email { get; set; }
         }
+
+        public static class PersonUsage
+        {
+            public static PersonFaker Create()
+                => new()
+                {
+                    FirstName = f => f.Basic.Literal("Alice"),
+                    LastName = f => f.Basic.Literal("Smith")
+                };
+        }
         """;
 
     [Test]
@@ -107,7 +116,7 @@ public class SourceGeneratorTests
         var generated = runResult.Results[0].GeneratedSources;
         var fakerSource = generated.Single(s => s.HintName == "PersonFaker.g.cs").SourceText.ToString();
 
-        await Assert.That(fakerSource).Contains("public required virtual global::System.Func<global::Forged.Core.Forge, global::Forged.Core.Generators.IGenerator<string>> FirstName { get; init; }");
+        await Assert.That(fakerSource).Contains("public required virtual global::System.Func<global::Forged.Core.GenerationContext<Person>, global::Forged.Core.Generators.IGenerator<string>> FirstName { get; init; }");
     }
 
     [Test]
@@ -117,8 +126,8 @@ public class SourceGeneratorTests
         var generated = runResult.Results[0].GeneratedSources;
         var fakerSource = generated.Single(s => s.HintName == "PersonFaker.g.cs").SourceText.ToString();
 
-        await Assert.That(fakerSource).Contains("virtual global::System.Func<global::Forged.Core.Forge, global::Forged.Core.Generators.IGenerator<int>>? Age { get; init; }");
-        await Assert.That(fakerSource).Contains("virtual global::System.Func<global::Forged.Core.Forge, global::Forged.Core.Generators.IGenerator<string?>>? Email { get; init; }");
+        await Assert.That(fakerSource).Contains("virtual global::System.Func<global::Forged.Core.GenerationContext<Person>, global::Forged.Core.Generators.IGenerator<int>>? Age { get; init; }");
+        await Assert.That(fakerSource).Contains("virtual global::System.Func<global::Forged.Core.GenerationContext<Person>, global::Forged.Core.Generators.IGenerator<string?>>? Email { get; init; }");
     }
 
     [Test]
@@ -128,8 +137,108 @@ public class SourceGeneratorTests
         var fakerSource = runResult.Results[0].GeneratedSources
             .Single(s => s.HintName == "PersonFaker.g.cs").SourceText.ToString();
 
-        await Assert.That(fakerSource).Contains("FirstName = firstNameGenerator.Generate(),");
-        await Assert.That(fakerSource).Contains("Age = ageGenerator?.Generate() ?? default!,");
+        await Assert.That(fakerSource).Contains("using var __forgedScope = base.Forge.BeginGeneration();");
+        await Assert.That(fakerSource).Contains("__forgedScope.Register<string>(nameof(FirstName), firstNameGenerator);");
+        await Assert.That(fakerSource).Contains("FirstName = __forgedScope.Get<string>(nameof(FirstName)),");
+        await Assert.That(fakerSource).Contains("Age = __forgedScope.GetOrDefault<int>(nameof(Age)),");
+    }
+
+    private const string GeneratedReferenceSource = """
+        #nullable enable
+        using Forged.Core;
+
+        namespace Forged.Tests.SourceGen.Generated;
+
+        [Fake]
+        public sealed class GeneratedPerson
+        {
+            public required string FullName { get; set; }
+            public required string FirstName { get; set; }
+            public required string LastName { get; set; }
+            public required string Forge { get; set; }
+            public required string Context { get; set; }
+        }
+
+        public static class GeneratedPersonUsage
+        {
+            public static GeneratedPersonFaker Create()
+                => new()
+                {
+                    FirstName = f => f.Basic.Literal("Ada"),
+                    LastName = f => f.Basic.Literal("Lovelace"),
+                    FullName = f => f.Basic.Func(() => $"{f.Generated.FirstName} {f.Generated.LastName}"),
+                    Forge = f => f.Basic.Literal("forge"),
+                    Context = f => f.Basic.Literal("context")
+                };
+        }
+        """;
+
+    [Test]
+    public async Task GeneratedFacade_ReferencesPropertiesWithoutOutVariables()
+    {
+        var runResult = RunGenerator(GeneratedReferenceSource, out var compilation, out var diagnostics);
+
+        await Assert.That(diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error)).IsEmpty();
+
+        var generated = runResult.Results[0].GeneratedSources;
+        await Assert.That(generated.Select(s => s.HintName)).Contains("ForgedGeneratedValues.Forged.Tests.SourceGen.Generated.g.cs");
+
+        var facadeSource = generated.Single(s => s.HintName == "ForgedGeneratedValues.Forged.Tests.SourceGen.Generated.g.cs").SourceText.ToString();
+        await Assert.That(facadeSource).Contains("extension(global::Forged.Core.GenerationContext<GeneratedPerson> context)");
+        await Assert.That(facadeSource).Contains("public ForgedGeneratedGeneratedPersonValues Generated => new(context.Forge);");
+        await Assert.That(facadeSource).Contains("public global::Forged.Core.Generators.Generator<string> FirstName");
+
+        using var stream = new MemoryStream();
+        var emit = compilation.Emit(stream);
+        await Assert.That(emit.Success).IsTrue();
+
+        var assembly = Assembly.Load(stream.ToArray());
+        var usageType = assembly.GetType("Forged.Tests.SourceGen.Generated.GeneratedPersonUsage", throwOnError: true)!;
+        var faker = usageType.GetMethod("Create")!.Invoke(null, null)!;
+        var person = faker.GetType().GetMethod("Get", Type.EmptyTypes)!.Invoke(faker, null)!;
+
+        await Assert.That(person.GetType().GetProperty("FirstName")!.GetValue(person)).IsEqualTo("Ada");
+        await Assert.That(person.GetType().GetProperty("LastName")!.GetValue(person)).IsEqualTo("Lovelace");
+        await Assert.That(person.GetType().GetProperty("FullName")!.GetValue(person)).IsEqualTo("Ada Lovelace");
+        await Assert.That(person.GetType().GetProperty("Forge")!.GetValue(person)).IsEqualTo("forge");
+        await Assert.That(person.GetType().GetProperty("Context")!.GetValue(person)).IsEqualTo("context");
+    }
+
+    private const string ModelIsolationSource = """
+        #nullable enable
+        using Forged.Core;
+
+        namespace Forged.Tests.SourceGen.Isolation;
+
+        [Fake]
+        public sealed class IsolatedPerson
+        {
+            public required string FirstName { get; set; }
+        }
+
+        [Fake]
+        public sealed class OtherAddress
+        {
+            public required string Street { get; set; }
+        }
+
+        public static class IsolatedPersonUsage
+        {
+            public static IsolatedPersonFaker Create()
+                => new()
+                {
+                    FirstName = f => f.Generated.OtherAddress
+                };
+        }
+        """;
+
+    [Test]
+    public async Task GeneratedFacade_IsScopedToTheFakerModel()
+    {
+        RunGenerator(ModelIsolationSource, out _, out var diagnostics);
+
+        var errors = diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error).ToList();
+        await Assert.That(errors.Select(d => d.Id)).Contains("CS1061");
     }
 
     private const string FakerForSource = """
@@ -162,7 +271,7 @@ public class SourceGeneratorTests
         var fakerSource = generated.Single(s => s.HintName == "AddressGenerator.g.cs").SourceText.ToString();
         await Assert.That(fakerSource).Contains("public partial class AddressGenerator : global::Forged.Core.Faker<Address>");
         await Assert.That(fakerSource).Contains("partial class AddressGenerator");
-        await Assert.That(fakerSource).Contains("public required virtual global::System.Func<global::Forged.Core.Forge, global::Forged.Core.Generators.IGenerator<string>> Street { get; init; }");
+        await Assert.That(fakerSource).Contains("public required virtual global::System.Func<global::Forged.Core.GenerationContext<Address>, global::Forged.Core.Generators.IGenerator<string>> Street { get; init; }");
     }
 
     private const string StructSource = """
@@ -248,7 +357,7 @@ public class SourceGeneratorTests
     [Test]
     public async Task GeneratedFaker_IsInstantiableAtRuntime()
     {
-        var runResult = RunGenerator(PersonSource, out var compilation, out var diagnostics);
+        RunGenerator(PersonSource, out var compilation, out var diagnostics);
         await Assert.That(diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error)).IsEmpty();
 
         using var stream = new MemoryStream();
@@ -256,15 +365,9 @@ public class SourceGeneratorTests
         await Assert.That(emit.Success).IsTrue();
 
         var assembly = Assembly.Load(stream.ToArray());
-        var fakerType = assembly.GetType("Forged.Tests.SourceGen.PersonFaker", throwOnError: true)!;
-
-        var instance = fakerType.GetConstructors().Single().Invoke([null, null]);
-
-        fakerType.GetProperty("FirstName")!.SetValue(instance, new Func<Forge, IGenerator<string>>(f => f.Basic.Literal("Alice")));
-        fakerType.GetProperty("LastName")!.SetValue(instance, new Func<Forge, IGenerator<string>>(f => f.Basic.Literal("Smith")));
-
-        var get = fakerType.GetMethods().First(m => m.Name == "Get" && m.GetParameters().Length == 0);
-        var person = get.Invoke(instance, null)!;
+        var usageType = assembly.GetType("Forged.Tests.SourceGen.PersonUsage", throwOnError: true)!;
+        var faker = usageType.GetMethod("Create")!.Invoke(null, null)!;
+        var person = faker.GetType().GetMethod("Get", Type.EmptyTypes)!.Invoke(faker, null)!;
         var personType = person.GetType();
 
         await Assert.That(personType.GetProperty("FirstName")!.GetValue(person)).IsEqualTo("Alice");

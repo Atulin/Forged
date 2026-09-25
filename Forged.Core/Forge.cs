@@ -1,5 +1,7 @@
 using System.Globalization;
 using Forged.Core.Core;
+using Forged.Core.Generators;
+using Forged.Core.Generators.Basic;
 using Forged.Core.Modules;
 
 namespace Forged.Core;
@@ -9,6 +11,8 @@ namespace Forged.Core;
 /// </summary>
 public sealed class Forge
 {
+    private GenerationScope? _currentGeneration;
+
     /// <summary>
     /// Gets the underlying random number generator.
     /// </summary>
@@ -25,6 +29,20 @@ public sealed class Forge
     /// Gets the random data generation module.
     /// </summary>
     public ForgeRandom Random { get; }
+
+    public GenerationScope BeginGeneration()
+    {
+        var scope = new GenerationScope(this, _currentGeneration);
+        _currentGeneration = scope;
+        return scope;
+    }
+
+    public Generator<T> Ref<T>(string key)
+        => new FuncGenerator<T>(() =>
+        {
+            var scope = _currentGeneration ?? throw new InvalidOperationException("No generation scope is active.");
+            return scope.GetOrDefault<T>(key);
+        }, this);
     
     /// <summary>
     /// Gets the temporal (date/time) generation module.
@@ -74,5 +92,13 @@ public sealed class Forge
         Internet = new ForgeInternet(this);
         Person = new ForgePerson(this);
         Network = new ForgeNetwork(this);
+    }
+
+    internal void EndGeneration(GenerationScope scope)
+    {
+        if (ReferenceEquals(_currentGeneration, scope))
+        {
+            _currentGeneration = scope.Previous;
+        }
     }
 }

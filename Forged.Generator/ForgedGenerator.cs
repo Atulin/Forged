@@ -58,9 +58,19 @@ public class ForgedGenerator : IIncrementalGenerator
 
 		context.RegisterSourceOutput(combined, static (spc, source) => {
 			var (types, fakers) = source;
-			foreach (var ttg in types.Concat(fakers))
+			var allTypes = types.Concat(fakers).ToArray();
+			foreach (var ttg in allTypes)
 			{
 				Execute(spc, ttg);
+			}
+
+			foreach (var group in allTypes.GroupBy(static ttg => ttg.Namespace))
+			{
+				var models = group
+					.GroupBy(static ttg => ttg.Name)
+					.Select(static nested => nested.First())
+					.ToArray();
+				ExecuteGenerated(spc, group.Key, models);
 			}
 		});
 	}
@@ -141,7 +151,7 @@ public class ForgedGenerator : IIncrementalGenerator
 				{
 					w.Write("required ");
 				}
-				w.Write($"virtual global::System.Func<global::Forged.Core.Forge, global::Forged.Core.Generators.IGenerator<{prop.Type}>>");
+				w.Write($"virtual global::System.Func<global::Forged.Core.GenerationContext<{typeToGenerate.Name}>, global::Forged.Core.Generators.IGenerator<{prop.Type}>>");
 				if (!prop.IsRequired)
 				{
 					w.Write("?");
@@ -156,13 +166,16 @@ public class ForgedGenerator : IIncrementalGenerator
 			w.WriteLine();
 			w.WriteLine($"public override {typeToGenerate.Name} Get()");
 			w.BodyBlock(() => {
+				w.WriteLine("using var __forgedScope = base.Forge.BeginGeneration();");
+				w.WriteLine();
 
 				foreach (var prop in typeToGenerate.Properties)
 				{
 					w.Write($"var {Decapitalize(prop.Name)}Generator = {prop.Name}");
 					w.WriteLine(prop.IsRequired
-						? "(this.Forge);"
-						: "?.Invoke(this.Forge);");
+						? "(base.Context);"
+						: "?.Invoke(base.Context);");
+					w.WriteLine($"__forgedScope.Register<{prop.Type}>(nameof({prop.Name}), {Decapitalize(prop.Name)}Generator);");
 				}
 
 				w.WriteLine();
@@ -170,16 +183,59 @@ public class ForgedGenerator : IIncrementalGenerator
 				w.InitBlock(() => {
 					foreach (var prop in typeToGenerate.Properties)
 					{
-						w.Write($"{prop.Name} = {Decapitalize(prop.Name)}Generator");
 						w.WriteLine(prop.IsRequired
-							? ".Generate(),"
-							: "?.Generate() ?? default!,");
+							? $"{prop.Name} = __forgedScope.Get<{prop.Type}>(nameof({prop.Name})),"
+							: $"{prop.Name} = __forgedScope.GetOrDefault<{prop.Type}>(nameof({prop.Name})),");
 					}
 				});
 			});
 		});
 		
 		context.AddSource($"{fakerName}.g.cs", SourceText.From(w.ToString(), Encoding.UTF8));
+	}
+
+	private static void ExecuteGenerated(SourceProductionContext context, string modelNamespace, IReadOnlyList<TypeToGenerate> models)
+	{
+		var w = new IndentedWriter();
+		w.WriteLine(Header);
+		w.WriteLine("#nullable enable");
+
+		if (!string.IsNullOrEmpty(modelNamespace))
+		{
+			w.WriteLine();
+			w.WriteLine($"namespace {modelNamespace};");
+		}
+
+		w.WriteLine();
+		w.WriteLine(Attributes);
+		foreach (var model in models)
+		{
+			w.WriteLine($"public sealed class ForgedGenerated{model.Name}Values(global::Forged.Core.Forge forge)");
+			w.BodyBlock(() => {
+				foreach (var prop in model.Properties)
+				{
+					w.WriteLine($"public global::Forged.Core.Generators.Generator<{prop.Type}> {prop.Name}");
+					w.WriteLine($"    => forge.Ref<{prop.Type}>(\"{prop.Name}\");");
+				}
+			});
+			w.WriteLine();
+		}
+
+		w.WriteLine("public static class ForgedGeneratedContextExtensions");
+		w.BodyBlock(() => {
+			foreach (var model in models)
+			{
+				w.WriteLine($"extension(global::Forged.Core.GenerationContext<{model.Name}> context)");
+				w.Block(() => {
+					w.WriteLine($"public ForgedGenerated{model.Name}Values Generated => new(context.Forge);");
+				});
+			}
+		});
+
+		var hintName = string.IsNullOrEmpty(modelNamespace)
+			? "ForgedGeneratedValues.g.cs"
+			: $"ForgedGeneratedValues.{modelNamespace}.g.cs";
+		context.AddSource(hintName, SourceText.From(w.ToString(), Encoding.UTF8));
 	}
 
 	private static string Decapitalize(string input)
