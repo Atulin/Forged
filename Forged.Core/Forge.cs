@@ -47,6 +47,13 @@ public sealed class Forge
     public ForgeInternet Internet { get; }
 
     /// <summary>
+    /// Provides functionality for generating financial-related fake data.
+    /// Includes methods for creating currency information, account details,
+    /// IBANs, BICs, credit card numbers, and other financial identifiers.
+    /// </summary>
+    public ForgeFinance Finance { get; }
+
+    /// <summary>
     /// Gets the module for generating person (name) data.
     /// </summary>
     public ForgePerson Person { get; }
@@ -72,6 +79,7 @@ public sealed class Forge
 	    Text = new ForgeText(this);
         Basic = new ForgeBasic(this);
         Internet = new ForgeInternet(this);
+        Finance = new ForgeFinance(this);
         Person = new ForgePerson(this);
         Network = new ForgeNetwork(this);
     }

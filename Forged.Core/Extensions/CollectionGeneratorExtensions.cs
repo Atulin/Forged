@@ -17,13 +17,13 @@ public static class CollectionGeneratorExtensions
 		/// </summary>
 		/// <returns>A generator that produces lists.</returns>
 		public Generator<List<T>> AsList()
-			=> new RefineGenerator<ICollection<T>, List<T>>(generator, static c => c.ToList(), generator.Forge);
+			=> new RefineGenerator<ICollection<T>, List<T>>(generator, static c => [.. c], generator.Forge);
 		
 		/// <summary>
 		/// Converts collections from a generator to hash sets.
 		/// </summary>
 		/// <returns>A generator that produces hash sets.</returns>
 		public Generator<HashSet<T>> AsHashSet()
-			=> new RefineGenerator<ICollection<T>, HashSet<T>>(generator, static c => c.ToHashSet(), generator.Forge);
+			=> new RefineGenerator<ICollection<T>, HashSet<T>>(generator, static c => [.. c], generator.Forge);
 	}
 }

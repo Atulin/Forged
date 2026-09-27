@@ -28,5 +28,15 @@ internal static class RandomExtensions
 				yield return items[i];
 			}
 		}
+		
+		internal string Digits(int count)
+		{
+			Span<char> body = stackalloc char[count];
+			for (var i = 0; i < count; i++)
+			{
+				body[i] = (char)rng.Next('0', '9' + 1);
+			}
+			return body.ToString();
+		}
 	}
 }

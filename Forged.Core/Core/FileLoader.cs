@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using Microsoft.Extensions.FileProviders;
@@ -13,6 +14,12 @@ internal sealed class FileLoader
 	{
 		public static readonly ConcurrentDictionary<(string locale, string file), T> Data = new();
 	}
+
+	public T LoadData<T>(string file, JsonTypeInfo<T> typeInfo) where T : class
+		=> LoadData("en", file, typeInfo);
+
+	public T LoadData<T>(CultureInfo locale, string file, JsonTypeInfo<T> typeInfo) where T : class
+		=> LoadData(locale.Name, file, typeInfo);
 
 	public T LoadData<T>(string locale, string file, JsonTypeInfo<T> typeInfo) where T : class
 	{

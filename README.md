@@ -192,6 +192,16 @@ The `Forge` instance (`f` in the lambda expressions) provides access to built-in
 - `UriScheme(bool strip = false)` - Generates a random URI scheme from well-known protocols (e.g. `https://`, `mailto:`). Pass `strip: true` to drop the colon and path delimiters (e.g. `https`, `mailto`).
 - `MacAddress(float locallyAdministeredChance = 0.0f)` - Generates a random unicast MAC address. When `locallyAdministeredChance` is 1, the locally-administered bit is set (per IEEE 802).
 
+### `Finance`
+- `Currency()`, `CurrencyCode()`, `CurrencyName()`, `CurrencySymbol()`, `CurrencyNumericCode()` - Generate currency names and ISO 4217 values.
+- `Iban(bool valid = true, bool test = false)` / `Iban(string countryCode, bool valid = true, bool test = false)` - Generate a valid IBAN, optionally for a specific country. The country code is case-insensitive and must be a supported IBAN country, otherwise an `ArgumentOutOfRangeException` is thrown.
+- `Bic(bool valid = true, bool test = false)` / `Swift(...)` - Generate ISO 9362 Business Identifier Codes.
+- `RoutingNumber(bool valid = true, bool test = false)` - Generate a nine-digit ABA routing number.
+- `AccountNumber(int length = 8)` - Generate a numeric account number.
+- `CreditCardNumber(CardOperator cardOperator = CardOperator.All, bool valid = true, bool test = false)` - Generate a card number for selected networks and optionally calculate its Luhn check digit.
+- `CreditCardCvv(CardOperator cardOperator = CardOperator.All)` - Generate a network-appropriate three- or four-digit security code.
+- `CreditCardExpirationDate(DateTimeOffset? today = null, float expirationChance = .5f)` - Generate an expiration month relative to today.
+
 ### `Person`
 - `FirstName(float male = 0.5f, float female = 0.5f)` - Generate a first name based on gender probabilities.
 - `LastName(float hyphenated = 0.04f, float compound = 0.02f)` - Generate a single, hyphenated, or compound last name.
