@@ -8,7 +8,7 @@ namespace Forged.Core.Generators.Random;
 /// <typeparam name="T">The numeric type to generate (must implement INumber&lt;T&gt;).</typeparam>
 public sealed class BernoulliGenerator<T>(T? probability, Forge forge) : Generator<T>(forge) where T : struct, INumber<T>
 {
-	private readonly double _probability = probability is null ? 0.5 : Validate(double.CreateTruncating(probability.Value));
+	private readonly double Probability = probability is null ? 0.5 : Validate(double.CreateTruncating(probability.Value));
 
 	private static double Validate(double probability)
 		=> probability is >= 0 and <= 1
@@ -21,7 +21,7 @@ public sealed class BernoulliGenerator<T>(T? probability, Forge forge) : Generat
 	/// <returns>1 with the specified probability, otherwise 0.</returns>
 	public override T Generate()
 	{
-		var value = Rng.NextDouble() < _probability ? 1 : 0;
+		var value = Rng.NextDouble() < Probability ? 1 : 0;
 
 		return T.CreateSaturating(value);
 	}

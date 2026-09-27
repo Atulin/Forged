@@ -16,7 +16,7 @@ public static class EnumerableGeneratorExtensions
 	/// <param name="generator">The generator to convert.</param>
 	/// <returns>A generator that produces lists.</returns>
 	public static Generator<List<T>> AsList<T>(this Generator<IEnumerable<T>> generator)
-		=> new RefineGenerator<IEnumerable<T>, List<T>>(generator, static e => e.ToList(), generator.Forge);
+		=> new RefineGenerator<IEnumerable<T>, List<T>>(generator, static e => [.. e], generator.Forge);
 
 	/// <param name="generator">The generator to convert.</param>
 	/// <typeparam name="T">The type of items in the enumerable.</typeparam>
@@ -48,6 +48,6 @@ public static class EnumerableGeneratorExtensions
 		/// </summary>
 		/// <returns>A generator that produces hash sets.</returns>
 		public Generator<HashSet<T>> AsHashSet()
-			=> new RefineGenerator<IEnumerable<T>, HashSet<T>>(generator, static e => e.ToHashSet(), generator.Forge);
+			=> new RefineGenerator<IEnumerable<T>, HashSet<T>>(generator, static e => [.. e], generator.Forge);
 	}
 }

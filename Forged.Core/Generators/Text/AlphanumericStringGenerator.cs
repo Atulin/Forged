@@ -1,3 +1,5 @@
+using Forged.Core.Core;
+
 namespace Forged.Core.Generators.Text;
 
 /// <summary>
@@ -18,6 +20,6 @@ public sealed class AlphanumericStringGenerator(int minLength, int maxLength, Fo
 			? minLength
 			: Rng.Next(minLength, maxLength + 1);
 
-		return Rng.GetString(Constants.AlphanumericString, length);
+		return Rng.GetString(CharPool.Get(CharKind.Alphanumeric), length);
 	}
 }

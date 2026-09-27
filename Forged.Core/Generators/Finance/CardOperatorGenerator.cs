@@ -1,4 +1,4 @@
-﻿using Forged.Core.Core;
+using Forged.Core.Core;
 
 namespace Forged.Core.Generators.Finance;
 
@@ -8,7 +8,7 @@ namespace Forged.Core.Generators.Finance;
 /// </summary>
 public sealed class CardOperatorGenerator(CardOperator operators, Forge forge) : Generator<CardOperator>(forge)
 {
-	private readonly CardOperator[] _specs = [.. CardOperatorCatalog.ResolveOperator(operators)];
+	private readonly CardOperator[] Specs = [.. CardOperatorCatalog.ResolveOperator(operators)];
 
-	public override CardOperator Generate() => Rng.GetItem(_specs);
+	public override CardOperator Generate() => Rng.GetItem(Specs);
 }

@@ -8,8 +8,8 @@ namespace Forged.Core.Generators.Temporal;
 /// <param name="forge">The Forge instance to use.</param>
 public sealed class TimeSpanGenerator(TimeSpan? min, TimeSpan? max, Forge forge) : Generator<TimeSpan>(forge)
 {
-	private readonly long _minTicks = (min ?? TimeSpan.MinValue).Ticks;
-	private readonly long _maxTicks = (max ?? TimeSpan.MaxValue).Ticks;
+	private readonly long MinTicks = (min ?? TimeSpan.MinValue).Ticks;
+	private readonly long MaxTicks = (max ?? TimeSpan.MaxValue).Ticks;
 
 	/// <summary>
 	/// Generates a random <see cref="TimeSpan"/> value.
@@ -17,7 +17,7 @@ public sealed class TimeSpanGenerator(TimeSpan? min, TimeSpan? max, Forge forge)
 	/// <returns>A random <see cref="TimeSpan"/> between the specified minimum and maximum.</returns>
 	public override TimeSpan Generate()
 	{
-		var ticks = Rng.NextInt64(_minTicks, _maxTicks);
+		var ticks = Rng.NextInt64(MinTicks, MaxTicks);
 		return new TimeSpan(ticks);
 	}
 }

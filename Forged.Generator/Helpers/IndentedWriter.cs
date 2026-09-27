@@ -1,10 +1,10 @@
-﻿using System.Text;
+using System.Text;
 
 namespace Forged.Generator.Helpers;
 
 internal sealed class IndentedWriter(int initialCapacity = 4096)
 {
-	private readonly StringBuilder _sb = new(initialCapacity);
+	private readonly StringBuilder Sb = new(initialCapacity);
 	private int _depth;
 	private bool _atLineStart = true;
 	private const string IndentUnit = "\t";
@@ -20,11 +20,11 @@ internal sealed class IndentedWriter(int initialCapacity = 4096)
 			{
 				for (var i = 0; i < _depth; i++)
 				{
-					_sb.Append(IndentUnit);
+					Sb.Append(IndentUnit);
 				}
 				_atLineStart = false;
 			}
-			_sb.Append(ch);
+			Sb.Append(ch);
 			if (ch == '\n')
 			{
 				_atLineStart = true;
@@ -95,5 +95,5 @@ internal sealed class IndentedWriter(int initialCapacity = 4096)
 		return this;
 	}
 
-	public override string ToString() => _sb.ToString();
+	public override string ToString() => Sb.ToString();
 }

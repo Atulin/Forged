@@ -52,7 +52,7 @@ public sealed class RoutingNumberGenerator(bool valid, bool test, Forge forge) :
 			return Rng.GetItem(TestRoutingNumbers);
 		}
 
-		var body = $"{Rng.GetItem(Prefixes)}{Rng.Digits(6)}";
+		var body = $"{Rng.GetItem(Prefixes)}{Rng.GetString(CharPool.Get(CharKind.Numeric), 6)}";
 		var checkDigit = (10 - Checksum($"{body}0") % 10) % 10;
 		if (!valid)
 		{

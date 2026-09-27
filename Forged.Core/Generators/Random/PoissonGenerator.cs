@@ -8,7 +8,7 @@ namespace Forged.Core.Generators.Random;
 /// <typeparam name="T">The numeric type to generate (must implement INumber&lt;T&gt;).</typeparam>
 public sealed class PoissonGenerator<T>(T? lambda, Forge forge) : Generator<T>(forge) where T : struct, INumber<T>
 {
-	private readonly double _lambda = lambda is null ? 1 : Validate(double.CreateTruncating(lambda.Value));
+	private readonly double Lambda = lambda is null ? 1 : Validate(double.CreateTruncating(lambda.Value));
 
 	private static double Validate(double lambda)
 		=> lambda >= 0
@@ -22,18 +22,18 @@ public sealed class PoissonGenerator<T>(T? lambda, Forge forge) : Generator<T>(f
 	/// <returns>A random non-negative integer value from a Poisson distribution with the specified lambda.</returns>
 	public override T Generate()
 	{
-		if (_lambda == 0)
+		if (Lambda == 0)
 		{
 			return T.CreateSaturating(0);
 		}
 
-		var threshold = Math.Exp(-_lambda);
+		var threshold = Math.Exp(-Lambda);
 		if (threshold == 0)
 		{
 			var u1 = 1.0 - Rng.NextDouble();
 			var u2 = Rng.NextDouble();
 			var z = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Cos(2.0 * Math.PI * u2);
-			var value = Math.Max(0, Math.Round(_lambda + Math.Sqrt(_lambda) * z));
+			var value = Math.Max(0, Math.Round(Lambda + Math.Sqrt(Lambda) * z));
 
 			return T.CreateSaturating(value);
 		}

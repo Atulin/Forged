@@ -1,4 +1,4 @@
-﻿using Forged.Core.Core;
+using Forged.Core.Core;
 
 namespace Forged.Core.Generators.Finance;
 
@@ -13,7 +13,7 @@ public sealed class CreditCardExpirationDateGenerator(
 	float expirationChance,
 	Forge forge) : Generator<DateTimeOffset>(forge)
 {
-	private readonly DateTimeOffset _today = today ?? DateTimeOffset.Now;
+	private readonly DateTimeOffset Today = today ?? DateTimeOffset.Now;
 	private static readonly DateTimeOffset MinimumDate = new(1, 1, 1, 0, 0, 0, TimeSpan.Zero);
 
 	public override DateTimeOffset Generate()
@@ -23,9 +23,9 @@ public sealed class CreditCardExpirationDateGenerator(
 			: Rng.Next(0, 241);
 		var minimumMonth = MinimumDate.Year * 12L + MinimumDate.Month - 1;
 		var maximumMonth = DateTimeOffset.MaxValue.Year * 12L + DateTimeOffset.MaxValue.Month - 1;
-		var monthIndex = Math.Clamp(_today.Year * 12L + _today.Month - 1 + monthOffset, minimumMonth, maximumMonth);
+		var monthIndex = Math.Clamp(Today.Year * 12L + Today.Month - 1 + monthOffset, minimumMonth, maximumMonth);
 		var year = (int)(monthIndex / 12);
 		var month = (int)(monthIndex % 12) + 1;
-		return new DateTimeOffset(year, month, 1, 0, 0, 0, _today.Offset);
+		return new DateTimeOffset(year, month, 1, 0, 0, 0, Today.Offset);
 	}
 }

@@ -1,32 +1,32 @@
 ﻿namespace Forged.Core.Generators.Random.DiceGeneratorHelpers;
 
-internal sealed class DiceLexer(string expression)
+internal static class DiceLexer
 {
-	private int _position;
-	private ReadOnlyMemory<char> _text = expression.AsMemory().Trim();
-
-	public IEnumerable<Token> Lex()
+	public static IEnumerable<Token> Lex(string expression)
 	{
+		var position = 0;
+		var text = expression.AsMemory().Trim();
+
 		while (true)
 		{
-			var span = _text.Span;
-			var start = _position;
+			var span = text.Span;
+			var start = position;
 
-			if (_position >= span.Length)
+			if (position >= span.Length)
 			{
-				yield return new Token(TokenType.End, ReadOnlyMemory<char>.Empty, _position);
+				yield return new Token(TokenType.End, ReadOnlyMemory<char>.Empty, position);
 				break;
 			}
 
-			var c = span[_position];
+			var c = span[position];
 			if (char.IsDigit(c))
 			{
-				while (_position < _text.Length && char.IsDigit(span[_position]))
+				while (position < text.Length && char.IsDigit(span[position]))
 				{
-					_position++;
+					position++;
 				}
 
-				yield return new Token(TokenType.Number, _text[start.._position], start);
+				yield return new Token(TokenType.Number, text[start..position], start);
 				continue;
 			}
 
@@ -39,10 +39,10 @@ internal sealed class DiceLexer(string expression)
 				'/' => TokenType.Divide,
 				'(' => TokenType.LeftParen,
 				')' => TokenType.RightParen,
-				_ => throw new InvalidOperationException($"Unexpected character {c} at {_position}"),
+				_ => throw new InvalidOperationException($"Unexpected character {c} at {position}"),
 			};
 
-			_position++;
+			position++;
 			yield return new Token(type, ReadOnlyMemory<char>.Empty, start);
 		}
 	}

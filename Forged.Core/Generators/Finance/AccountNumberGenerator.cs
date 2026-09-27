@@ -10,6 +10,6 @@ public sealed class AccountNumberGenerator(int minLength, int maxLength, Forge f
 	public override string Generate()
 	{
 		var length = minLength == maxLength ? minLength : Rng.Next(minLength, maxLength + 1);
-		return Rng.Digits(length);
+		return Rng.GetString(CharPool.Get(CharKind.Numeric), length);
 	}
 }

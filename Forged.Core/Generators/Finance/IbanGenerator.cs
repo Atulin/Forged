@@ -1,4 +1,4 @@
-﻿using Forged.Core.Core;
+using Forged.Core.Core;
 
 namespace Forged.Core.Generators.Finance;
 
@@ -26,12 +26,12 @@ public sealed class IbanGenerator : Generator<string>
 
 	private static readonly char[] AlphanumericPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
 
-	private readonly bool _valid;
-	private readonly bool _test;
-	private readonly Dictionary<string, int> _countries;
-	private readonly string[] _countryCodes;
-	private readonly string? _code;
-	private readonly string[] _testIbans;
+	private readonly bool Valid;
+	private readonly bool Test;
+	private readonly Dictionary<string, int> Countries;
+	private readonly string[] CountryCodes;
+	private readonly string? Code;
+	private readonly string[] FilteredTestIbans;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="IbanGenerator"/> class.
@@ -43,14 +43,14 @@ public sealed class IbanGenerator : Generator<string>
 	/// <exception cref="ArgumentOutOfRangeException">Thrown if the country code is not a supported IBAN country.</exception>
 	public IbanGenerator(string? countryCode, bool valid, bool test, Forge forge) : base(forge)
 	{
-		_valid = valid;
-		_test = test;
-		_countries = FileLoader.LoadData(Locale, "finance/iban_countries", CommonContext.Default.DictionaryStringInt32);
-		_countryCodes = [.. _countries.Keys];
-		_code = Validate(countryCode);
-		_testIbans = _code is null
+		Valid = valid;
+		Test = test;
+		Countries = FileLoader.LoadData(Locale, "finance/iban_countries", CommonContext.Default.DictionaryStringInt32);
+		CountryCodes = [.. Countries.Keys];
+		Code = Validate(countryCode);
+		FilteredTestIbans = Code is null
 			? TestIbans
-			: [.. TestIbans.Where(iban => iban.StartsWith(_code, StringComparison.Ordinal))];
+			: [.. TestIbans.Where(iban => iban.StartsWith(Code, StringComparison.Ordinal))];
 	}
 
 	private string? Validate(string? countryCode)
@@ -61,20 +61,20 @@ public sealed class IbanGenerator : Generator<string>
 		}
 
 		var code = countryCode.ToUpperInvariant();
-		return _countries.ContainsKey(code)
+		return Countries.ContainsKey(code)
 			? code
 			: throw new ArgumentOutOfRangeException(nameof(countryCode), countryCode, "Unsupported IBAN country code.");
 	}
 
 	public override string Generate()
 	{
-		if (_test && _testIbans.Length > 0)
+		if (Test && FilteredTestIbans.Length > 0)
 		{
-			return Rng.GetItem(_testIbans);
+			return Rng.GetItem(FilteredTestIbans);
 		}
 
-		var code = _code ?? Rng.GetItem(_countryCodes);
-		var ibanLength = _countries[code];
+		var code = Code ?? Rng.GetItem(CountryCodes);
+		var ibanLength = Countries[code];
 
 		Span<char> body = stackalloc char[ibanLength];
 		body[0] = code[0];
@@ -89,7 +89,7 @@ public sealed class IbanGenerator : Generator<string>
 
 		var rearranged = string.Concat(body[4..], body[..4]);
 		var checkDigits = 98 - Mod97(rearranged);
-		if (!_valid)
+		if (!Valid)
 		{
 			checkDigits = checkDigits == 0 ? 1 : checkDigits - 1;
 		}

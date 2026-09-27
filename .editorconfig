@@ -1,7 +1,7 @@
 root = true
 
 [*]
-charset = utf-8-no-bom
+charset = utf-8
 end_of_line = lf
 indent_style = tab
 indent_size = 4
@@ -144,10 +144,6 @@ dotnet_naming_style.camel_case.capitalization = camel_case
 dotnet_naming_style.camel_case.required_prefix =
 dotnet_naming_style.camel_case.required_suffix =
 
-dotnet_naming_style.camel_case_with_underscore.capitalization = camel_case
-dotnet_naming_style.camel_case_with_underscore.required_prefix = _
-dotnet_naming_style.camel_case_with_underscore.required_suffix =
-
 dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum, delegate
 dotnet_naming_symbols.types.applicable_accessibilities = *
 
@@ -163,20 +159,19 @@ dotnet_naming_rule.exposed_members_should_be_pascal_case.symbols = exposed_membe
 dotnet_naming_rule.exposed_members_should_be_pascal_case.style = pascal_case
 dotnet_naming_rule.exposed_members_should_be_pascal_case.severity = suggestion
 
-dotnet_naming_symbols.private_fields.applicable_kinds = field
-dotnet_naming_symbols.private_fields.applicable_accessibilities = private
-dotnet_naming_symbols.private_fields.required_modifiers =
+dotnet_naming_symbols.const_fields.applicable_kinds = field
+dotnet_naming_symbols.const_fields.required_modifiers = const
 
-dotnet_naming_rule.private_fields_should_be_camel_case_with_underscore.symbols = private_fields
-dotnet_naming_rule.private_fields_should_be_camel_case_with_underscore.style = camel_case_with_underscore
-dotnet_naming_rule.private_fields_should_be_camel_case_with_underscore.severity = suggestion
+dotnet_naming_rule.const_fields_should_be_pascal_case.symbols = const_fields
+dotnet_naming_rule.const_fields_should_be_pascal_case.style = pascal_case
+dotnet_naming_rule.const_fields_should_be_pascal_case.severity = suggestion
 
-dotnet_naming_symbols.constants.applicable_kinds = field, property
-dotnet_naming_symbols.constants.required_modifiers = const, static
+dotnet_naming_symbols.readonly_fields.applicable_kinds = field
+dotnet_naming_symbols.readonly_fields.required_modifiers = readonly
 
-dotnet_naming_rule.constants_should_be_pascal_case.symbols = constants
-dotnet_naming_rule.constants_should_be_pascal_case.style = pascal_case
-dotnet_naming_rule.constants_should_be_pascal_case.severity = suggestion
+dotnet_naming_rule.readonly_fields_should_be_pascal_case.symbols = readonly_fields
+dotnet_naming_rule.readonly_fields_should_be_pascal_case.style = pascal_case
+dotnet_naming_rule.readonly_fields_should_be_pascal_case.severity = suggestion
 
 dotnet_naming_symbols.parameters.applicable_kinds = parameter
 dotnet_naming_symbols.parameters.applicable_accessibilities = *

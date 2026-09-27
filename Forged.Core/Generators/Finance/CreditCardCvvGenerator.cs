@@ -19,11 +19,11 @@ namespace Forged.Core.Generators.Finance;
 /// </param>
 public sealed class CreditCardCvvGenerator(CardOperator operators, Forge forge) : Generator<string>(forge)
 {
-	private readonly CardOperatorSpec[] _specs = [.. CardOperatorCatalog.ResolveSpec(operators)];
+	private readonly CardOperatorSpec[] Specs = [.. CardOperatorCatalog.ResolveSpec(operators)];
 
 	public override string Generate()
 	{
-		var spec = Rng.GetItem(_specs);
-		return Rng.Digits(spec.CvvLength);
+		var spec = Rng.GetItem(Specs);
+		return Rng.GetString(CharPool.Get(CharKind.Numeric), spec.CvvLength);
 	}
 }

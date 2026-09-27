@@ -24,7 +24,6 @@ public sealed class DiceGenerator(string expression, RoundingMode mode, Forge fo
 		var result = DiceParser.Evaluate(expression, Rng);
 		var rounded = mode switch
 		{
-
 			RoundingMode.Floor => Math.Floor(result),
 			RoundingMode.Round => Math.Round(result),
 			RoundingMode.Ceiling => Math.Ceiling(result),

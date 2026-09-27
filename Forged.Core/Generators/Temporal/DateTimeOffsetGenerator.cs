@@ -8,8 +8,8 @@ namespace Forged.Core.Generators.Temporal;
 /// <param name="forge">The Forge instance to use.</param>
 public sealed class DateTimeOffsetGenerator(DateTimeOffset? min, DateTimeOffset? max, Forge forge) : Generator<DateTimeOffset>(forge)
 {
-	private readonly long _minTicks = (min ?? DateTimeOffset.MinValue).Ticks;
-	private readonly long _maxTicks = (max ?? DateTimeOffset.MaxValue).Ticks;
+	private readonly long MinTicks = (min ?? DateTimeOffset.MinValue).Ticks;
+	private readonly long MaxTicks = (max ?? DateTimeOffset.MaxValue).Ticks;
 
 	/// <summary>
 	/// Generates a random <see cref="DateTimeOffset"/> value.
@@ -17,7 +17,7 @@ public sealed class DateTimeOffsetGenerator(DateTimeOffset? min, DateTimeOffset?
 	/// <returns>A random <see cref="DateTimeOffset"/> between the specified minimum and maximum.</returns>
 	public override DateTimeOffset Generate()
 	{
-		var ticks = Rng.NextInt64(_minTicks, _maxTicks);
+		var ticks = Rng.NextInt64(MinTicks, MaxTicks);
 		return new DateTimeOffset(ticks, TimeSpan.Zero);
 	}
 }

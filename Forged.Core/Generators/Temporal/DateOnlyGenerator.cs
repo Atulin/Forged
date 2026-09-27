@@ -8,8 +8,8 @@ namespace Forged.Core.Generators.Temporal;
 /// <param name="forge">The Forge instance to use.</param>
 public sealed class DateOnlyGenerator(DateOnly? min, DateOnly? max, Forge forge) : Generator<DateOnly>(forge)
 {
-	private readonly int _minDay = (min ?? DateOnly.MinValue).DayNumber;
-	private readonly int _maxDay = (max ?? DateOnly.MaxValue).DayNumber;
+	private readonly int MinDay = (min ?? DateOnly.MinValue).DayNumber;
+	private readonly int MaxDay = (max ?? DateOnly.MaxValue).DayNumber;
 
 	/// <summary>
 	/// Generates a random <see cref="DateOnly"/> value.
@@ -17,7 +17,7 @@ public sealed class DateOnlyGenerator(DateOnly? min, DateOnly? max, Forge forge)
 	/// <returns>A random <see cref="DateOnly"/> between the specified minimum and maximum.</returns>
 	public override DateOnly Generate()
 	{
-		var dayNumber = Rng.Next(_minDay, _maxDay);
+		var dayNumber = Rng.Next(MinDay, MaxDay);
 		return DateOnly.FromDayNumber(dayNumber);
 	}
 }

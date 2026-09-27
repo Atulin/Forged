@@ -3,21 +3,21 @@ using Rng = System.Random;
 
 namespace Forged.Core.Generators.Random.DiceGeneratorHelpers;
 
-public sealed class DiceParser(string expression, Rng random)
+public sealed class DiceParser(string expression)
 {
-	private readonly ImmutableArray<Token> _tokens = [.. new DiceLexer(expression).Lex()];
+	private readonly ImmutableArray<Token> Tokens = [.. DiceLexer.Lex(expression)];
 	private int _index;
 
 	public static double Evaluate(string expression, Rng random)
 	{
-		var parser = new DiceParser(expression, random);
+		var parser = new DiceParser(expression);
 		var ast = parser.ParseExpression();
 		parser.Expect(TokenType.End);
 		return ast.Evaluate(random);
 	}
 
-	private Token Current => _tokens[_index];
-	private Token Next() => _tokens[_index++];
+	private Token Current => Tokens[_index];
+	private Token Next() => Tokens[_index++];
 
 	private Token Expect(TokenType type) => Current.Type == type
 		? Next()

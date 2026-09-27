@@ -15,7 +15,7 @@ namespace Forged.Core.Generators.Internet;
 /// <param name="forge">The Forge instance to use.</param>
 public sealed class UsernameGenerator(float prefixChance, float suffixChance, float leetChance, Forge forge) : Generator<string>(forge)
 {
-	private readonly FrozenDictionary<char, string[]> _leetReplacements = new Dictionary<char, string[]>
+	private readonly FrozenDictionary<char, string[]> LeetReplacements = new Dictionary<char, string[]>
 	{
 		['a'] = ["4", "@", "^"],
 		['b'] = ["8", "I3", "l3"],
@@ -68,7 +68,7 @@ public sealed class UsernameGenerator(float prefixChance, float suffixChance, fl
 		var newCore = new List<char>(core.Length);
 		foreach (var ch in core)
 		{
-			if (Rng.Chance(leetChance) && _leetReplacements.TryGetValue(ch, out var replacement))
+			if (Rng.Chance(leetChance) && LeetReplacements.TryGetValue(ch, out var replacement))
 			{
 				newCore.AddRange(Rng.GetItem(replacement));
 			}

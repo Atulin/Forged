@@ -17,7 +17,7 @@ public sealed class CharGenerator(CharKind kind, Forge forge) : Generator<char>(
 	public override char Generate()
 	{
 		Span<char> pool = stackalloc char[CharPool.MaxLength];
-		var count = CharPool.FillCharPool(pool, kind);
+		var count = CharPool.Fill(pool, kind);
 		return pool[Rng.Next(count)];
 	}
 }

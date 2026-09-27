@@ -25,17 +25,19 @@ public sealed class WaffleGenerator(int sentences, WaffleStyle style, Forge forg
 			factoryArgument: corpus.Templates
 		);
 
+		var replacements = new Dictionary<string, Func<string>>
+		{
+			["subject"] = () => corpus.Subjects[Rng.Next(corpus.Subjects.Length)],
+			["verb"] = () => corpus.Verbs[Rng.Next(corpus.Verbs.Length)],
+			["object"] = () => corpus.Objects[Rng.Next(corpus.Objects.Length)],
+			["adjective"] = () => corpus.Adjectives[Rng.Next(corpus.Adjectives.Length)],
+		};
+
 		var sb = new StringBuilder();
 		for (var i = 0; i < sentences; i++)
 		{
 			var template = templates[Rng.Next(templates.Length)];
-			var rendered = TemplateCompiler.Render(template, new Dictionary<string, Func<string>>
-			{
-				["subject"] = () => corpus.Subjects[Rng.Next(corpus.Subjects.Length)],
-				["verb"] = () => corpus.Verbs[Rng.Next(corpus.Verbs.Length)],
-				["object"] = () => corpus.Objects[Rng.Next(corpus.Objects.Length)],
-				["adjective"] = () => corpus.Adjectives[Rng.Next(corpus.Adjectives.Length)],
-			}).AsSpan();
+			var rendered = TemplateCompiler.Render(template, replacements).AsSpan();
 			sb.Append(char.ToUpperInvariant(rendered[0]));
 			sb.Append(rendered[1..]);
 			sb.Append(' ');

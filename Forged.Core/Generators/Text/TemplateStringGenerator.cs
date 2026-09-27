@@ -1,4 +1,5 @@
 using System.Text;
+using Forged.Core.Core;
 
 namespace Forged.Core.Generators.Text;
 
@@ -46,11 +47,11 @@ public sealed class TemplateStringGenerator(
 			}
 			else if (c == letterToken)
 			{
-				sb.Append(Rng.GetItems(Constants.AlphanumericString.AsSpan()[..^10], 1));
+				sb.Append(Rng.GetItems(CharPool.Get(CharKind.Alphabetical), 1));
 			}
 			else if (c == alphanumericToken)
 			{
-				sb.Append(Rng.GetItems(Constants.AlphanumericString.AsSpan(), 1));
+				sb.Append(Rng.GetItems(CharPool.Get(CharKind.Alphanumeric), 1));
 			}
 			else
 			{

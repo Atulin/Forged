@@ -10,7 +10,7 @@ namespace Forged.Core.Generators.Network;
 /// </summary>
 public sealed class UriScheme(bool strip, Forge forge) : Generator<string>(forge)
 {
-	private readonly ImmutableArray<string> _protocols =
+	private readonly ImmutableArray<string> Protocols =
 	[
 		"file:///",
 		"ftp://",
@@ -28,7 +28,7 @@ public sealed class UriScheme(bool strip, Forge forge) : Generator<string>(forge
 
 	public override string Generate()
 	{
-		var scheme = Rng.GetItem(_protocols).AsSpan();
+		var scheme = Rng.GetItem(Protocols).AsSpan();
 
 		if (!strip)
 		{

@@ -11,7 +11,7 @@ public sealed class CharsGenerator(int minCount, int maxCount, CharKind kind, Fo
 	public override char[] Generate()
 	{
 		Span<char> pool = stackalloc char[CharPool.MaxLength];
-		var poolLength = CharPool.FillCharPool(pool, kind);
+		var poolLength = CharPool.Fill(pool, kind);
 
 		var count = minCount == maxCount
 			? minCount

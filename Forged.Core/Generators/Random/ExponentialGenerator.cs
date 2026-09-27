@@ -8,7 +8,7 @@ namespace Forged.Core.Generators.Random;
 /// <typeparam name="T">The numeric type to generate (must implement INumber&lt;T&gt;).</typeparam>
 public sealed class ExponentialGenerator<T>(T? rate, Forge forge) : Generator<T>(forge) where T : struct, INumber<T>
 {
-	private readonly double _rate = rate is null ? 1 : Validate(double.CreateTruncating(rate.Value));
+	private readonly double Rate = rate is null ? 1 : Validate(double.CreateTruncating(rate.Value));
 
 	private static double Validate(double rate)
 		=> rate > 0
@@ -22,7 +22,7 @@ public sealed class ExponentialGenerator<T>(T? rate, Forge forge) : Generator<T>
 	public override T Generate()
 	{
 		var u = 1.0 - Rng.NextDouble();
-		var value = -Math.Log(u) / _rate;
+		var value = -Math.Log(u) / Rate;
 
 		return T.CreateSaturating(value);
 	}

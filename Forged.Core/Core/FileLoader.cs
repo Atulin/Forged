@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
@@ -8,7 +8,7 @@ namespace Forged.Core.Core;
 
 internal sealed class FileLoader
 {
-	private readonly EmbeddedFileProvider _fileProvider = new(typeof(FileLoader).Assembly);
+	private readonly EmbeddedFileProvider FileProvider = new(typeof(FileLoader).Assembly);
 
 	private static class Cache<T> where T : class
 	{
@@ -53,6 +53,6 @@ internal sealed class FileLoader
 
 			using var stream = fileInfo.CreateReadStream();
 			return JsonSerializer.Deserialize(stream, info) ?? throw new JsonException($"Failed to deserialize {file} data for {target}");
-		}, factoryArgument: (_fileProvider, typeInfo));
+		}, factoryArgument: (FileProvider, typeInfo));
 	}
 }

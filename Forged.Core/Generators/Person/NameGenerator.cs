@@ -35,7 +35,7 @@ public sealed class NameGenerator(
 	Forge forge
 ) : Generator<string>(forge)
 {
-	private readonly LastNameGenerator _lastNameGenerator = new(hyphenated, compound, forge);
+	private readonly LastNameGenerator LastNameGenerator = new(hyphenated, compound, forge);
 
 	public override string Generate()
 	{
@@ -67,7 +67,7 @@ public sealed class NameGenerator(
 			segments.Add(Rng.GetItem(infixes));
 		}
 
-		segments.Add(_lastNameGenerator.Generate());
+		segments.Add(LastNameGenerator.Generate());
 
 		if (Rng.NextDouble() < suffix)
 		{

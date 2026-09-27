@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Forged.Core.Generators;
+using Forged.Core.Generators.Utility;
 using Forged.Core.Generators.Utility.Text;
 
 namespace Forged.Core.Extensions;
@@ -39,6 +40,14 @@ public static class StringGeneratorExtensions
 		/// <returns>A generator that produces substrings within the specified range.</returns>
 		public Generator<string> Range(int start, int? end = null)
 			=> new RangeGenerator(generator, start, end, generator.Forge);
+
+		/// <summary>
+		/// Creates a generator that extracts a substring from the generated strings using the specified range.
+		/// </summary>
+		/// <param name="range">The range representing the start and optional end indices of the substring to extract.</param>
+		/// <returns>A generator that produces substrings based on the specified range.</returns>
+		public Generator<string> Range(Range range)
+			=> new RefineGenerator<string, string>(generator, s => s[range], generator.Forge);
 
 		/// <summary>
 		/// Creates a generator that replaces all occurrences of a specified string in the generated text with another string.

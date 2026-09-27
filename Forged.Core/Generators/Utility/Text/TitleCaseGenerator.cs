@@ -11,11 +11,11 @@ namespace Forged.Core.Generators.Utility.Text;
 public sealed class TitleCaseGenerator(Generator<string> innerGenerator, Forge forge, CultureInfo? cultureInfo = null)
 	: Generator<string>(forge)
 {
-	private readonly TextInfo _textInfo = (cultureInfo ?? forge.Locale).TextInfo;
+	private readonly TextInfo TextInfo = (cultureInfo ?? forge.Locale).TextInfo;
 
 	/// <summary>
 	/// Generates a title case string.
 	/// </summary>
 	/// <returns>A title case string.</returns>
-	public override string Generate() => _textInfo.ToTitleCase(innerGenerator.Generate());
+	public override string Generate() => TextInfo.ToTitleCase(innerGenerator.Generate());
 }
