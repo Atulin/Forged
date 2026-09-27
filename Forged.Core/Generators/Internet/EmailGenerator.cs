@@ -14,7 +14,7 @@ public sealed class EmailGenerator(EmailKind kind, IGenerator<string>? nameGener
 {
 	public override string Generate()
 	{
-		var providers = FileLoader.LoadData(Locale.Name, "internet/email", CommonContext.Default.ListString);
+		var providers = FileLoader.LoadData(Locale, "internet/email", CommonContext.Default.ListString);
 
 		var name = (nameGenerator ?? Forge.Internet.Username(leetChance: 0)).Generate();
 

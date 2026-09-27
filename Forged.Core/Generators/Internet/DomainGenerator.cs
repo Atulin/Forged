@@ -16,7 +16,7 @@ public sealed class DomainGenerator(float ccSldChance, Forge forge) : Generator<
 	/// <returns>A random domain.</returns>
 	public override string Generate()
 	{
-		var data = FileLoader.LoadData("en", "internet/domains", DomainDataContext.Default.DomainData);
+		var data = FileLoader.LoadData("internet/domains", DomainDataContext.Default.DomainData);
 
 		var domain = Rng.GetItem(data.Tld);
 		if (ccSldChance <= 0 || !Rng.Chance(ccSldChance))

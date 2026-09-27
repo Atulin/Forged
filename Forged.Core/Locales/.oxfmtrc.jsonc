@@ -1,13 +1,16 @@
 {
 	"overrides": [
 		{
-			"files": ["*.jsonc"],
+			"files": [
+				"*.jsonc"
+			],
 			"options": {
 				"tabWidth": 4,
 				"useTabs": true,
 				"trailingComma": "all",
 				"singleQuote": false,
 				"quoteProps": "preserve",
+				"objectWrap": "preserve",
 			},
 		},
 	],

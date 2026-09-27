@@ -23,7 +23,7 @@ public abstract class Generator<T>(Forge forge) : IGenerator<T>
 
 	internal FileLoader FileLoader => Forge.FileLoader;
 
-	
+
 	/// <summary>
 	/// Generates a random value of type <typeparamref name="T"/>
 	/// </summary>
@@ -64,7 +64,7 @@ public abstract class Generator<T>(Forge forge) : IGenerator<T>
 	/// <returns>A generator that produces transformed values.</returns>
 	public Generator<TNew> Refine<TNew>(Func<T, TNew> refiner)
 		=> new RefineGenerator<T, TNew>(this, refiner, Forge);
-	
+
 	/// <summary>
 	/// Creates a generator that produces an enumerable of generated values with a fixed length.
 	/// </summary>
@@ -72,7 +72,7 @@ public abstract class Generator<T>(Forge forge) : IGenerator<T>
 	/// <returns>A generator that produces enumerables of generated values.</returns>
 	public Generator<IEnumerable<T>> Enumerable(int length)
 		=> new EnumerableGenerator<T>(this, length, length, Forge);
-	
+
 	/// <summary>
 	/// Creates a generator that produces an enumerable of generated values with a variable length.
 	/// </summary>
@@ -81,7 +81,7 @@ public abstract class Generator<T>(Forge forge) : IGenerator<T>
 	/// <returns>A generator that produces enumerables of generated values.</returns>
 	public Generator<IEnumerable<T>> Enumerable(int minLength, int maxLength)
 		=> new EnumerableGenerator<T>(this, minLength, maxLength, Forge);
-	
+
 	/// <summary>
 	/// Creates a generator that produces an array of generated values with a fixed length.
 	/// </summary>
@@ -89,7 +89,7 @@ public abstract class Generator<T>(Forge forge) : IGenerator<T>
 	/// <returns>A generator that produces arrays of generated values.</returns>
 	public Generator<T[]> Array(int length)
 		=> new EnumerableGenerator<T>(this, length, length, Forge).Refine<T[]>(static e => e.ToArray());
-	
+
 	/// <summary>
 	/// Creates a generator that produces an array of generated values with a variable length.
 	/// </summary>
@@ -98,7 +98,7 @@ public abstract class Generator<T>(Forge forge) : IGenerator<T>
 	/// <returns>A generator that produces arrays of generated values.</returns>
 	public Generator<T[]> Array(int minLength, int maxLength)
 		=> new EnumerableGenerator<T>(this, minLength, maxLength, Forge).Refine<T[]>(static e => e.ToArray());
-	
+
 	/// <summary>
 	/// Creates a generator that produces a list of generated values with a fixed length.
 	/// </summary>
@@ -106,7 +106,7 @@ public abstract class Generator<T>(Forge forge) : IGenerator<T>
 	/// <returns>A generator that produces lists of generated values.</returns>
 	public Generator<List<T>> List(int length)
 		=> new EnumerableGenerator<T>(this, length, length, Forge).Refine<List<T>>(static e => e.ToList());
-	
+
 	/// <summary>
 	/// Creates a generator that produces a list of generated values with a variable length.
 	/// </summary>
@@ -115,7 +115,7 @@ public abstract class Generator<T>(Forge forge) : IGenerator<T>
 	/// <returns>A generator that produces lists of generated values.</returns>
 	public Generator<List<T>> List(int minLength, int maxLength)
 		=> new EnumerableGenerator<T>(this, minLength, maxLength, Forge).Refine<List<T>>(static e => e.ToList());
-	
+
 	/// <summary>
 	/// Creates a generator that produces a hash set of generated values with a fixed length.
 	/// </summary>
@@ -123,7 +123,7 @@ public abstract class Generator<T>(Forge forge) : IGenerator<T>
 	/// <returns>A generator that produces hash sets of generated values.</returns>
 	public Generator<HashSet<T>> HashSet(int length)
 		=> new EnumerableGenerator<T>(this, length, length, Forge).Refine<HashSet<T>>(static e => e.ToHashSet());
-	
+
 	/// <summary>
 	/// Creates a generator that produces a hash set of generated values with a variable length.
 	/// </summary>
@@ -156,7 +156,7 @@ public abstract class Generator<T>(Forge forge) : IGenerator<T>
 		var value = Generate();
 		return new LiteralGenerator<TOut?>((TOut?)value, Forge);
 	}
-	
+
 	/// <summary>
 	/// Returns a string representation of the generated value.
 	/// </summary>

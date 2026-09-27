@@ -14,10 +14,10 @@ public sealed class AlphaStringGenerator(int minLength, int maxLength, Forge for
 	/// <returns>A random alphabetic string.</returns>
 	public override string Generate()
 	{
-		var length = minLength == maxLength 
-			? minLength 
+		var length = minLength == maxLength
+			? minLength
 			: Rng.Next(minLength, maxLength + 1);
-		
+
 		return Rng.GetString(Constants.AlphanumericString.AsSpan()[..^10], length);
 	}
 }

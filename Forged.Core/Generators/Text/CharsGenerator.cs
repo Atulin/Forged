@@ -12,11 +12,11 @@ public sealed class CharsGenerator(int minCount, int maxCount, CharKind kind, Fo
 	{
 		Span<char> pool = stackalloc char[CharPool.MaxLength];
 		var poolLength = CharPool.FillCharPool(pool, kind);
-		
-		var count = minCount == maxCount 
-			? minCount 
+
+		var count = minCount == maxCount
+			? minCount
 			: Rng.Next(minCount, maxCount);
-		
+
 		return Rng.GetItems(pool[..poolLength], count);
 	}
 }

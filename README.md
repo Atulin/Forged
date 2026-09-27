@@ -8,12 +8,14 @@
 
 A fast, strict, and strongly-typed data generator (faker) for C# powered by Source Generators.
 
-Forged allows you to declaratively define how your models should be faked, leveraging the C# compiler to enforce required properties, nullability, and type-safety.
+Forged allows you to declaratively define how your models should be faked, leveraging the C# compiler to enforce
+required properties, nullability, and type-safety.
 
 ## Features
 
 - 🚀 **Source Generated**: No reflection, fast at runtime, and fully trim/AOT compatible.
-- 🛡️ **Strict & Type-Safe**: Respects your class properties. If a property in your model is `required`, the faker will force you to provide a generator for it at compile time.
+- 🛡️ **Strict & Type-Safe**: Respects your class properties. If a property in your model is `required`, the faker will
+  force you to provide a generator for it at compile time.
 - 🌊 **Fluent API**: A clean and readable fluent API for configuring generators and their modifiers.
 - 🎲 **Deterministic**: Pass a seeded `Random` instance to the faker to generate the exact same data every time.
 - 🌐 **Localized**: Pass a `CultureInfo` to localize generated data and locale-aware modifiers.
@@ -90,7 +92,8 @@ var faker = new PersonFaker(new Random(12345))
 
 ### Localization
 
-You can optionally provide a `CultureInfo` instance to the faker, which will be utilized by modifiers and generators that support localization:
+You can optionally provide a `CultureInfo` instance to the faker, which will be utilized by modifiers and generators
+that support localization:
 
 ```csharp
 var faker = new PersonFaker(locale: new CultureInfo("fr-FR"))
@@ -121,10 +124,12 @@ var faker = new PersonFaker
 The `Forge` instance (`f` in the lambda expressions) provides access to built-in generators categorized by modules:
 
 ### `Basic`
+
 - `.Literal(T value)` - Creates a generator that always returns the specified literal value.
 - `.Func(Func<T> func)` - Creates a generator that invokes the specified function.
 
 ### `Random`
+
 - `.CoinToss()` - Generate a random boolean (heads/tails).
 - `.Pick<T>(params T[] items)` - Pick a single random item from the given collection.
 - `.Pick<T>(T[] items, int count)` - Pick an exact number of random items from the collection.
@@ -132,18 +137,27 @@ The `Forge` instance (`f` in the lambda expressions) provides access to built-in
 - `.Pick<TEnum>()` - Pick a random value from an enum (`T : struct, Enum`).
 - `.PickUnique<T>(T[] items, int count)` - Pick an exact number of unique items from the collection.
 - `.PickUnique<T>(T[] items, int minCount, int maxCount)` - Pick a variable number of unique items from the collection.
-- `Number<T>(T? min, T? max)` - Generate a random numeric value within the specified range (supports all `INumber<T>` types).
-- `Uniform<T>(T? min, T? max)` - Generate a random numeric value uniformly distributed within the specified range (same as `Number`).
-- `Normal<T>(T? mean, T? stdDev)` - Generate a random numeric value from a normal (Gaussian) distribution (defaults: mean `0`, stdDev `1`).
-- `Exponential<T>(T? rate)` - Generate a random non-negative numeric value from an exponential distribution (default rate `1`, mean = `1/rate`).
-- `Bernoulli<T>(T? probability)` - Generate a random `1` or `0` from a Bernoulli distribution with the given success probability (default `0.5`).
-- `Poisson<T>(T? lambda)` - Generate a random non-negative integer from a Poisson distribution with the given mean (default `1`).
-- `LogNormal<T>(T? mean, T? stdDev)` - Generate a random positive numeric value from a log-normal distribution (defaults: underlying mean `0`, stdDev `1`).
-- `WeightedPick<T>(T[] items, float[] weights)` - Pick an item from the collection using specified weights for probability distribution.
+- `Number<T>(T? min, T? max)` - Generate a random numeric value within the specified range (supports all `INumber<T>`
+  types).
+- `Uniform<T>(T? min, T? max)` - Generate a random numeric value uniformly distributed within the specified range (same
+  as `Number`).
+- `Normal<T>(T? mean, T? stdDev)` - Generate a random numeric value from a normal (Gaussian) distribution (defaults:
+  mean `0`, stdDev `1`).
+- `Exponential<T>(T? rate)` - Generate a random non-negative numeric value from an exponential distribution (default
+  rate `1`, mean = `1/rate`).
+- `Bernoulli<T>(T? probability)` - Generate a random `1` or `0` from a Bernoulli distribution with the given success
+  probability (default `0.5`).
+- `Poisson<T>(T? lambda)` - Generate a random non-negative integer from a Poisson distribution with the given mean
+  (default `1`).
+- `LogNormal<T>(T? mean, T? stdDev)` - Generate a random positive numeric value from a log-normal distribution
+  (defaults: underlying mean `0`, stdDev `1`).
+- `WeightedPick<T>(T[] items, float[] weights)` - Pick an item from the collection using specified weights for
+  probability distribution.
 - `WeightedPick<T>((T item, float weight)[] items)` - Pick an item from an array of item-weight tuples.
 - `Dice(string expression, RoundingMode mode)` - Roll dice using a dice expression (e.g. `2d6+1d10-3`).
 
 ### `Temporal`
+
 - `Between(DateTime? min, DateTime? max)` - Generate a random `DateTime` within the specified range.
 - `Past(DateTime? earliest)` - Generate a random `DateTime` in the past, with an optional earliest bound.
 - `Future(DateTime? latest)` - Generate a random `DateTime` in the future, with an optional latest bound.
@@ -151,74 +165,108 @@ The `Forge` instance (`f` in the lambda expressions) provides access to built-in
 - `DateInPast(DateOnly? earliest)` - Generate a random `DateOnly` in the past, with an optional earliest bound.
 - `DateInFuture(DateOnly? latest)` - Generate a random `DateOnly` in the future, with an optional latest bound.
 - `TimeBetween(TimeOnly? min, TimeOnly? max)` - Generate a random `TimeOnly` within the specified range.
-- `DateTimeOffsetBetween(DateTimeOffset? min, DateTimeOffset? max)` - Generate a random `DateTimeOffset` within the specified range.
-- `DateTimeOffsetInPast(DateTimeOffset? earliest)` - Generate a random `DateTimeOffset` in the past, with an optional earliest bound.
-- `DateTimeOffsetInFuture(DateTimeOffset? latest)` - Generate a random `DateTimeOffset` in the future, with an optional latest bound.
+- `DateTimeOffsetBetween(DateTimeOffset? min, DateTimeOffset? max)` - Generate a random `DateTimeOffset` within the
+  specified range.
+- `DateTimeOffsetInPast(DateTimeOffset? earliest)` - Generate a random `DateTimeOffset` in the past, with an optional
+  earliest bound.
+- `DateTimeOffsetInFuture(DateTimeOffset? latest)` - Generate a random `DateTimeOffset` in the future, with an optional
+  latest bound.
 - `TimeSpanBetween(TimeSpan? min, TimeSpan? max)` - Generate a random `TimeSpan` within the specified range.
 
 ### `Text`
+
 - `Alphanumeric(int length)` - Generate a random alphanumeric string of fixed length.
 - `Alphanumeric(int minLength, int maxLength)` - Generate a random alphanumeric string of variable length.
 - `Alpha(int length)` - Generate a random alphabetic string of fixed length.
 - `Alpha(int minLength, int maxLength)` - Generate a random alphabetic string of variable length.
 - `Pronounceable(int length)` - Generate a random pronounceable string (syllable-based) of fixed length.
 - `Pronounceable(int minLength, int maxLength)` - Generate a random pronounceable string of variable length.
-- `Lorem(int length, LoremIpsumGenerator.Options? options = null)` - Generate Lorem Ipsum text with a fixed number of words.
-- `Lorem(int minLength, int maxLength, LoremIpsumGenerator.Options? options = null)` - Generate Lorem Ipsum text with a variable number of words.
-- `Waffle(int sentences, WaffleStyle style = WaffleStyle.Technical)` - Generate dummy filler sentences (e.g. `WaffleStyle.Fiction`, `WaffleStyle.Technical`).
+- `Lorem(int length, LoremIpsumGenerator.Options? options = null)` - Generate Lorem Ipsum text with a fixed number of
+  words.
+- `Lorem(int minLength, int maxLength, LoremIpsumGenerator.Options? options = null)` - Generate Lorem Ipsum text with a
+  variable number of words.
+- `Waffle(int sentences, WaffleStyle style = WaffleStyle.Technical)` - Generate dummy filler sentences (e.g.
+  `WaffleStyle.Fiction`, `WaffleStyle.Technical`).
 - `Hex(int length)` - Generate a random hexadecimal string of fixed length.
 - `Hex(int minLength, int maxLength)` - Generate a random hexadecimal string of variable length.
 - `Guid(GuidGenerator.Kind kind = Kind.V4)` - Generate a GUID of the specified kind (supports V4 and V7).
-- `Template(string template)` - Generate a string from a template with random placeholder replacements (`#` digit, `?` letter, `*` alphanumeric).
-- `Char(CharKind kind = CharKind.Printable)` - Generate a random character (e.g. `CharKind.Ascii`, `Printable`, `Alphanumeric`, `Alphabetical`, `Numeric`).
+- `Template(string template)` - Generate a string from a template with random placeholder replacements (`#` digit, `?`
+  letter, `*` alphanumeric).
+- `Char(CharKind kind = CharKind.Printable)` - Generate a random character (e.g. `CharKind.Ascii`, `Printable`,
+  `Alphanumeric`, `Alphabetical`, `Numeric`).
 - `Chars(int count, CharKind kind = CharKind.Printable)` - Generate a random character array of fixed length.
-- `Chars(int minCount, int maxCount, CharKind kind = CharKind.Printable)` - Generate a random character array of variable length.
+- `Chars(int minCount, int maxCount, CharKind kind = CharKind.Printable)` - Generate a random character array of
+  variable length.
 - `Emoji()` - Generate a random emoji (sourced from unicode.org data).
 - `EmojiRunes()` - Generate a random emoji as an array of `System.Text.Rune`.
 
 ### `Internet`
-- `Username(float prefixChance = 0.5f, float suffixChance = 0.5f, float leetChance = 0.1f)` - Generates a random username with configurable probability for including prefixes, suffixes, and leet-speak character substitutions.
+
+- `Username(float prefixChance = 0.5f, float suffixChance = 0.5f, float leetChance = 0.1f)` - Generates a random
+  username with configurable probability for including prefixes, suffixes, and leet-speak character substitutions.
 - `Domain(float ccSldChance = 0.0f)` - Generates a random domain name.
-- `Email(EmailKind kind = EmailKind.Random, IGenerator<string>? provider = null)` - Generates a random email address (`EmailKind.Known`, `EmailKind.Example`, or with a custom provider).
+- `Email(EmailKind kind = EmailKind.Random, IGenerator<string>? provider = null)` - Generates a random email address
+  (`EmailKind.Known`, `EmailKind.Example`, or with a custom provider).
 
 ### `Network`
-- `Ipv4(float publicChance = 1.0f)` - Generates a random IPv4 address. When `publicChance` is 1, reserved ranges (private, loopback, multicast, etc.) are excluded.
-- `Ipv6(float publicChance = 1.0f)` - Generates a random IPv6 address. When `publicChance` is 1, the address is restricted to global unicast (`2000::/3`).
-- `IpAddress(float publicChance = 1.0f, float ipv6Chance = 0.45f)` - Generates a random IP address, picking IPv4 or IPv6 per generation based on `ipv6Chance`.
-- `Port(float wellKnownChance = 0.0f)` - Generates a random network port. When `wellKnownChance` is 0, well-known ports (1–1023) are excluded.
-- `Endpoint(float ipv6Chance = 0.45f, float publicChance = 1.0f, float wellKnownPortChance = 0.0f)` - Generates a random `IPEndPoint` combining an IP address and a port.
+
+- `Ipv4(float publicChance = 1.0f)` - Generates a random IPv4 address. When `publicChance` is 1, reserved ranges
+  (private, loopback, multicast, etc.) are excluded.
+- `Ipv6(float publicChance = 1.0f)` - Generates a random IPv6 address. When `publicChance` is 1, the address is
+  restricted to global unicast (`2000::/3`).
+- `IpAddress(float publicChance = 1.0f, float ipv6Chance = 0.45f)` - Generates a random IP address, picking IPv4 or IPv6
+  per generation based on `ipv6Chance`.
+- `Port(float wellKnownChance = 0.0f)` - Generates a random network port. When `wellKnownChance` is 0, well-known ports
+  (1–1023) are excluded.
+- `Endpoint(float ipv6Chance = 0.45f, float publicChance = 1.0f, float wellKnownPortChance = 0.0f)` - Generates a random
+  `IPEndPoint` combining an IP address and a port.
 - `Ipv4Endpoint(float publicChance = 1.0f, float wellKnownPortChance = 0.0f)` - Generates a random IPv4 `IPEndPoint`.
 - `Ipv6Endpoint(float publicChance = 1.0f, float wellKnownPortChance = 0.0f)` - Generates a random IPv6 `IPEndPoint`.
-- `UriScheme(bool strip = false)` - Generates a random URI scheme from well-known protocols (e.g. `https://`, `mailto:`). Pass `strip: true` to drop the colon and path delimiters (e.g. `https`, `mailto`).
-- `MacAddress(float locallyAdministeredChance = 0.0f)` - Generates a random unicast MAC address. When `locallyAdministeredChance` is 1, the locally-administered bit is set (per IEEE 802).
+- `UriScheme(bool strip = false)` - Generates a random URI scheme from well-known protocols (e.g. `https://`,
+  `mailto:`). Pass `strip: true` to drop the colon and path delimiters (e.g. `https`, `mailto`).
+- `MacAddress(float locallyAdministeredChance = 0.0f)` - Generates a random unicast MAC address. When
+  `locallyAdministeredChance` is 1, the locally-administered bit is set (per IEEE 802).
 
 ### `Finance`
-- `Currency()`, `CurrencyCode()`, `CurrencyName()`, `CurrencySymbol()`, `CurrencyNumericCode()` - Generate currency names and ISO 4217 values.
-- `Iban(bool valid = true, bool test = false)` / `Iban(string countryCode, bool valid = true, bool test = false)` - Generate a valid IBAN, optionally for a specific country. The country code is case-insensitive and must be a supported IBAN country, otherwise an `ArgumentOutOfRangeException` is thrown.
+
+- `Currency()`, `CurrencyCode()`, `CurrencyName()`, `CurrencySymbol()`, `CurrencyNumericCode()` - Generate currency
+  names and ISO 4217 values.
+- `Iban(bool valid = true, bool test = false)` / `Iban(string countryCode, bool valid = true, bool test = false)` -
+  Generate a valid IBAN, optionally for a specific country. The country code is case-insensitive and must be a supported
+  IBAN country, otherwise an `ArgumentOutOfRangeException` is thrown.
 - `Bic(bool valid = true, bool test = false)` / `Swift(...)` - Generate ISO 9362 Business Identifier Codes.
 - `RoutingNumber(bool valid = true, bool test = false)` - Generate a nine-digit ABA routing number.
 - `AccountNumber(int length = 8)` - Generate a numeric account number.
-- `CreditCardNumber(CardOperator cardOperator = CardOperator.All, bool valid = true, bool test = false)` - Generate a card number for selected networks and optionally calculate its Luhn check digit.
-- `CreditCardCvv(CardOperator cardOperator = CardOperator.All)` - Generate a network-appropriate three- or four-digit security code.
-- `CreditCardExpirationDate(DateTimeOffset? today = null, float expirationChance = .5f)` - Generate an expiration month relative to today.
+- `CreditCardNumber(CardOperator cardOperator = CardOperator.All, bool valid = true, bool test = false)` - Generate a
+  card number for selected networks and optionally calculate its Luhn check digit.
+- `CreditCardCvv(CardOperator cardOperator = CardOperator.All)` - Generate a network-appropriate three- or four-digit
+  security code.
+- `CreditCardExpirationDate(DateTimeOffset? today = null, float expirationChance = .5f)` - Generate an expiration month
+  relative to today.
 
 ### `Person`
+
 - `FirstName(float male = 0.5f, float female = 0.5f)` - Generate a first name based on gender probabilities.
 - `LastName(float hyphenated = 0.04f, float compound = 0.02f)` - Generate a single, hyphenated, or compound last name.
 - `NamePrefix()` - Generate a name prefix (titles and honorifics, e.g. "Dr.", "Mrs.").
 - `NameInfix()` - Generate a name infix (e.g. "van", "de").
 - `NameSuffix()` - Generate a name suffix (e.g. "Jr.", "Sr.", "III").
-- `FullName(...)` - Generate a full name, with probabilities for gender, middle name, hyphenation, compound names, prefix, infix, and suffix.
+- `FullName(...)` - Generate a full name, with probabilities for gender, middle name, hyphenation, compound names,
+  prefix, infix, and suffix.
 
 ## Modifiers & Extensions
 
-Any `Generator<T>` can be customized and composed using fluent methods. These methods can be chained to create complex generation pipelines.
+Any `Generator<T>` can be customized and composed using fluent methods. These methods can be chained to create complex
+generation pipelines.
 
 ### Core Modifiers (on `Generator<T>`)
-- `.Or(T other, float probability)` - Returns an alternative value with the specified probability (e.g., 0.2f = 20% chance).
+
+- `.Or(T other, float probability)` - Returns an alternative value with the specified probability (e.g., 0.2f = 20%
+  chance).
 - `.OrDefault(float probability)` - Returns the default value for type T with the specified probability.
 - `.Refine<TNew>(Func<T, TNew> refiner)` - Transforms the generated value using the provided function.
-- `.Memo(out MemoValueGenerator<T> value)` - Captures the generated value for reuse within the same generation cycle. Use the captured `MemoValueGenerator<T>` inside other generators (via its implicit conversion to `T`).
+- `.Memo(out MemoValueGenerator<T> value)` - Captures the generated value for reuse within the same generation cycle.
+  Use the captured `MemoValueGenerator<T>` inside other generators (via its implicit conversion to `T`).
 - `.Enumerable(int length)` - Generates an `IEnumerable<T>` with a fixed number of items.
 - `.Enumerable(int minLength, int maxLength)` - Generates an `IEnumerable<T>` with a variable number of items.
 - `.Array(int length)` - Generates a `T[]` array with a fixed number of items.
@@ -230,28 +278,36 @@ Any `Generator<T>` can be customized and composed using fluent methods. These me
 - `.Cast<TOut>()` - Casts the generated value to the specified type.
 
 ### Nullable & Struct Extensions
+
 - `.OrNull(float probability)` - For struct generators, returns null with the specified probability.
 - `.Nullable()` - Converts a struct generator to a nullable struct generator.
 
 ### Enumerable & Collection Extensions
+
 - `.Shuffle()` - Shuffles the generated `IEnumerable<T>`.
 - `.AsList()` - Converts an `IEnumerable<T>` or `ICollection<T>` generator to a `List<T>` generator.
 - `.AsHashSet()` - Converts an `IEnumerable<T>` or `ICollection<T>` generator to a `HashSet<T>` generator.
-- `.AsDictionary<T, TKey, TValue>(keySelector, valueSelector)` - Converts an `IEnumerable<T>` generator to a `Dictionary<TKey, TValue>` using the provided selectors.
+- `.AsDictionary<T, TKey, TValue>(keySelector, valueSelector)` - Converts an `IEnumerable<T>` generator to a
+  `Dictionary<TKey, TValue>` using the provided selectors.
 
 ### String-Specific Extensions
+
 - `.ToUpper()` - Converts generated strings to uppercase.
 - `.ToLower()` - Converts generated strings to lowercase.
 - `.Range(int start, int? end = null)` - Produces substrings within the specified range.
 - `.Replace(string oldValue, string newValue)` - Replaces all occurrences of a specified string with another string.
 - `.Replace(char oldValue, char newValue)` - Replaces all occurrences of a specified char with another char.
 - `.Replace(Regex regex, string newValue)` - Replaces substrings matching a regular expression with another string.
-- `.ToTitleCase(CultureInfo? cultureInfo = null)` - Converts generated strings to title case using the specified culture.
+- `.ToTitleCase(CultureInfo? cultureInfo = null)` - Converts generated strings to title case using the specified
+  culture.
 - `.Capitalize(CultureInfo? cultureInfo = null)` - Capitalizes the first character of generated strings.
-- `.Sentencify(int sentenceLength, CultureInfo? cultureInfo = null)` - Formats strings as proper sentences with a fixed word count.
-- `.Sentencify(int minSentenceLength, int maxSentenceLength, CultureInfo? cultureInfo = null)` - Formats strings as proper sentences with a variable word count.
+- `.Sentencify(int sentenceLength, CultureInfo? cultureInfo = null)` - Formats strings as proper sentences with a fixed
+  word count.
+- `.Sentencify(int minSentenceLength, int maxSentenceLength, CultureInfo? cultureInfo = null)` - Formats strings as
+  proper sentences with a variable word count.
 
 ### Temporal-Specific Extensions (DateTime)
+
 - `.ToUtc()` - Converts generated DateTime values to UTC.
 - `.ToLocal()` - Converts generated DateTime values to local time.
 - `.ToDateOnly()` - Extracts the date component from DateTime values, producing DateOnly.
@@ -259,8 +315,10 @@ Any `Generator<T>` can be customized and composed using fluent methods. These me
 - `.TruncateToDate()` - Truncates DateTime values to date precision (sets time to midnight).
 
 ### Formatting Extensions
+
 - `.ToString()` - Converts generated values to their string representation.
-- `.ToString(string format, CultureInfo? cultureInfo = null)` - Converts generated values to formatted strings using the specified format and culture (for types implementing `ISpanFormattable`).
+- `.ToString(string format, CultureInfo? cultureInfo = null)` - Converts generated values to formatted strings using the
+  specified format and culture (for types implementing `ISpanFormattable`).
 
 ## Development
 
@@ -272,4 +330,5 @@ Forged uses a [Taskfile](https://taskfile.dev) (`taskfile.yml`) and scripts in `
 - `task format-locale` - Format the locale data files.
 - `task test` - Run the test suite with coverage.
 
-Locale data is stored as embedded `.jsonc` files under `Forged.Core/Locales/` (currently `en`, with fallback for other locales).
+Locale data is stored as embedded `.jsonc` files under `Forged.Core/Locales/` (currently `en`, with fallback for other
+locales).

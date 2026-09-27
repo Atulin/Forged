@@ -14,10 +14,10 @@ public sealed class HexStringGenerator(int minLength, int maxLength, Forge forge
 	/// <returns>A random hexadecimal string.</returns>
 	public override string Generate()
 	{
-		var length = minLength == maxLength 
-			? minLength 
+		var length = minLength == maxLength
+			? minLength
 			: Rng.Next(minLength, maxLength + 1);
-		
+
 		return Rng.GetHexString(length);
 	}
 }

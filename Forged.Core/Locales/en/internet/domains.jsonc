@@ -14,5 +14,14 @@
 		"uk",
 		"nz",
 	],
-	"CcSld": ["co", "com", "gov", "edu", "mil", "ac", "net", "org"],
+	"CcSld": [
+		"co",
+		"com",
+		"gov",
+		"edu",
+		"mil",
+		"ac",
+		"net",
+		"org"
+	],
 }

@@ -8,7 +8,8 @@ namespace Forged.Core.Generators.Utility.Text;
 /// <param name="innerGenerator">The inner generator that produces strings.</param>
 /// <param name="forge">The Forge instance to use.</param>
 /// <param name="cultureInfo">The culture to use for title case conversion. If null, uses the Forge's locale.</param>
-public sealed class TitleCaseGenerator(Generator<string> innerGenerator, Forge forge, CultureInfo? cultureInfo = null) : Generator<string>(forge)
+public sealed class TitleCaseGenerator(Generator<string> innerGenerator, Forge forge, CultureInfo? cultureInfo = null)
+	: Generator<string>(forge)
 {
 	private readonly TextInfo _textInfo = (cultureInfo ?? forge.Locale).TextInfo;
 

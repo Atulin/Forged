@@ -30,7 +30,7 @@ public sealed class SentencifyGenerator(
 		var words = str.Split(' ');
 
 		var builder = new StringBuilder();
-		
+
 		var length = 0;
 		foreach (var wordRange in words)
 		{
@@ -39,12 +39,12 @@ public sealed class SentencifyGenerator(
 
 			if (length == 1)
 			{
-				Span<char> cap = [char.ToUpper(word[0], cultureInfo ?? Locale), ..word[1..]];
+				Span<char> cap = [char.ToUpper(word[0], cultureInfo ?? Locale), .. word[1..]];
 				builder.Append(cap);
 				builder.Append(' ');
 				continue;
 			}
-			
+
 			if (length >= minSentenceLength && (length >= maxSentenceLength || Rng.Chance(0.15f)))
 			{
 				builder.Append(word);
@@ -53,7 +53,7 @@ public sealed class SentencifyGenerator(
 				length = 0;
 				continue;
 			}
-			
+
 			builder.Append(word);
 			builder.Append(' ');
 		}
@@ -64,7 +64,7 @@ public sealed class SentencifyGenerator(
 		{
 			builder.Append('.');
 		}
-		
+
 		return builder.ToString();
 	}
 }

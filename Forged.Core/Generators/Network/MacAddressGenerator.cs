@@ -24,12 +24,12 @@ public sealed class MacAddressGenerator(float locallyAdministeredChance, Forge f
 		Span<byte> bytes = stackalloc byte[6];
 		Rng.NextBytes(bytes);
 
-		bytes[0] = Rng.Chance(locallyAdministeredChance) 
+		bytes[0] = Rng.Chance(locallyAdministeredChance)
 			// Set Unicast bit (LSB = 0) and Locally Administered bit (2nd LSB = 1)
-			? (byte)(bytes[0] & 0xFE | 0x02) 
+			? (byte)(bytes[0] & 0xFE | 0x02)
 			// Ensure Unicast bit only (LSB = 0)
 			: (byte)(bytes[0] & 0xFE);
 
-		return new PhysicalAddress([..bytes]);
+		return new PhysicalAddress([.. bytes]);
 	}
 }

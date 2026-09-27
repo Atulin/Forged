@@ -21,7 +21,7 @@ public static class StringGeneratorExtensions
 		/// <returns>A generator that produces uppercase strings.</returns>
 		public Generator<string> ToUpper()
 			=> new UppercaseGenerator(generator, generator.Forge);
-		
+
 		/// <summary>
 		/// Creates a generator that converts strings to lowercase.
 		/// </summary>
@@ -67,7 +67,7 @@ public static class StringGeneratorExtensions
 		/// <returns>A generator that produces strings with substrings replaced according to the specified regular expression and replacement value.</returns>
 		public Generator<string> Replace(Regex regex, string newValue)
 			=> new RegexReplaceGenerator(generator, regex, newValue, generator.Forge);
-		
+
 		/// <summary>
 		/// Creates a generator that converts strings to title case.
 		/// </summary>
@@ -75,7 +75,7 @@ public static class StringGeneratorExtensions
 		/// <returns>A generator that produces title case strings.</returns>
 		public Generator<string> ToTitleCase(CultureInfo? cultureInfo = null)
 			=> new TitleCaseGenerator(generator, generator.Forge, cultureInfo);
-		
+
 		/// <summary>
 		/// Creates a generator that capitalizes the first character of strings.
 		/// </summary>
@@ -83,7 +83,7 @@ public static class StringGeneratorExtensions
 		/// <returns>A generator that produces strings with the first character capitalized.</returns>
 		public Generator<string> Capitalize(CultureInfo? cultureInfo = null)
 			=> new CapitalizeGenerator(generator, generator.Forge, cultureInfo);
-		
+
 		/// <summary>
 		/// Creates a generator that converts strings into properly formatted sentences.
 		/// </summary>
@@ -92,7 +92,7 @@ public static class StringGeneratorExtensions
 		/// <returns>A generator that produces properly formatted sentences.</returns>
 		public Generator<string> Sentencify(int sentenceLength, CultureInfo? cultureInfo = null)
 			=> new SentencifyGenerator(generator, sentenceLength, sentenceLength, generator.Forge, cultureInfo);
-		
+
 		/// <summary>
 		/// Creates a generator that converts strings into properly formatted sentences with variable length.
 		/// </summary>

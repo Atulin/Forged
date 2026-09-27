@@ -9,39 +9,39 @@ namespace Forged.Core;
 /// <param name="random">The random number generator to use for generating data.</param>
 public abstract class Faker<TModel>(Random? random = null, CultureInfo? locale = null)
 {
-    /// <summary>
-    /// Gets the underlying <see cref="Forge"/> instance used for generating data.
-    /// </summary>
-    public Forge Forge { get; } = new(random, locale);
+	/// <summary>
+	/// Gets the underlying <see cref="Forge"/> instance used for generating data.
+	/// </summary>
+	public Forge Forge { get; } = new(random, locale);
 
-    /// <summary>
-    /// Generates a single fake model instance.
-    /// </summary>
-    /// <returns>A single fake model instance.</returns>
-    public abstract TModel Get();
-    
-    /// <summary>
-    /// Generates multiple fake model instances.
-    /// </summary>
-    /// <param name="count">The number of instances to generate.</param>
-    /// <returns>An enumerable of fake model instances.</returns>
-    public IEnumerable<TModel> Get(int count)
-    {
-	    for (var i = 0; i < count; i++)
-	    {
-		    yield return Get();
-	    }
-    }
-	
-    /// <summary>
-    /// Generates a random number of fake model instances within a specified range.
-    /// </summary>
-    /// <param name="min">The minimum number of instances to generate.</param>
-    /// <param name="max">The maximum number of instances to generate.</param>
-    /// <returns>An enumerable of fake model instances.</returns>
-    public IEnumerable<TModel> Get(int min, int max)
-    {
-	    var count = Forge.Rng.Next(min, max);
-	    return Get(count);
-    }
+	/// <summary>
+	/// Generates a single fake model instance.
+	/// </summary>
+	/// <returns>A single fake model instance.</returns>
+	public abstract TModel Get();
+
+	/// <summary>
+	/// Generates multiple fake model instances.
+	/// </summary>
+	/// <param name="count">The number of instances to generate.</param>
+	/// <returns>An enumerable of fake model instances.</returns>
+	public IEnumerable<TModel> Get(int count)
+	{
+		for (var i = 0; i < count; i++)
+		{
+			yield return Get();
+		}
+	}
+
+	/// <summary>
+	/// Generates a random number of fake model instances within a specified range.
+	/// </summary>
+	/// <param name="min">The minimum number of instances to generate.</param>
+	/// <param name="max">The maximum number of instances to generate.</param>
+	/// <returns>An enumerable of fake model instances.</returns>
+	public IEnumerable<TModel> Get(int min, int max)
+	{
+		var count = Forge.Rng.Next(min, max);
+		return Get(count);
+	}
 }

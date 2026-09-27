@@ -9,7 +9,7 @@ public sealed class NameInfixGenerator(Forge forge) : Generator<string>(forge)
 {
 	public override string Generate()
 	{
-		var list = FileLoader.LoadData(Locale.Name, "person/name/infix", CommonContext.Default.ListString);
+		var list = FileLoader.LoadData(Locale, "person/name/infix", CommonContext.Default.ListString);
 		return Rng.GetItem(list).TrimEnd('*');
 	}
 }

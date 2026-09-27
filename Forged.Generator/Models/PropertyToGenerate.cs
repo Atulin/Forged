@@ -2,6 +2,6 @@
 
 public record PropertyToGenerate(
 	string Name,
-	string Type, 
+	string Type,
 	bool IsRequired
 );

@@ -11,13 +11,13 @@ internal sealed class DiceLexer(string expression)
 		{
 			var span = _text.Span;
 			var start = _position;
-			
+
 			if (_position >= span.Length)
 			{
 				yield return new Token(TokenType.End, ReadOnlyMemory<char>.Empty, _position);
 				break;
 			}
-			
+
 			var c = span[_position];
 			if (char.IsDigit(c))
 			{
@@ -25,7 +25,7 @@ internal sealed class DiceLexer(string expression)
 				{
 					_position++;
 				}
-				
+
 				yield return new Token(TokenType.Number, _text[start.._position], start);
 				continue;
 			}

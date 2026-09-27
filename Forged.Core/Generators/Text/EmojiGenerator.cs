@@ -14,7 +14,7 @@ public sealed class EmojiGenerator(Forge forge) : Generator<string>(forge)
 	{
 		if (_emojiCache is null)
 		{
-			var file = FileLoader.LoadData("en", "text/emoji", CommonContext.Default.DictionaryStringString);
+			var file = FileLoader.LoadData("text/emoji", CommonContext.Default.DictionaryStringString);
 			_emojiCache = file.ToFrozenDictionary();
 		}
 

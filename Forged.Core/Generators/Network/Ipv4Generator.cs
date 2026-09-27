@@ -64,7 +64,7 @@ public sealed class Ipv4Generator(float publicChance, Forge forge) : Generator<I
 				case [>= 224, ..]:
 					Rng.NextBytes(bytes);
 					continue;
-				
+
 				default:
 					return new IPAddress(bytes);
 			}

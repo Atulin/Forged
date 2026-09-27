@@ -8,7 +8,8 @@ namespace Forged.Core.Generators.Utility.Collections;
 /// <param name="minLength">The minimum number of values to generate.</param>
 /// <param name="maxLength">The maximum number of values to generate.</param>
 /// <param name="forge">The Forge instance to use.</param>
-public sealed class EnumerableGenerator<T>(Generator<T> innerGenerator, int minLength, int maxLength, Forge forge) : Generator<IEnumerable<T>>(forge)
+public sealed class EnumerableGenerator<T>(Generator<T> innerGenerator, int minLength, int maxLength, Forge forge)
+	: Generator<IEnumerable<T>>(forge)
 {
 	/// <summary>
 	/// Generates an enumerable of random values.
@@ -16,10 +17,10 @@ public sealed class EnumerableGenerator<T>(Generator<T> innerGenerator, int minL
 	/// <returns>An enumerable of randomly generated values.</returns>
 	public override IEnumerable<T> Generate()
 	{
-		var length = minLength == maxLength 
-			? minLength 
+		var length = minLength == maxLength
+			? minLength
 			: Rng.Next(minLength, maxLength + 1);
-		
+
 		for (var i = 0; i < length; i++)
 		{
 			yield return innerGenerator.Generate();

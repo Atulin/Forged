@@ -1,40 +1,40 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
-        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-        <IsRoslynComponent>true</IsRoslynComponent>
-        <LangVersion>preview</LangVersion>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+		<IsRoslynComponent>true</IsRoslynComponent>
+		<LangVersion>preview</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-    <PropertyGroup>
-        <MeziantouPolyfill_IncludedPolyfills>
-            T:System.Runtime.CompilerServices.CompilerRequiredAttribute;
-            T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute;
-            T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute;
-            T:System.Runtime.CompilerServices.IsExternalInit;
-            T:System.Index;
-            T:System.Range;
-        </MeziantouPolyfill_IncludedPolyfills>
-    </PropertyGroup>
-    
-    <ItemGroup>
-        <PackageReference Include="AssemblyMetadata.Generators" Version="2.2.0">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Meziantou.Polyfill" Version="1.0.165">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="5.9.0">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" PrivateAssets="all" />
-      <PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
-    </ItemGroup>
+	<PropertyGroup>
+		<MeziantouPolyfill_IncludedPolyfills>
+			T:System.Runtime.CompilerServices.CompilerRequiredAttribute;
+			T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute;
+			T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute;
+			T:System.Runtime.CompilerServices.IsExternalInit;
+			T:System.Index;
+			T:System.Range;
+		</MeziantouPolyfill_IncludedPolyfills>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AssemblyMetadata.Generators" Version="2.2.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Meziantou.Polyfill" Version="1.0.165">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="5.9.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" PrivateAssets="all"/>
+		<PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0"/>
+	</ItemGroup>
 
 </Project>

@@ -52,11 +52,12 @@ public class ForgedGenerator : IIncrementalGenerator
 			.Where(static m => m is not null)
 			.Select(static (m, _) => m!)
 			.Collect();
-		
+
 		var combined = typesToFake
 			.Combine(fakersToGenerate);
 
-		context.RegisterSourceOutput(combined, static (spc, source) => {
+		context.RegisterSourceOutput(combined, static (spc, source) =>
+		{
 			var (types, fakers) = source;
 			foreach (var ttg in types.Concat(fakers))
 			{
@@ -85,14 +86,15 @@ public class ForgedGenerator : IIncrementalGenerator
 			Properties: properties.ToEquatableReadOnlyList()
 		);
 	}
-	
+
 	private static TypeToGenerate? GetFakers(SemanticModel semanticModel, SyntaxNode node)
 	{
 		if (semanticModel.GetDeclaredSymbol(node) is not INamedTypeSymbol symbol) return NoTypeToGenerate();
-		
+
 		var attribute = symbol.GetAttributes().FirstOrDefault(a => a.AttributeClass?.Name == "FakerAttribute");
-		if (attribute is not { AttributeClass: { IsGenericType: true, TypeArguments: [ INamedTypeSymbol targetType ] } }) return NoTypeToGenerate();
-		
+		if (attribute is not { AttributeClass: { IsGenericType: true, TypeArguments: [INamedTypeSymbol targetType] } })
+			return NoTypeToGenerate();
+
 		var properties = targetType.GetMembers()
 			.OfType<IPropertySymbol>()
 			.Where(p => p.SetMethod is not null && p.DeclaredAccessibility == Accessibility.Public)
@@ -119,9 +121,9 @@ public class ForgedGenerator : IIncrementalGenerator
 		var w = new IndentedWriter();
 		w.WriteLine(Header);
 		w.WriteLine("#nullable enable");
-		
+
 		var fakerName = typeToGenerate.FakerName ?? $"{typeToGenerate.Name}Faker";
-		
+
 		if (!string.IsNullOrEmpty(typeToGenerate.Namespace))
 		{
 			w.WriteLine();
@@ -132,7 +134,8 @@ public class ForgedGenerator : IIncrementalGenerator
 		w.WriteLine(Attributes);
 
 		w.WriteLine($"public partial class {fakerName} : global::Forged.Core.Faker<{typeToGenerate.Name}>");
-		w.BodyBlock(() => {
+		w.BodyBlock(() =>
+		{
 
 			foreach (var prop in typeToGenerate.Properties)
 			{
@@ -151,11 +154,13 @@ public class ForgedGenerator : IIncrementalGenerator
 
 			w.WriteLine();
 			w.WriteLine("// Constructor");
-			w.WriteLine($"public {fakerName}(global::System.Random? random = null, global::System.Globalization.CultureInfo? locale = null) : base(random, locale) {{ }}");
+			w.WriteLine(
+				$"public {fakerName}(global::System.Random? random = null, global::System.Globalization.CultureInfo? locale = null) : base(random, locale) {{ }}");
 
 			w.WriteLine();
 			w.WriteLine($"public override {typeToGenerate.Name} Get()");
-			w.BodyBlock(() => {
+			w.BodyBlock(() =>
+			{
 
 				foreach (var prop in typeToGenerate.Properties)
 				{
@@ -167,7 +172,8 @@ public class ForgedGenerator : IIncrementalGenerator
 
 				w.WriteLine();
 				w.WriteLine($"return new {typeToGenerate.Name}");
-				w.InitBlock(() => {
+				w.InitBlock(() =>
+				{
 					foreach (var prop in typeToGenerate.Properties)
 					{
 						w.Write($"{prop.Name} = {Decapitalize(prop.Name)}Generator");
@@ -178,7 +184,7 @@ public class ForgedGenerator : IIncrementalGenerator
 				});
 			});
 		});
-		
+
 		context.AddSource($"{fakerName}.g.cs", SourceText.From(w.ToString(), Encoding.UTF8));
 	}
 

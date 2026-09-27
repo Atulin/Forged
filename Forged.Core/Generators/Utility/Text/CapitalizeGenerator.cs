@@ -8,7 +8,8 @@ namespace Forged.Core.Generators.Utility.Text;
 /// <param name="innerGenerator">The inner generator that produces strings.</param>
 /// <param name="forge">The Forge instance to use.</param>
 /// <param name="cultureInfo">The culture to use for capitalization. If null, uses the Forge's locale.</param>
-public sealed class CapitalizeGenerator(Generator<string> innerGenerator, Forge forge, CultureInfo? cultureInfo = null) : Generator<string>(forge)
+public sealed class CapitalizeGenerator(Generator<string> innerGenerator, Forge forge, CultureInfo? cultureInfo = null)
+	: Generator<string>(forge)
 {
 	/// <summary>
 	/// Generates a string with the first character capitalized.
@@ -17,7 +18,7 @@ public sealed class CapitalizeGenerator(Generator<string> innerGenerator, Forge 
 	public override string Generate()
 	{
 		var str = innerGenerator.Generate().AsSpan();
-		Span<char> capitalized = [char.ToUpper(str[0], cultureInfo ?? Locale), ..str[1..]];
+		Span<char> capitalized = [char.ToUpper(str[0], cultureInfo ?? Locale), .. str[1..]];
 		return capitalized.ToString();
 	}
 }

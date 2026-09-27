@@ -1,30 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-    <PropertyGroup>
-        <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
-    </PropertyGroup>
-    
-    <ItemGroup>
-        <AssemblyAttribute Include="AutoSeal.SealPublicClasses" />
-    </ItemGroup>
+	<PropertyGroup>
+		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+	</PropertyGroup>
 
-    <ItemGroup>
-        <EmbeddedResource Include="Locales\**\*.jsonc" />
-        <EmbeddedResource Remove="Locales\.oxfmtrc.jsonc" />
-    </ItemGroup>
+	<ItemGroup>
+		<AssemblyAttribute Include="AutoSeal.SealPublicClasses"/>
+	</ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Atulin.SealAnalyzer" Version="1.0.0" PrivateAssets="all" />
-      <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" />
-      <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.12" />
-      <PackageReference Include="NetEscapades.EnumGenerators" Version="1.0.0-beta21" />
-      <PackageReference Include="NetEscapades.EnumGenerators.Interceptors" Version="1.0.0-beta21" />
-    </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Locales\**\*.jsonc"/>
+		<EmbeddedResource Remove="Locales\.oxfmtrc.jsonc"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Atulin.SealAnalyzer" Version="1.0.0" PrivateAssets="all"/>
+		<PackageReference Include="JetBrains.Annotations" Version="2026.2.0"/>
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.12"/>
+		<PackageReference Include="NetEscapades.EnumGenerators" Version="1.0.0-beta21"/>
+		<PackageReference Include="NetEscapades.EnumGenerators.Interceptors" Version="1.0.0-beta21"/>
+	</ItemGroup>
 
 </Project>

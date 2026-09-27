@@ -40,7 +40,7 @@ public sealed class BicGenerator(bool valid, bool test, Forge forge) : Generator
 		var country = valid ? Rng.GetItem(_countries.Keys.ToArray()) : "ZZ";
 		var location = Rng.GetItems(UppercaseLetters, 2);
 
-		ReadOnlySpan<char> body = [.. bank, .. country, .. location, .."XXX"];
+		ReadOnlySpan<char> body = [.. bank, .. country, .. location, .. "XXX"];
 
 		return new string(body);
 	}

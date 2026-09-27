@@ -9,78 +9,78 @@ namespace Forged.Core;
 /// </summary>
 public sealed class Forge
 {
-    /// <summary>
-    /// Gets the underlying random number generator.
-    /// </summary>
-    public Random Rng { get; }
+	/// <summary>
+	/// Gets the underlying random number generator.
+	/// </summary>
+	public Random Rng { get; }
 
-    /// <summary>
-    /// Gets or sets the locale used for generating localized data.
-    /// </summary>
-    public CultureInfo Locale { get; }
-    
-    internal FileLoader FileLoader { get; }
-    
-    /// <summary>
-    /// Gets the random data generation module.
-    /// </summary>
-    public ForgeRandom Random { get; }
-    
-    /// <summary>
-    /// Gets the temporal (date/time) generation module.
-    /// </summary>
-    public ForgeTemporal Temporal { get; }
-    
-    /// <summary>
-    /// Gets the text generation module.
-    /// </summary>
-    public ForgeText Text { get; }
+	/// <summary>
+	/// Gets or sets the locale used for generating localized data.
+	/// </summary>
+	public CultureInfo Locale { get; }
 
-    /// <summary>
-    /// Gets the module for generating basic random or deterministic data.
-    /// </summary>
-    public ForgeBasic Basic { get; }
+	internal FileLoader FileLoader { get; }
 
-    /// <summary>
-    /// Gets the module for generating internet data.
-    /// </summary>
-    public ForgeInternet Internet { get; }
+	/// <summary>
+	/// Gets the random data generation module.
+	/// </summary>
+	public ForgeRandom Random { get; }
 
-    /// <summary>
-    /// Provides functionality for generating financial-related fake data.
-    /// Includes methods for creating currency information, account details,
-    /// IBANs, BICs, credit card numbers, and other financial identifiers.
-    /// </summary>
-    public ForgeFinance Finance { get; }
+	/// <summary>
+	/// Gets the temporal (date/time) generation module.
+	/// </summary>
+	public ForgeTemporal Temporal { get; }
 
-    /// <summary>
-    /// Gets the module for generating person (name) data.
-    /// </summary>
-    public ForgePerson Person { get; }
+	/// <summary>
+	/// Gets the text generation module.
+	/// </summary>
+	public ForgeText Text { get; }
 
-    /// <summary>
-    /// Gets the module that provides methods for generating network-related data,
-    /// such as IP addresses and port numbers.
-    /// </summary>
-    public ForgeNetwork Network { get; set; }
-    
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Forge"/> class.
-    /// </summary>
-    /// <param name="random">The random number generator to use. If null, <see cref="System.Random.Shared"/> is used.</param>
-    /// <param name="locale">The locale to use for generating locale-specific data. If null, <see cref="CultureInfo.InvariantCulture"/> is used.</param>
-    public Forge(Random? random, CultureInfo? locale)
-    {
-	    Locale = locale ?? CultureInfo.InvariantCulture;
-	    Rng = random ?? System.Random.Shared;
-	    FileLoader = new FileLoader();
-	    Random = new ForgeRandom(this);
-	    Temporal = new ForgeTemporal(this);
-	    Text = new ForgeText(this);
-        Basic = new ForgeBasic(this);
-        Internet = new ForgeInternet(this);
-        Finance = new ForgeFinance(this);
-        Person = new ForgePerson(this);
-        Network = new ForgeNetwork(this);
-    }
+	/// <summary>
+	/// Gets the module for generating basic random or deterministic data.
+	/// </summary>
+	public ForgeBasic Basic { get; }
+
+	/// <summary>
+	/// Gets the module for generating internet data.
+	/// </summary>
+	public ForgeInternet Internet { get; }
+
+	/// <summary>
+	/// Provides functionality for generating financial-related fake data.
+	/// Includes methods for creating currency information, account details,
+	/// IBANs, BICs, credit card numbers, and other financial identifiers.
+	/// </summary>
+	public ForgeFinance Finance { get; }
+
+	/// <summary>
+	/// Gets the module for generating person (name) data.
+	/// </summary>
+	public ForgePerson Person { get; }
+
+	/// <summary>
+	/// Gets the module that provides methods for generating network-related data,
+	/// such as IP addresses and port numbers.
+	/// </summary>
+	public ForgeNetwork Network { get; set; }
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Forge"/> class.
+	/// </summary>
+	/// <param name="random">The random number generator to use. If null, <see cref="System.Random.Shared"/> is used.</param>
+	/// <param name="locale">The locale to use for generating locale-specific data. If null, <see cref="CultureInfo.InvariantCulture"/> is used.</param>
+	public Forge(Random? random, CultureInfo? locale)
+	{
+		Locale = locale ?? CultureInfo.InvariantCulture;
+		Rng = random ?? System.Random.Shared;
+		FileLoader = new FileLoader();
+		Random = new ForgeRandom(this);
+		Temporal = new ForgeTemporal(this);
+		Text = new ForgeText(this);
+		Basic = new ForgeBasic(this);
+		Internet = new ForgeInternet(this);
+		Finance = new ForgeFinance(this);
+		Person = new ForgePerson(this);
+		Network = new ForgeNetwork(this);
+	}
 }

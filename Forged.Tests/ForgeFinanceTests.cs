@@ -108,8 +108,8 @@ public class ForgeFinanceTests
 	{
 		var digits = value.Select(character => character - '0').ToArray();
 		var sum = 3 * (digits[0] + digits[3] + digits[6])
-			+ 7 * (digits[1] + digits[4] + digits[7])
-			+ digits[2] + digits[5] + digits[8];
+		          + 7 * (digits[1] + digits[4] + digits[7])
+		          + digits[2] + digits[5] + digits[8];
 		return sum % 10 == 0;
 	}
 
@@ -340,17 +340,17 @@ public class ForgeFinanceTests
 				{
 					CardOperator.Visa => value.StartsWith('4'),
 					CardOperator.Mastercard => value.StartsWith("51", StringComparison.Ordinal)
-						|| value.StartsWith("52", StringComparison.Ordinal)
-						|| value.StartsWith("53", StringComparison.Ordinal)
-						|| value.StartsWith("54", StringComparison.Ordinal)
-						|| value.StartsWith("55", StringComparison.Ordinal),
+					                           || value.StartsWith("52", StringComparison.Ordinal)
+					                           || value.StartsWith("53", StringComparison.Ordinal)
+					                           || value.StartsWith("54", StringComparison.Ordinal)
+					                           || value.StartsWith("55", StringComparison.Ordinal),
 					CardOperator.AmericanExpress => value.StartsWith("34", StringComparison.Ordinal)
-						|| value.StartsWith("37", StringComparison.Ordinal),
+					                                || value.StartsWith("37", StringComparison.Ordinal),
 					CardOperator.Discover => value.StartsWith("6011", StringComparison.Ordinal)
-						|| value.StartsWith("65", StringComparison.Ordinal),
+					                         || value.StartsWith("65", StringComparison.Ordinal),
 					CardOperator.DinersClub => value.StartsWith("30", StringComparison.Ordinal)
-						|| value.StartsWith("36", StringComparison.Ordinal)
-						|| value.StartsWith("38", StringComparison.Ordinal),
+					                           || value.StartsWith("36", StringComparison.Ordinal)
+					                           || value.StartsWith("38", StringComparison.Ordinal),
 					CardOperator.JCB => value.StartsWith("35", StringComparison.Ordinal),
 					CardOperator.UnionPay => value.StartsWith("62", StringComparison.Ordinal),
 					_ => false,

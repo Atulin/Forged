@@ -40,38 +40,38 @@ public sealed class NameGenerator(
 	public override string Generate()
 	{
 		var segments = new List<string>();
-		
+
 		var weight = male + female;
 		var roll = Rng.NextDouble() * weight;
-		
-		var firstNames = roll < male 
-			? FileLoader.LoadData(Locale.Name, "person/name/male_first", CommonContext.Default.ListString) 
-			: FileLoader.LoadData(Locale.Name, "person/name/female_first", CommonContext.Default.ListString);
+
+		var firstNames = roll < male
+			? FileLoader.LoadData(Locale, "person/name/male_first", CommonContext.Default.ListString)
+			: FileLoader.LoadData(Locale, "person/name/female_first", CommonContext.Default.ListString);
 
 		if (Rng.NextDouble() < prefix)
 		{
-			var prefixes = FileLoader.LoadData(Locale.Name, "person/name/prefix", CommonContext.Default.ListString);
+			var prefixes = FileLoader.LoadData(Locale, "person/name/prefix", CommonContext.Default.ListString);
 			segments.Add(Rng.GetItem(prefixes));
 		}
-		
+
 		segments.Add(Rng.GetItem(firstNames));
 
 		if (Rng.NextDouble() < middle)
 		{
 			segments.Add(Rng.GetItem(firstNames));
 		}
-		
+
 		if (Rng.NextDouble() < infix)
 		{
-			var infixes = FileLoader.LoadData(Locale.Name, "person/name/infix", CommonContext.Default.ListString);
+			var infixes = FileLoader.LoadData(Locale, "person/name/infix", CommonContext.Default.ListString);
 			segments.Add(Rng.GetItem(infixes));
 		}
-		
+
 		segments.Add(_lastNameGenerator.Generate());
-		
+
 		if (Rng.NextDouble() < suffix)
 		{
-			var suffixes = FileLoader.LoadData(Locale.Name, "person/name/suffix", CommonContext.Default.ListString);
+			var suffixes = FileLoader.LoadData(Locale, "person/name/suffix", CommonContext.Default.ListString);
 			segments.Add(Rng.GetItem(suffixes));
 		}
 

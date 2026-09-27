@@ -18,7 +18,7 @@ public static class CollectionGeneratorExtensions
 		/// <returns>A generator that produces lists.</returns>
 		public Generator<List<T>> AsList()
 			=> new RefineGenerator<ICollection<T>, List<T>>(generator, static c => [.. c], generator.Forge);
-		
+
 		/// <summary>
 		/// Converts collections from a generator to hash sets.
 		/// </summary>

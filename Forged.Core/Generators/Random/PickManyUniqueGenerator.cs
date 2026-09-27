@@ -14,13 +14,13 @@ public sealed class PickManyUniqueGenerator<T>(T[] items, int minLength, int max
 	/// <returns>An array of randomly selected unique items.</returns>
 	public override T[] Generate()
 	{
-		var length = minLength == maxLength 
-			? minLength 
+		var length = minLength == maxLength
+			? minLength
 			: Rng.Next(minLength, maxLength);
-		
+
 		var set = new HashSet<T>(items);
 		var shuffled = Rng.GetShuffled([.. set]).Take(length);
-		
+
 		return [.. shuffled];
 	}
 }

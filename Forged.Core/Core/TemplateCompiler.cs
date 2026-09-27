@@ -25,18 +25,18 @@ internal static class TemplateCompiler
 			{
 				tokens.Add(new Literal(template[i..start]));
 			}
-			
+
 			var end = template.IndexOf('}', start);
 			var key = template[(start + 1)..end];
-			
+
 			tokens.Add(new Placeholder(key));
-			
+
 			i = end + 1;
 		}
 
 		return tokens;
 	}
-	
+
 	public static string Render(List<Token> tokens, Dictionary<string, Func<string>> values)
 	{
 		var sb = new StringBuilder();
@@ -51,11 +51,13 @@ internal static class TemplateCompiler
 			};
 			sb.Append(part);
 		}
-		
+
 		return sb.ToString();
 	}
 
 	internal abstract record Token;
+
 	private sealed record Literal(string Value) : Token;
+
 	private sealed record Placeholder(string Key) : Token;
 }

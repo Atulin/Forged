@@ -19,17 +19,17 @@ public class FileLoaderTests
 	[Test]
 	public async Task LoadData_WithJsoncSuffix_StripsTheExtension()
 	{
-		var data = new FileLoader().LoadData("en", "internet/username.jsonc", UserDataContext.Default.UserData);
+		var data = new FileLoader().LoadData("internet/username.jsonc", UserDataContext.Default.UserData);
 
 		await Assert.That(data.Prefixes).IsNotNull();
 		await Assert.That(data.Cores).IsNotNull();
 		await Assert.That(data.Suffixes).IsNotNull();
 	}
-	
+
 	[Test]
 	public async Task LoadData_WithJson5Suffix_StripsTheExtension()
 	{
-		var data = new FileLoader().LoadData("en", "internet/username.json5", UserDataContext.Default.UserData);
+		var data = new FileLoader().LoadData("internet/username.json5", UserDataContext.Default.UserData);
 
 		await Assert.That(data.Prefixes).IsNotNull();
 		await Assert.That(data.Cores).IsNotNull();
@@ -39,7 +39,7 @@ public class FileLoaderTests
 	[Test]
 	public async Task LoadData_WithJsonSuffix_StripsTheExtension()
 	{
-		var data = new FileLoader().LoadData("en", "internet/username.json", UserDataContext.Default.UserData);
+		var data = new FileLoader().LoadData("internet/username.json", UserDataContext.Default.UserData);
 
 		await Assert.That(data.Prefixes).IsNotNull();
 	}

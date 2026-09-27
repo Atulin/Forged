@@ -29,15 +29,15 @@ public sealed class UriScheme(bool strip, Forge forge) : Generator<string>(forge
 	public override string Generate()
 	{
 		var scheme = Rng.GetItem(_protocols).AsSpan();
-		
+
 		if (!strip)
 		{
 			return scheme.ToString();
 		}
-		
+
 		var semi = scheme.IndexOf(':');
-		return semi != -1 
-			? scheme[..semi].ToString() 
+		return semi != -1
+			? scheme[..semi].ToString()
 			: scheme.ToString();
 	}
 }

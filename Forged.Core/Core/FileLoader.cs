@@ -23,7 +23,8 @@ internal sealed class FileLoader
 
 	public T LoadData<T>(string locale, string file, JsonTypeInfo<T> typeInfo) where T : class
 	{
-		return Cache<T>.Data.GetOrAdd((locale, file), static (target, ctx) => {
+		return Cache<T>.Data.GetOrAdd((locale, file), static (target, ctx) =>
+		{
 			var (provider, info) = ctx;
 			var (locale, file) = target;
 

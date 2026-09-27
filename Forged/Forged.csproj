@@ -1,47 +1,47 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
 
-        <PackageId>Atulin.Forged</PackageId>
-        <PackageVersion>1.2.0</PackageVersion>
-        <Title>Atulin.Forged</Title>
-        <Description>A fast, strict, and strongly-typed data generator (faker) for C# powered by Source Generators.</Description>
-        <Authors>Atulin</Authors>
-        <PackageTags>faker;data-generator;testing;source-generator;csharp</PackageTags>
-        
-        <PackageProjectUrl>https://github.com/Atulin/Forged</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/Atulin/Forged</RepositoryUrl>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        
-        <IsPackable>true</IsPackable>
-        <IncludeBuildOutput>false</IncludeBuildOutput>
-    </PropertyGroup>
+		<PackageId>Atulin.Forged</PackageId>
+		<PackageVersion>1.2.0</PackageVersion>
+		<Title>Atulin.Forged</Title>
+		<Description>A fast, strict, and strongly-typed data generator (faker) for C# powered by Source Generators.</Description>
+		<Authors>Atulin</Authors>
+		<PackageTags>faker;data-generator;testing;source-generator;csharp</PackageTags>
 
-    <ItemGroup>
-        <None Include="..\README.md" Pack="true" PackagePath="\"/>
-    </ItemGroup>
+		<PackageProjectUrl>https://github.com/Atulin/Forged</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Atulin/Forged</RepositoryUrl>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<RepositoryType>git</RepositoryType>
 
-    <ItemGroup>
-        <None Include="../Forged.Core/bin/$(Configuration)/$(TargetFramework)/Forged.Core.dll" 
-              Pack="true" 
-              PackagePath="lib/$(TargetFramework)"/>
-        <None Include="../Forged.Generator/bin/$(Configuration)/netstandard2.0/Forged.Generator.dll" 
-              Pack="true" 
-              PackagePath="analyzers/dotnet/roslyn4.8/cs" 
-              Visible="true"/>
-    </ItemGroup>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
-    <ItemGroup>
-        <ProjectReference Include="..\Forged.Core\Forged.Core.csproj" ReferenceOutputAssembly="false"/>
-        <ProjectReference Include="..\Forged.Generator\Forged.Generator.csproj" ReferenceOutputAssembly="false"/>
-    </ItemGroup>
+		<IsPackable>true</IsPackable>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="../Forged.Core/bin/$(Configuration)/$(TargetFramework)/Forged.Core.dll"
+			  Pack="true"
+			  PackagePath="lib/$(TargetFramework)"/>
+		<None Include="../Forged.Generator/bin/$(Configuration)/netstandard2.0/Forged.Generator.dll"
+			  Pack="true"
+			  PackagePath="analyzers/dotnet/roslyn4.8/cs"
+			  Visible="true"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Forged.Core\Forged.Core.csproj" ReferenceOutputAssembly="false"/>
+		<ProjectReference Include="..\Forged.Generator\Forged.Generator.csproj" ReferenceOutputAssembly="false"/>
+	</ItemGroup>
 
 </Project>

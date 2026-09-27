@@ -8,7 +8,6 @@ namespace Forged.Core.Core;
 [JsonSerializable(typeof(string[]))]
 [JsonSerializable(typeof(Dictionary<string, string>))]
 [JsonSerializable(typeof(Dictionary<string, int>))]
-
 [JsonSourceGenerationOptions(
 	ReadCommentHandling = JsonCommentHandling.Skip,
 	AllowTrailingCommas = true,

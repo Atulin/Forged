@@ -11,10 +11,10 @@ public sealed class FirstNameGenerator(float male, float female, Forge forge) : 
 	{
 		var weight = male + female;
 		var roll = Rng.NextDouble() * weight;
-		
-		var list = roll < male 
-			? FileLoader.LoadData(Locale.Name, "person/name/male_first", CommonContext.Default.ListString) 
-			: FileLoader.LoadData(Locale.Name, "person/name/female_first", CommonContext.Default.ListString);
+
+		var list = roll < male
+			? FileLoader.LoadData(Locale, "person/name/male_first", CommonContext.Default.ListString)
+			: FileLoader.LoadData(Locale, "person/name/female_first", CommonContext.Default.ListString);
 
 		return Rng.GetItem(list);
 	}

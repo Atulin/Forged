@@ -10,7 +10,7 @@ public sealed class LastNameGenerator(float hyphenated, float compound, Forge fo
 {
 	public override string Generate()
 	{
-		var list = FileLoader.LoadData(Locale.Name, "person/name/last", CommonContext.Default.ListString);
+		var list = FileLoader.LoadData(Locale, "person/name/last", CommonContext.Default.ListString);
 
 		var comp = hyphenated + compound;
 

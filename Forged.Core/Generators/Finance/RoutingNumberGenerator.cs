@@ -65,7 +65,7 @@ public sealed class RoutingNumberGenerator(bool valid, bool test, Forge forge) :
 	{
 		var digits = value.Select(character => character - '0').ToArray();
 		return 3 * (digits[0] + digits[3] + digits[6])
-			+ 7 * (digits[1] + digits[4] + digits[7])
-			+ digits[2] + digits[5] + digits[8];
+		       + 7 * (digits[1] + digits[4] + digits[7])
+		       + digits[2] + digits[5] + digits[8];
 	}
 }

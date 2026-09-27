@@ -27,6 +27,7 @@ public sealed class GuidGenerator(GuidGenerator.Kind kind, Forge forge) : Genera
 	{
 		/// <summary>Generate a version 4 (random) GUID.</summary>
 		V4,
+
 		/// <summary>Generate a version 7 (time-based) GUID.</summary>
 		V7,
 	}

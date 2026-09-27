@@ -51,7 +51,7 @@ public sealed class UsernameGenerator(float prefixChance, float suffixChance, fl
 	/// <returns>A randomly generated username that may include a prefix, suffix, and leet-speak substitutions based on the configured probabilities.</returns>
 	public override string Generate()
 	{
-		var data = FileLoader.LoadData(Locale.Name, "internet/username", UserDataContext.Default.UserData);
+		var data = FileLoader.LoadData(Locale, "internet/username", UserDataContext.Default.UserData);
 
 		var usePrefix = Rng.Chance(prefixChance);
 		var useSuffix = Rng.Chance(suffixChance);
@@ -64,7 +64,7 @@ public sealed class UsernameGenerator(float prefixChance, float suffixChance, fl
 		{
 			return $"{prefix}{new string(core)}{suffix}";
 		}
-		
+
 		var newCore = new List<char>(core.Length);
 		foreach (var ch in core)
 		{
@@ -86,5 +86,6 @@ internal sealed record UserData(string[] Prefixes, string[] Cores, string[] Suff
 
 [UsedImplicitly]
 [JsonSerializable(typeof(UserData))]
-[JsonSourceGenerationOptions(AllowTrailingCommas = true, ReadCommentHandling = JsonCommentHandling.Skip, PropertyNameCaseInsensitive = true)]
+[JsonSourceGenerationOptions(AllowTrailingCommas = true, ReadCommentHandling = JsonCommentHandling.Skip,
+	PropertyNameCaseInsensitive = true)]
 internal sealed partial class UserDataContext : JsonSerializerContext;

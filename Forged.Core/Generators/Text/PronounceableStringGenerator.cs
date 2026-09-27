@@ -27,15 +27,15 @@ public sealed class PronounceableStringGenerator(int minSyllables, int maxSyllab
 		"", "b", "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "t", "x", "z",
 		"ch", "sh", "th", "ck", "ng", "nk", "nt", "st", "rd", "ld"
 	];
-	
+
 	/// <summary>
 	/// Generates a random pronounceable string.
 	/// </summary>
 	/// <returns>A random pronounceable string.</returns>
 	public override string Generate()
 	{
-		var length = minSyllables == maxSyllables 
-			? minSyllables 
+		var length = minSyllables == maxSyllables
+			? minSyllables
 			: Rng.Next(minSyllables, maxSyllables + 1);
 
 		var word = new StringBuilder();

@@ -3,7 +3,7 @@
 namespace Forged.Generator.Models;
 
 public sealed record TypeToGenerate(
-	string Namespace, 
+	string Namespace,
 	string Name,
 	EquatableReadOnlyList<PropertyToGenerate> Properties,
 	string? FakerName = null

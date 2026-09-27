@@ -10,7 +10,7 @@ public sealed class PickManyGenerator<T>(T[] items, int minLength, int maxLength
 	/// Generates an array of randomly selected items from the collection.
 	/// </summary>
 	/// <returns>An array of randomly selected items.</returns>
-	public override T[] Generate() => minLength == maxLength 
-		? Rng.GetItems(items, minLength) 
+	public override T[] Generate() => minLength == maxLength
+		? Rng.GetItems(items, minLength)
 		: Rng.GetItems(items, Rng.Next(minLength, maxLength));
 }

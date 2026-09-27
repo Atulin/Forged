@@ -16,7 +16,7 @@ public sealed class WaffleGenerator(int sentences, WaffleStyle style, Forge forg
 
 	public override string Generate()
 	{
-		var data = FileLoader.LoadData(Locale.Name, "waffle", SentenceCorpusContext.Default.DictionaryWaffleStyleSentenceCorpus);
+		var data = FileLoader.LoadData(Locale, "waffle", SentenceCorpusContext.Default.DictionaryWaffleStyleSentenceCorpus);
 		var corpus = data[style] ?? throw new InvalidOperationException($"No corpus found for style {style}.");
 
 		var templates = Cache.GetOrAdd(
@@ -45,7 +45,7 @@ public sealed class WaffleGenerator(int sentences, WaffleStyle style, Forge forg
 		{
 			sb.Remove(sb.Length - 1, 1);
 		}
-		
+
 		return sb.ToString();
 	}
 }

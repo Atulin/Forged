@@ -44,8 +44,8 @@ internal static class CardOperatorCatalog
 	}.ToFrozenDictionary();
 
 	public static ImmutableArray<CardOperator> Operators { get; } = [.. Specs.Keys];
-	
-	public static IEnumerable<CardOperatorSpec> ResolveSpec(CardOperator operators) 
+
+	public static IEnumerable<CardOperatorSpec> ResolveSpec(CardOperator operators)
 		=> ResolveOperator(operators).Select(flag => Specs[flag]);
 
 	public static IEnumerable<CardOperator> ResolveOperator(CardOperator operators)
@@ -54,7 +54,7 @@ internal static class CardOperatorCatalog
 		{
 			throw new ArgumentOutOfRangeException(nameof(operators), operators, "At least one valid card operator is required.");
 		}
-		
+
 		foreach (var flag in CardOperator.GetValues())
 		{
 			if (flag == 0 || (flag & flag - 1) != 0)

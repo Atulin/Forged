@@ -26,6 +26,7 @@ public static class GeneratorExtensions
 	/// <param name="format">The format string to use.</param>
 	/// <param name="cultureInfo">The culture to use for formatting. If null, uses invariant culture.</param>
 	/// <returns>A generator that produces formatted strings.</returns>
-	public static Generator<string> ToString<T>(this Generator<T> generator, string format, CultureInfo? cultureInfo = null) where T : ISpanFormattable
+	public static Generator<string> ToString<T>(this Generator<T> generator, string format, CultureInfo? cultureInfo = null)
+		where T : ISpanFormattable
 		=> new ToFormattedStringGenerator<T>(generator, format, generator.Forge, cultureInfo);
 }

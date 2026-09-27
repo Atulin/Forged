@@ -20,7 +20,7 @@ public static class StructGeneratorExtensions
 		/// <returns>A generator that may produce null values.</returns>
 		public Generator<T?> OrNull(float probability)
 			=> new NullableOrValueGenerator<T>(generator, probability, generator.Forge);
-		
+
 		/// <summary>
 		/// Creates a generator that produces nullable values.
 		/// </summary>

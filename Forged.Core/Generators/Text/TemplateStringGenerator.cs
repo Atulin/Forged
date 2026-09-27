@@ -33,13 +33,13 @@ public sealed class TemplateStringGenerator(
 				escaped = false;
 				continue;
 			}
-			
+
 			if (c == '\\')
 			{
 				escaped = true;
 				continue;
 			}
-			
+
 			if (c == digitToken)
 			{
 				sb.Append(Rng.Next(0, 10));

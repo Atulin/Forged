@@ -9,7 +9,7 @@ public sealed class NameSuffixGenerator(Forge forge) : Generator<string>(forge)
 {
 	public override string Generate()
 	{
-		var list = FileLoader.LoadData(Locale.Name, "person/name/suffix", CommonContext.Default.ListString);
+		var list = FileLoader.LoadData(Locale, "person/name/suffix", CommonContext.Default.ListString);
 		return Rng.GetItem(list);
 	}
 }

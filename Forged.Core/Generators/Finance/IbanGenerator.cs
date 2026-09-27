@@ -23,7 +23,7 @@ public sealed class IbanGenerator : Generator<string>
 		"BE68539007547034",
 		"PT50000201231234567890154",
 	];
-	
+
 	private static readonly char[] AlphanumericPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
 
 	private readonly bool _valid;
@@ -45,7 +45,7 @@ public sealed class IbanGenerator : Generator<string>
 	{
 		_valid = valid;
 		_test = test;
-		_countries = FileLoader.LoadData(Locale.Name, "finance/iban_countries", CommonContext.Default.DictionaryStringInt32);
+		_countries = FileLoader.LoadData(Locale, "finance/iban_countries", CommonContext.Default.DictionaryStringInt32);
 		_countryCodes = [.. _countries.Keys];
 		_code = Validate(countryCode);
 		_testIbans = _code is null
@@ -72,16 +72,16 @@ public sealed class IbanGenerator : Generator<string>
 		{
 			return Rng.GetItem(_testIbans);
 		}
-		
+
 		var code = _code ?? Rng.GetItem(_countryCodes);
 		var ibanLength = _countries[code];
-		
+
 		Span<char> body = stackalloc char[ibanLength];
 		body[0] = code[0];
 		body[1] = code[1];
 		body[2] = '0';
 		body[3] = '0';
-		
+
 		for (var i = 4; i < ibanLength; i++)
 		{
 			body[i] = Rng.GetItem(AlphanumericPool);
@@ -93,10 +93,10 @@ public sealed class IbanGenerator : Generator<string>
 		{
 			checkDigits = checkDigits == 0 ? 1 : checkDigits - 1;
 		}
-		
+
 		body[2] = (char)('0' + checkDigits / 10);
 		body[3] = (char)('0' + checkDigits % 10);
-		
+
 		return body.ToString();
 	}
 

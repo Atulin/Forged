@@ -9,7 +9,7 @@ public sealed class NamePrefixGenerator(Forge forge) : Generator<string>(forge)
 {
 	public override string Generate()
 	{
-		var list = FileLoader.LoadData(Locale.Name, "person/name/prefix", CommonContext.Default.ListString);
+		var list = FileLoader.LoadData(Locale, "person/name/prefix", CommonContext.Default.ListString);
 		return Rng.GetItem(list);
 	}
 }

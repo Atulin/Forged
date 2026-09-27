@@ -5,7 +5,7 @@ namespace Forged.Core.Generators.Random.DiceGeneratorHelpers;
 
 public sealed class DiceParser(string expression, Rng random)
 {
-	private readonly ImmutableArray<Token> _tokens = [..new DiceLexer(expression).Lex()];
+	private readonly ImmutableArray<Token> _tokens = [.. new DiceLexer(expression).Lex()];
 	private int _index;
 
 	public static double Evaluate(string expression, Rng random)
@@ -15,12 +15,12 @@ public sealed class DiceParser(string expression, Rng random)
 		parser.Expect(TokenType.End);
 		return ast.Evaluate(random);
 	}
-	
+
 	private Token Current => _tokens[_index];
 	private Token Next() => _tokens[_index++];
 
-	private Token Expect(TokenType type) => Current.Type == type 
-		? Next() 
+	private Token Expect(TokenType type) => Current.Type == type
+		? Next()
 		: throw new InvalidOperationException($"Expected {type} but got {Current.Type}");
 
 	private Node ParseExpression()
@@ -44,7 +44,7 @@ public sealed class DiceParser(string expression, Rng random)
 		}
 		return left;
 	}
-	
+
 	private Node ParseFactor()
 	{
 		if (Current.Type == TokenType.Minus)
@@ -52,7 +52,7 @@ public sealed class DiceParser(string expression, Rng random)
 			Next();
 			return new UnaryMinusNode(ParseFactor());
 		}
-		
+
 		return ParseDiceOrPrimary();
 	}
 
@@ -63,7 +63,7 @@ public sealed class DiceParser(string expression, Rng random)
 			Next();
 			return new DiceNode(null, ParsePrimary());
 		}
-		
+
 		var primary = ParsePrimary();
 
 		if (Current.Type == TokenType.D)
@@ -71,10 +71,10 @@ public sealed class DiceParser(string expression, Rng random)
 			Next();
 			return new DiceNode(primary, ParsePrimary());
 		}
-		
+
 		return primary;
 	}
-	
+
 	private Node ParsePrimary()
 	{
 		// ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
@@ -114,7 +114,7 @@ internal sealed record BinaryNode(Node Left, TokenType Operator, Node Right) : N
 	{
 		var left = Left.Evaluate(random);
 		var right = Right.Evaluate(random);
-		
+
 		// ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
 		return Operator switch
 		{
@@ -133,7 +133,7 @@ internal sealed record DiceNode(Node? Count, Node Sides) : Node
 	{
 		var count = (int?)Count?.Evaluate(random) ?? 1;
 		var sides = (int)Sides.Evaluate(random);
-		
+
 		if (count < 0) throw new InvalidOperationException("Dice count cannot be negative");
 		if (sides < 1) throw new InvalidOperationException("Dice sides must be greater than 0");
 
@@ -142,7 +142,7 @@ internal sealed record DiceNode(Node? Count, Node Sides) : Node
 		{
 			total += random.Next(1, sides + 1);
 		}
-		
+
 		return total;
 	}
 }

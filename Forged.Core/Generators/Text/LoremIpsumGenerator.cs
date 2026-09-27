@@ -9,7 +9,8 @@ namespace Forged.Core.Generators.Text;
 /// <param name="minWords">The minimum number of words to generate.</param>
 /// <param name="maxWords">The maximum number of words to generate.</param>
 /// <param name="forge">The Forge instance to use.</param>
-public sealed class LoremIpsumGenerator(int minWords, int maxWords, LoremIpsumGenerator.Options? options, Forge forge) : Generator<string>(forge)
+public sealed class LoremIpsumGenerator(int minWords, int maxWords, LoremIpsumGenerator.Options? options, Forge forge)
+	: Generator<string>(forge)
 {
 	private static readonly string[] Lorem = ["lorem", "ipsum", "dolor", "sit", "amet"];
 
@@ -19,7 +20,7 @@ public sealed class LoremIpsumGenerator(int minWords, int maxWords, LoremIpsumGe
 	/// <returns>A random Lorem Ipsum string with the specified number of words.</returns>
 	public override string Generate()
 	{
-		var data = FileLoader.LoadData("en", "text/lorem", CommonContext.Default.StringArray);
+		var data = FileLoader.LoadData("text/lorem", CommonContext.Default.StringArray);
 
 		var length = minWords == maxWords
 			? minWords
