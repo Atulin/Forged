@@ -26,11 +26,8 @@ jobs:
             - name: Set up Bun
               uses: oven-sh/setup-bun@v2
 
-            - name: Install Task
-              uses: go-task/setup-task@v2
-
             - name: Build documentation
-              run: task site:build
+              run: bun run docs:build
 
             - name: Upload Pages artifact
               uses: actions/upload-pages-artifact@v5

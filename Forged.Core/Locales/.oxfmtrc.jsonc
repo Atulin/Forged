@@ -1,9 +1,7 @@
 {
 	"overrides": [
 		{
-			"files": [
-				"*.jsonc"
-			],
+			"files": ["*.jsonc"],
 			"options": {
 				"tabWidth": 4,
 				"useTabs": true,
