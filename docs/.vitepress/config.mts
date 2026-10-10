@@ -2,20 +2,25 @@
 export default {
 	title: "Forged",
 	description: "A fast, strict, and strongly-typed data generator (faker) for C# powered by Source Generators.",
-	base: "/forged/",
+	base: "/Forged/",
+	lastUpdated: true,
 	themeConfig: {
 		// https://vitepress.dev/reference/default-theme-config
 		nav: [
-			{ text: "Home", link: "/" },
-			{ text: "Examples", link: "/markdown-examples" },
+			{ text: "Guide", link: "/guide/quick-start" },
+			{ text: "Generator Reference", link: "/guide/generators" },
+			{ text: "Examples", link: "/guide/examples" },
 		],
 
 		sidebar: [
 			{
-				text: "Examples",
+				text: "Guide",
 				items: [
-					{ text: "Markdown Examples", link: "/markdown-examples" },
-					{ text: "Runtime API Examples", link: "/api-examples" },
+					{ text: "Quick Start", link: "/guide/quick-start" },
+					{ text: "Generator Reference", link: "/guide/generators" },
+					{ text: "Modifiers & Extensions", link: "/guide/modifiers" },
+					{ text: "Determinism & Localization", link: "/guide/localization" },
+					{ text: "Examples", link: "/guide/examples" },
 				],
 			},
 		],
