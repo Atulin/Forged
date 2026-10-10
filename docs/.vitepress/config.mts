@@ -1,5 +1,7 @@
+import { defineConfig } from "vitepress";
+
 // https://vitepress.dev/reference/site-config
-export default {
+export default defineConfig({
 	title: "Forged",
 	description: "A fast, strict, and strongly-typed data generator (faker) for C# powered by Source Generators.",
 	base: "/Forged/",
@@ -28,5 +30,9 @@ export default {
 		socialLinks: [
 			{ icon: "github", link: "https://github.com/Atulin/Forged" },
 		],
+
+		search: {
+			provider: "local",
+		}
 	},
-};
+});
