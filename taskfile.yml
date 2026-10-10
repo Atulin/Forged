@@ -16,3 +16,7 @@ tasks:
         cmd: "{{.EXEC}} oxfmt . -c .oxfmtrc.jsonc"
 
     test: dotnet test -c Release --coverage --coverage-output coverage.cobertura.xml --coverage-output-format cobertura
+
+    site:dev: bunx vitepress@latest dev docs
+    site:build: bunx vitepress@latest build docs
+    site:preview: bunx vitepress@latest preview docs
